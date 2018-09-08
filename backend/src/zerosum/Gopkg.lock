@@ -31,12 +31,11 @@
   version = "v1.2.0"
 
 [[projects]]
-  digest = "1:5003a6cd968a1dcf09b85b26822e762500629398ff7cdfa526443da128c90adb"
+  digest = "1:6895fbe5a10c5aebd1965cac6f6905dcdb21bee01e08912d3ba6a805c2485f6a"
   name = "github.com/jinzhu/gorm"
   packages = [
     ".",
     "dialects/postgres",
-    "dialects/sqlite",
   ]
   pruneopts = "UT"
   revision = "6ed508ec6a4ecb3531899a69cbc746ccf65a4166"
@@ -77,14 +76,6 @@
   pruneopts = "UT"
   revision = "6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c"
   version = "v0.0.4"
-
-[[projects]]
-  digest = "1:3cafc6a5a1b8269605d9df4c6956d43d8011fc57f266ca6b9d04da6c09dee548"
-  name = "github.com/mattn/go-sqlite3"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "25ecb14adfc7543176f7d85291ec7dba82c6f7e4"
-  version = "v1.9.0"
 
 [[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
@@ -141,7 +132,6 @@
     "github.com/gin-gonic/gin",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/postgres",
-    "github.com/jinzhu/gorm/dialects/sqlite",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
