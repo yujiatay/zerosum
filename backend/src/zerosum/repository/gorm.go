@@ -18,13 +18,14 @@ func InitTestDB() (err error) {
 		"postgres", "password", "zerosum", "localhost", 5432))
 
 	// Set up database tables
-	db.AutoMigrate(&models.Poll{}, &models.Decision{}, &models.Choice{}, &models.User{})
+	db.AutoMigrate(&models.Poll{}, &models.Vote{}, &models.Choice{}, &models.User{})
 
 	// Add foreign key constraints
 	db.Model(models.Choice{}).AddForeignKey("poll_id", "poll(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Decision{}).AddForeignKey("poll_id", "poll(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Decision{}).AddForeignKey("choice_id", "choice(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Decision{}).AddForeignKey("user_id", "user(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Poll{}).AddForeignKey("user_id", "user(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Vote{}).AddForeignKey("poll_id", "poll(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Vote{}).AddForeignKey("choice_id", "choice(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Vote{}).AddForeignKey("user_id", "user(id)", "CASCADE", "RESTRICT")
 	return
 }
 
@@ -48,7 +49,6 @@ func CreatePoll(poll models.Poll) (err error) {
 }
 
 func QueryPoll(desiredPoll models.Poll) (poll models.Poll, err error) {
-	// TODO: Add preloading
 	res := db.Where(desiredPoll).First(&poll)
 	if res.RecordNotFound() {
 		err = errors.New("no poll found")
@@ -60,7 +60,6 @@ func QueryPoll(desiredPoll models.Poll) (poll models.Poll, err error) {
 }
 
 func QueryPolls(desiredPolls models.Poll) (polls []models.Poll, err error) {
-	// TODO: Add preloading
 	res := db.Where(desiredPolls).Find(&polls)
 	if res.RecordNotFound() {
 		err = errors.New("no poll found")
@@ -114,18 +113,6 @@ func CreateUser(user models.User) (err error) {
 	return
 }
 
-func QueryUser(desiredUser models.User) (user models.User, err error) {
-	// TODO: Add preloading
-	res := db.Where(desiredUser).First(&user)
-	if res.RecordNotFound() {
-		err = errors.New("no user found")
-	} else if res.Error != nil {
-		err = res.Error
-	}
-
-	return
-}
-
 func UpdateUser(user models.User) (err error) {
 	// Check if exists
 	if db.NewRecord(user) {
@@ -155,7 +142,7 @@ func DeleteUser(user models.User) (err error) {
 }
 
 /* DECISION CRUD */
-func CreateDecision(decision models.Decision) (err error) {
+func CreateDecision(decision models.Vote) (err error) {
 	// Check if alr exists
 	if !db.NewRecord(decision) {
 		err = errors.New("decision exists")
@@ -169,26 +156,13 @@ func CreateDecision(decision models.Decision) (err error) {
 	return
 }
 
-func QueryDecision(desiredDecision models.Decision) (decision models.Decision, err error) {
-	// TODO: Add preloading
-	res := db.Where(desiredDecision).First(&decision)
-	if res.RecordNotFound() {
-		err = errors.New("no decision found")
-	} else if res.Error != nil {
-		err = res.Error
-	}
-
-	return
-}
-
-
-func UpdateDecision(decision models.Decision) (err error) {
+func UpdateDecision(decision models.Vote) (err error) {
 	// Check if exists
 	if db.NewRecord(decision) {
 		err = errors.New("decision does not exist")
 		return
 	}
-	res:= db.Model(&models.Decision{}).Updates(decision)
+	res:= db.Model(&models.Vote{}).Updates(decision)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -196,7 +170,7 @@ func UpdateDecision(decision models.Decision) (err error) {
 	return
 }
 
-func DeleteDecision(decision models.Decision) (err error) {
+func DeleteDecision(decision models.Vote) (err error) {
 	// Check if exists
 	if db.NewRecord(decision) {
 		err = errors.New("decision does not exist")

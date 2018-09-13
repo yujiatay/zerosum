@@ -20,19 +20,19 @@ func TestMain(m *testing.M) {
 		"postgres", "password", "zerosumtest", "localhost", 5432))
 	if err == nil {
 		// Set up database tables
-		testDb.AutoMigrate(&models.Poll{}, &models.Decision{}, &models.Choice{}, &models.User{})
+		testDb.AutoMigrate(&models.Poll{}, &models.Vote{}, &models.Choice{}, &models.User{})
 
 		// Add foreign key constraints
 		testDb.Model(models.Choice{}).AddForeignKey("poll_id", "polls(id)", "CASCADE", "RESTRICT")
-		testDb.Model(models.Decision{}).AddForeignKey("poll_id", "polls(id)", "CASCADE", "RESTRICT")
-		testDb.Model(models.Decision{}).AddForeignKey("choice_id", "choices(id)", "CASCADE", "RESTRICT")
-		testDb.Model(models.Decision{}).AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
+		testDb.Model(models.Vote{}).AddForeignKey("poll_id", "polls(id)", "CASCADE", "RESTRICT")
+		testDb.Model(models.Vote{}).AddForeignKey("choice_id", "choices(id)", "CASCADE", "RESTRICT")
+		testDb.Model(models.Vote{}).AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
 
 		// Run tests
 		errCode = m.Run()
 	}
 	// Clean up db
-	testDb.DropTable(&models.Decision{}, &models.User{}, &models.Choice{}, &models.Poll{})
+	testDb.DropTable(&models.Vote{}, &models.User{}, &models.Choice{}, &models.Poll{})
 	testDb.Close()
 	os.Exit(errCode)
 }
@@ -79,49 +79,49 @@ func TestSchema(t *testing.T) {
 	}
 
 	// Test invalid decision making
-	res = testDb.Create(&models.Decision{PollId: "100"})
+	res = testDb.Create(&models.Vote{PollId: "100"})
 	if res.Error == nil {
 		t.Errorf("Constraint for decision failed")
 		return
 	}
-	res = testDb.Create(&models.Decision{ChoiceId: "123"})
+	res = testDb.Create(&models.Vote{ChoiceId: "123"})
 	if res.Error == nil {
 		t.Errorf("Constraint for decision failed")
 		return
 	}
-	res = testDb.Create(&models.Decision{UserId: "123"})
+	res = testDb.Create(&models.Vote{UserId: "123"})
 	if res.Error == nil {
 		t.Errorf("Constraint for decision failed")
 		return
 	}
-	res = testDb.Create(&models.Decision{PollId: "100", ChoiceId: "123"})
+	res = testDb.Create(&models.Vote{PollId: "100", ChoiceId: "123"})
 	if res.Error == nil {
 		t.Errorf("Constraint for decision failed")
 		return
 	}
-	res = testDb.Create(&models.Decision{PollId: "100", ChoiceId: "123"})
+	res = testDb.Create(&models.Vote{PollId: "100", ChoiceId: "123"})
 	if res.Error == nil {
 		t.Errorf("Constraint for decision failed")
 		return
 	}
-	res = testDb.Create(&models.Decision{PollId: "101", ChoiceId: "113", UserId: "103"})
+	res = testDb.Create(&models.Vote{PollId: "101", ChoiceId: "113", UserId: "103"})
 	if res.Error == nil {
 		t.Errorf("Constraint for decision failed")
 		return
 	}
 
 	// Test valid & duplicate decision
-	res = testDb.Create(&models.Decision{PollId: "100", ChoiceId: "123", UserId: "123"})
+	res = testDb.Create(&models.Vote{PollId: "100", ChoiceId: "123", UserId: "123"})
 	if res.Error != nil {
 		t.Errorf(fmt.Sprintf("Error creating decision: %+v", res.Error))
 		return
 	}
-	res = testDb.Create(&models.Decision{PollId: "100", ChoiceId: "123", UserId: "123"})
+	res = testDb.Create(&models.Vote{PollId: "100", ChoiceId: "123", UserId: "123"})
 	if res.Error == nil {
 		t.Errorf("Did not detect duplicate decision")
 		return
 	}
-	res = testDb.Create(&models.Decision{PollId: "100", ChoiceId: "124", UserId: "123"})
+	res = testDb.Create(&models.Vote{PollId: "100", ChoiceId: "124", UserId: "123"})
 	if res.Error == nil {
 		t.Errorf("Did not detect change of decision")
 		return
