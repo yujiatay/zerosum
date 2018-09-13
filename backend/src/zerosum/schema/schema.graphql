@@ -1,0 +1,95 @@
+# Following https://github.com/deltaskelta/graphql-go-pets-example
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+# The query type, represents all of the entry points into our object graph
+type Query {
+    getUser(id: ID!): User
+    getPoll(id: ID!): Post
+    getPoll(filter: String, limit: Int, nextToken: String): Post
+    getVote(userid: ID!, postid: ID!): Vote
+    getVotes(userid: ID, limit: Int, nextToken: String): Vote
+}
+
+# The mutation type, represents all updates we can make to our data
+type Mutation {
+    addUser(user: UserInput!): User
+    updateUser(user: UserInput!): User
+    deleteUser(userID: ID!): Boolean
+
+    addPoll(poll: PollInput!): Poll
+
+    addDecision(decision: VoteInput!): Decision
+    updateDecision(decision: VoteInput!): Decision
+}
+
+enum GameMode {
+}
+
+enum VotingMode {
+}
+
+type PollResult {
+    choice: Choice
+    votes: Int
+}
+
+type VoteResult {
+    win: Boolean
+    netChange: Int
+}
+
+# what is needed for a poll
+type Poll {
+    id: ID
+    owner: User
+    title: String
+    startTime: Date
+    endTime: Date
+    totalMoney: Date
+    gameMode: GameMode
+    votingMode: VotingMode
+    choices: [Choice]
+    participants: [User]
+    result: [PollResult]
+}
+
+# what is needed for a user
+type User {
+    id: ID
+    money: Int
+    pollsCreated: [Poll]
+    pollsParticipated: [Poll]
+    #other deets
+}
+
+# what is needed for a vote
+type Vote {
+    pollId: ID
+    userId: ID
+    choice: Choice
+    money: Int
+    result: VoteResult
+}
+
+type UserInput {
+    #deets
+}
+
+type PollInput {
+    userId: ID
+    duration: Int
+    gameMode: GameMode
+    votingMode: VotingMode
+    choices: [Choice]
+}
+
+type VoteInput {
+    userId: ID
+    pollId: ID
+    choiceId: ID
+    amount: Int
+}
