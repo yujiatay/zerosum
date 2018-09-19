@@ -14,7 +14,7 @@ const styles = theme => ({
     minWidth: 275,
     margin: 10,
     borderRadius: 10,
-    backgroundColor: '#01283b'
+    backgroundColor: '#014262'
   },
   cardContent: {
     paddingTop: 10,
