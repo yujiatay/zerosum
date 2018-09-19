@@ -5,13 +5,11 @@ import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import IconButton from '@material-ui/core/IconButton';
-import BackIcon from '@material-ui/icons/ArrowBack';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import ButtonBase from "@material-ui/core/ButtonBase/ButtonBase";
 import CardContent from "@material-ui/core/CardContent/CardContent";
 import Card from "@material-ui/core/Card/Card";
 import Avatar from '@material-ui/core/Avatar';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const styles = theme => ({
   fullHeight: {
@@ -92,7 +90,7 @@ class GameScreen extends Component {
               className={classes.backButton} color="inherit" aria-label="Back"
               component={Link} to="/games"
             >
-              <BackIcon/>
+              <FontAwesomeIcon icon="arrow-left" size="sm"/>
             </IconButton>
             <Typography className={classes.header} variant="display2" noWrap>
               G
