@@ -4,39 +4,43 @@ import { withStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import AddBox from '@material-ui/icons/AddBox';
+import AddBox from '@material-ui/icons/AddCircle';
 import Home from '@material-ui/icons/Home';
+import Shop from '@material-ui/icons/ShoppingCart';
+import AddCircle from './assets/add-circle.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const styles = theme => ({
   stickToBottom: {
     width: '100%',
     position: 'fixed',
     bottom: 0,
+  },
+  icon: {
+    fontSize: '1.5rem'
   }
 });
 
 class BottomNavBar extends Component {
-  state = {
-    value: 0,
-  };
-
   handleChange = (event, value) => {
     this.setState({ value });
   };
 
   render() {
     const { classes, value } = this.props;
-    // const { value } = this.state;
 
     return (
       <BottomNavigation
         value={value}
         onChange={this.handleChange}
         className={classes.stickToBottom}
+        showLabels='false'
       >
-        <BottomNavigationAction icon={<Home/>} component={Link} to='/polls'/>
-        <BottomNavigationAction icon={<AddBox/>} component={Link} to='/post'/>
-        <BottomNavigationAction icon={<AccountCircle/>} component={Link} to='/profile'/>
+        <BottomNavigationAction icon={<FontAwesomeIcon icon="home" size="lg"/>} component={Link} to='/games'/>
+        <BottomNavigationAction icon={<FontAwesomeIcon icon="shopping-cart" size="lg"/>} component={Link} to='/shop'/>
+        <BottomNavigationAction icon={<FontAwesomeIcon icon="plus-circle" size="lg"/>} component={Link} to='/post'/>
+        <BottomNavigationAction icon={<FontAwesomeIcon icon="trophy" size="lg"/>} component={Link} to='/leaderboard'/>
+        <BottomNavigationAction icon={<FontAwesomeIcon icon="user-circle" size="lg"/>} component={Link} to='/profile'/>
       </BottomNavigation>
     );
   }

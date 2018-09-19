@@ -132,7 +132,7 @@ class PostScreen extends Component {
           </Button>
         </div>
 
-        <BottomNavBar value={1}/>
+        <BottomNavBar value={2}/>
       </div>
     );
   }

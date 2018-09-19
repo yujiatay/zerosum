@@ -25,7 +25,7 @@ const styles = theme => ({
   },
 });
 
-class PollScreen extends Component {
+class GameScreen extends Component {
   constructor(props) {
     super(props);
   }
@@ -39,7 +39,7 @@ class PollScreen extends Component {
           <Toolbar>
             <IconButton
               className={classes.backButton} color="inherit" aria-label="Back"
-              component={Link} to="/polls"
+              component={Link} to="/games"
             >
               <BackIcon/>
             </IconButton>
@@ -67,4 +67,4 @@ class PollScreen extends Component {
   }
 }
 
-export default withStyles(styles)(PollScreen);
+export default withStyles(styles)(GameScreen);

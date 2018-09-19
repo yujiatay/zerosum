@@ -30,7 +30,7 @@ const styles = theme => ({
 });
 
 
-class PollsScreen extends Component {
+class GamesScreen extends Component {
   constructor(props) {
     super(props);
   }
@@ -57,7 +57,7 @@ class PollsScreen extends Component {
                   <Typography className={classes.title} color="textSecondary" align="right">
                     Pot: $30
                   </Typography>
-                  <Typography variant="headline" component="h2">
+                  <Typography variant="title" component="h2">
                     Democracy vs Communism?
                   </Typography>
                   <Typography className={classes.pos} color="textSecondary">
@@ -69,7 +69,7 @@ class PollsScreen extends Component {
                 </CardContent>
                 <CardActions>
                   <Button size="small" component={Link}
-                          to={{ pathname: "/poll",
+                          to={{ pathname: "/game",
                             state: { title: "Democracy vs Communism?",
                               options: ['Democracy', 'Communism']}}}>
                     See More
@@ -85,4 +85,4 @@ class PollsScreen extends Component {
   }
 }
 
-export default withStyles(styles)(PollsScreen);
+export default withStyles(styles)(GamesScreen);

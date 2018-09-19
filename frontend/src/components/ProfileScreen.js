@@ -8,19 +8,20 @@ import BottomNavBar from "./BottomNavBar";
 import Avatar from '@material-ui/core/Avatar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    marginTop: 60,
-    marginBottom: 60,
+    height: '100vh',
+  },
+  body: {
     backgroundColor: theme.palette.background.paper,
   },
   grow: {
     flexGrow: 1,
   },
-  title: {
-    display: 'block'
+  header: {
+    textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
   },
   sectionMobile: {
     display: 'flex',
@@ -31,17 +32,43 @@ const styles = theme => ({
   },
   bigAvatar: {
     margin: 10,
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
     backgroundColor: 'grey'
   },
+  logout: {
+    color: '#C1CAD6',
+    fontFamily: '"SuperMario256"'
+  },
+  winrate: {
+    fontSize: '1rem'
+  },
+  tab: {
+    width: '50%'
+  },
+  tabcontainer: {
+    backgroundColor: '#068D9D',
+    borderRadius: 0,
+    overflowY: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+  }
 });
 
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
+    <Paper elevation={0} style={{
+      backgroundColor: '#068D9D',
+      borderRadius: 0,
+      overflowY: 'auto',
+      marginBottom: 56,
+      height: `calc(100vh - 23.375rem)` // deduct height of everything else from viewport
+    }}>
+
+      <Typography component="div" style={{ padding: 8 * 3 }}>
+        {props.children}
+      </Typography>
+    </Paper>
   );
 }
 
@@ -61,49 +88,55 @@ class ProfileScreen extends Component {
     const { value } = this.state;
     const { classes } = this.props;
     return (
-      <div>
-        <AppBar position="fixed">
+      <div className={classes.root}>
+        <AppBar position="static">
           <Toolbar>
-            <Typography className={classes.title} variant="title" color="inherit" noWrap>
-              Profile
+            <Typography className={classes.header} variant="display2" noWrap>
+              P
+            </Typography>
+            <Typography className={classes.header} variant="display1" noWrap>
+              rofile
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionMobile}>
-              <Button color="default">
+              <Button className={classes.logout}>
                 LOGOUT
               </Button>
             </div>
           </Toolbar>
         </AppBar>
 
-        <div className={classes.root}>
+        <div className={classes.body}>
           <div className={classes.row}>
             <Avatar
-              alt="Adelle Charles"
-              src="/static/images/uxceo-128.jpg"
+              alt="Profile Pic"
+              src="https://via.placeholder.com/128x128"
               className={classes.bigAvatar}
             />
           </div>
-          <Typography variant="headline" component="h3">
-            Level 999
-          </Typography>
-          <p>Progress bar</p>
+            <Typography variant="headline" align="center">
+              MadHatter
+            </Typography>
+            <Typography className={classes.winrate} variant="title" align="center">
+              Win rate: 100%
+            </Typography>
+            <Typography variant="title" align="center">
+              --- Progress bar ---
+            </Typography>
 
-          <AppBar position="static" color="inherit">
-            <Tabs value={value} onChange={this.handleChange} indicatorColor="primary"
-                  textColor="primary" scrollable scrollButtons="auto" centered fullWidth
-            >
-              <Tab label="Hats" />
-              <Tab label="Achievements" />
-              <Tab label="Polls" />
-            </Tabs>
-          </AppBar>
-          {value === 0 && <TabContainer>Item One</TabContainer>}
-          {value === 1 && <TabContainer>Item Two</TabContainer>}
-          {value === 2 && <TabContainer>Item Three</TabContainer>}
+            <AppBar position="static">
+              <Tabs value={value} onChange={this.handleChange}
+                    textColor="primary" fullWidth elevation={0}
+              >
+                <Tab label="Hats" className={classes.tab}/>
+                <Tab label="Achievements" className={classes.tab}/>
+              </Tabs>
+            </AppBar>
+
         </div>
-
-        <BottomNavBar value={2}/>
+        {value === 0 && <TabContainer>Item One</TabContainer>}
+        {value === 1 && <TabContainer>Item Two</TabContainer>}
+        <BottomNavBar value={4}/>
       </div>
     );
   }
