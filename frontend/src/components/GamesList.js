@@ -56,7 +56,7 @@ class GamesList extends Component {
               <ButtonBase className={classes.button} component={Link}
                           to={{ pathname: "/game",
                             state: { title: "Democracy vs Communism?",
-                              options: ['Democracy', 'Communism']}}}>
+                              options: ['Forever', '2000', '2010', '2020']}}}>
                 <CardContent className={classes.cardContent}>
                   <Typography className={classes.white} variant="subheading" align="right">
                     $99999
@@ -66,13 +66,13 @@ class GamesList extends Component {
                   </Typography>
                 </CardContent>
                 <CardContent className={classes.cardContentRow}>
-                  <Typography>
+                  <Typography color="textSecondary">
                     Majority
                   </Typography>
-                  <Typography>
+                  <Typography color="textSecondary">
                     Fixed Stakes
                   </Typography>
-                  <Typography>
+                  <Typography color="textSecondary">
                     23h 39min
                   </Typography>
                 </CardContent>
