@@ -23,6 +23,9 @@ const styles = theme => ({
   sectionMobile: {
     display: 'flex',
   },
+  header: {
+    textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
+  },
 });
 
 class GameScreen extends Component {
@@ -43,8 +46,11 @@ class GameScreen extends Component {
             >
               <BackIcon/>
             </IconButton>
-            <Typography className={classes.title} variant="title" color="inherit" noWrap>
-              Poll
+            <Typography className={classes.header} variant="display2" noWrap>
+              G
+            </Typography>
+            <Typography className={classes.header} variant="display1" noWrap>
+              ame
             </Typography>
             <div className={classes.grow} />
           </Toolbar>

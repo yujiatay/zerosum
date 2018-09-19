@@ -39,6 +39,9 @@ const styles = theme => ({
   button: {
     marginTop: theme.spacing.unit,
   },
+  header: {
+    textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
+  },
 });
 
 class PostScreen extends Component {
@@ -66,8 +69,11 @@ class PostScreen extends Component {
       <div>
         <AppBar position="fixed">
           <Toolbar>
-            <Typography className={classes.title} variant="title" color="inherit" noWrap>
-              Post
+            <Typography className={classes.header} variant="display2" noWrap>
+              P
+            </Typography>
+            <Typography className={classes.header} variant="display1" noWrap>
+              ost
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionMobile}>

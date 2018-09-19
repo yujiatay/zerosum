@@ -9,6 +9,11 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import BottomNavBar from "./BottomNavBar";
+import Toolbar from "@material-ui/core/Toolbar/Toolbar";
+import IconButton from "@material-ui/core/IconButton/IconButton";
+import AppBar from "@material-ui/core/AppBar/AppBar";
+import SearchIcon from '@material-ui/icons/Search';
+import FilterIcon from '@material-ui/icons/FilterList';
 
 const styles = theme => ({
   root: {
@@ -27,6 +32,12 @@ const styles = theme => ({
   pos: {
     marginBottom: 12,
   },
+  grow: {
+    flexGrow: 1,
+  },
+  header: {
+    textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
+  },
 });
 
 
@@ -39,7 +50,25 @@ class GamesScreen extends Component {
 
     return (
       <div>
-        <TopNavBar/>
+        <AppBar position="fixed">
+          <Toolbar>
+            <Typography className={classes.header} variant="display2" noWrap>
+              G
+            </Typography>
+            <Typography className={classes.header} variant="display1" noWrap>
+              ames
+            </Typography>
+            <div className={classes.grow} />
+            <div className={classes.sectionMobile}>
+              <IconButton aria-haspopup="true" onClick={this.handleSearch} color="inherit">
+                <SearchIcon />
+              </IconButton>
+              <IconButton aria-haspopup="true" onClick={this.handleFilter} color="inherit">
+                <FilterIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
         <Grid
           container
           direction="column"
