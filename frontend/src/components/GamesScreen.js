@@ -11,8 +11,7 @@ import BottomNavBar from "./BottomNavBar";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import AppBar from "@material-ui/core/AppBar/AppBar";
-import SearchIcon from '@material-ui/icons/Search';
-import FilterIcon from '@material-ui/icons/FilterList';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const styles = theme => ({
   root: {
@@ -60,10 +59,10 @@ class GamesScreen extends Component {
             <div className={classes.grow} />
             <div className={classes.sectionMobile}>
               <IconButton aria-haspopup="true" onClick={this.handleSearch} color="inherit">
-                <SearchIcon />
+                <FontAwesomeIcon icon="search" size="sm"/>
               </IconButton>
               <IconButton aria-haspopup="true" onClick={this.handleFilter} color="inherit">
-                <FilterIcon />
+                <FontAwesomeIcon icon="filter" size="sm"/>
               </IconButton>
             </div>
           </Toolbar>

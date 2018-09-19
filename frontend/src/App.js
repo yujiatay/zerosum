@@ -7,9 +7,9 @@ import ProfileScreen from "./components/ProfileScreen";
 import PollScreen from './components/GameScreen';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHome, faShoppingCart, faPlusCircle, faTrophy, faUserCircle } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faShoppingCart, faPlusCircle, faTrophy, faUserCircle, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faHome, faShoppingCart, faPlusCircle, faTrophy, faUserCircle);
+library.add(faHome, faShoppingCart, faPlusCircle, faTrophy, faUserCircle, faSearch, faFilter);
 
 const theme = createMuiTheme({
   palette: {
