@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import BottomNavBar from "./BottomNavBar";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Paper from '@material-ui/core/Paper';
+import Tabs from "@material-ui/core/Tabs/Tabs";
+import Tab from "@material-ui/core/Tab/Tab";
+import GamesList from "./GamesList";
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    marginTop: 60,
-    marginBottom: 60
   },
   card: {
     minWidth: 275,
@@ -36,19 +32,38 @@ const styles = theme => ({
   header: {
     textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
   },
+  subheader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 15,
+    paddingBottom: 15,
+  },
+  tab: {
+    width: '50%'
+  },
 });
-
 
 class GamesScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      value: 0
+    }
   }
+
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
+
   render() {
     const { classes } = this.props;
+    const { value } = this.state;
 
     return (
       <div>
-        <AppBar position="fixed">
+        <AppBar position="static">
           <Toolbar>
             <Typography className={classes.header} variant="display2" noWrap>
               G
@@ -67,45 +82,26 @@ class GamesScreen extends Component {
             </div>
           </Toolbar>
         </AppBar>
-        <Grid
-          container
-          direction="column"
-          justify="flex-start"
-          alignItems="stretch"
-          className={classes.root}
-        >
-          <Typography color="textPrimary" component="p" align="right">
+        <Paper elevation={0} className={classes.subheader}>
+          <Typography variant="subheading" align="left">
+            999 ongoing games!
+          </Typography>
+          <Typography variant="subheading"  align="right">
             Money: $100
           </Typography>
-          {[0, 1, 2].map(value => (
-            <Grid key={value} item>
-              <Card className={classes.card}>
-                <CardContent>
-                  <Typography className={classes.title} color="textSecondary" align="right">
-                    Pot: $30
-                  </Typography>
-                  <Typography variant="title" component="h2">
-                    Democracy vs Communism?
-                  </Typography>
-                  <Typography className={classes.pos} color="textSecondary">
-                    posted by MadHatter
-                  </Typography>
-                  <Typography component="p">
-                    majority | 3h left
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small" component={Link}
-                          to={{ pathname: "/game",
-                            state: { title: "Democracy vs Communism?",
-                              options: ['Democracy', 'Communism']}}}>
-                    See More
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        </Paper>
+        <AppBar position="static">
+          <Tabs value={value} onChange={this.handleChange}
+                textColor="primary" fullWidth elevation={0}
+          >
+            <Tab label="All Games" className={classes.tab}/>
+            <Tab label="Your Games" className={classes.tab}/>
+          </Tabs>
+        </AppBar>
+
+
+        {value === 0 && <GamesList/>}
+        {value === 1 && <GamesList/>}
         <BottomNavBar value={0}/>
       </div>
     );

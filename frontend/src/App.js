@@ -41,6 +41,10 @@ const theme = createMuiTheme({
       fontSize: '1.3rem',
       color: '#068D9D',
     },
+    subheading: {
+      fontFamily: '"SuperMario256"',
+      color: '#068D9D'
+    },
     headline: {
       fontFamily: '"Acme"',
       color: '#014262'
