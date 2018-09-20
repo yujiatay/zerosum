@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from "@material-ui/core/Tabs/Tabs";
 import Tab from "@material-ui/core/Tab/Tab";
 import GamesList from "./GamesList";
+import Money from "./assets/money-bag.png";
 
 const styles = theme => ({
   root: {
@@ -34,7 +35,9 @@ const styles = theme => ({
   },
   subheader: {
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 15,
@@ -43,6 +46,39 @@ const styles = theme => ({
   tab: {
     width: '50%'
   },
+  moneybag: {
+    height: 24,
+    width: 24
+  },
+  moneyInfo: {
+  display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    padding: 0,
+    position: 'relative'
+  },
+  moneyText: {
+    lineHeight: 'inherit',
+    color: '#fff'
+  },
+  blueCircle: {
+    borderRadius: '50%',
+    backgroundColor: '#014262',
+    height: 30,
+    width: 30,
+    display: 'flex',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: -15
+  },
+  blueRect: {
+    backgroundColor: '#068D9D',
+    padding: 5,
+    width: 75,
+    display: 'flex',
+    justifyContent: 'flex-end'
+  }
 });
 
 class GamesScreen extends Component {
@@ -83,12 +119,19 @@ class GamesScreen extends Component {
           </Toolbar>
         </AppBar>
         <Paper elevation={0} className={classes.subheader}>
-          <Typography variant="subheading" align="left">
+          <Typography variant="title" align="left">
             999 ongoing games!
           </Typography>
-          <Typography variant="subheading"  align="right">
-            Money: $100
-          </Typography>
+          <Paper elevation={0} className={classes.moneyInfo}>
+            <Paper elevation={0} className={classes.blueCircle}>
+              <img src={Money} className={classes.moneybag}/>
+            </Paper>
+            <Paper elevation={0} className={classes.blueRect}>
+              <Typography variant="subheading"  className={classes.moneyText}>
+                100
+              </Typography>
+            </Paper>
+          </Paper>
         </Paper>
         <AppBar position="static">
           <Tabs value={value} onChange={this.handleChange}
