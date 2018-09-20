@@ -1,52 +1,52 @@
 package models
 
-import (
-	"time"
-)
+import "time"
 
-type VotingMode int
-type GameMode int
+type Stakes string
+type GameMode string
 
 const (
-	NO_STAKES VotingMode = iota
-	FIXED_STAKES
-	FIXED_LIMIT
-	NO_LIMIT
+	NO_STAKES    Stakes = "NO_STAKES"
+	FIXED_STAKES Stakes = "FIXED_STAKES"
+	FIXED_LIMIT  Stakes = "FIXED_LIMIT"
+	NO_LIMIT     Stakes = "NO_LIMIT"
 )
 const (
-	MAJORITY GameMode = iota
-	MINORITY
+	MAJORITY GameMode = "MAJORITY"
+	MINORITY GameMode = "MINORITY"
 )
 
-type Poll struct {
-	Id string `gorm:"primary_key"`
-	UserId string // foreign key from user
-	Body string
-	StartTime time.Time
-	EndTime time.Time
-	VotingMode VotingMode
-	GameMode GameMode
-	MoneySum int //TODO: confirm if necessary
-	Choices []Choice `gorm:"foreignkey:PollId"`
-	Participants []User `gorm:"many2many:votes;foreignkey:PollId"`
+type Game struct {
+	Id           string `gorm:"primary_key"`
+	UserId       string // foreign key from user
+	Topic        string
+	StartTime    time.Time
+	EndTime      time.Time
+	Stakes       Stakes
+	GameMode     GameMode
+	MoneySum     int //TODO: confirm if necessary
+	Options      []Option `gorm:"foreignkey:GameId"`
+	Participants []User   `gorm:"many2many:votes;foreignkey:GameId"`
 }
 
-type Choice struct {
-	Id string `gorm:"primary_key"`
-	Body string
-	PollId string // foreign key from poll
-	Users []User `gorm:"many2many:votes;foreignkey:ChoiceId"`
-}
-
-type Vote struct {
-	PollId string `gorm:"primary_key"` //foreign key from poll
-	UserId string `gorm:"primary_key"` // foreign key from user
-	ChoiceId string // foreign key from choice
-	Money int
+type Option struct {
+	Id     string `gorm:"primary_key"`
+	Body   string
+	GameId string // foreign key from game
+	Users  []User `gorm:"many2many:votes;foreignkey:OptionId"`
 }
 
 type User struct {
-	Id string `gorm:"primary_key"`
-	MoneyTotal int
-	PollsCreated []Poll `gorm:"foreignkey:UserId"`
+	Id                string `gorm:"primary_key"`
+	MoneyTotal        int
+	GamesCreated      []Game `gorm:"foreignkey:UserId"`
+	GamesParticipated []Game `gorm:"foreignkey:UserId"`
+	FbId              string `gorm:"unique_index"`
+}
+
+type Vote struct {
+	GameId   string `gorm:"primary_key"` //foreign key from game
+	UserId   string `gorm:"primary_key"` // foreign key from user
+	OptionId string                      // foreign key from option
+	Money    int
 }

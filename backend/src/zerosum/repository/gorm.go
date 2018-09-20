@@ -18,13 +18,13 @@ func InitTestDB() (err error) {
 		"postgres", "password", "zerosum", "localhost", 5432))
 
 	// Set up database tables
-	db.AutoMigrate(&models.Poll{}, &models.Vote{}, &models.Choice{}, &models.User{})
+	db.AutoMigrate(&models.Game{}, &models.Vote{}, &models.Option{}, &models.User{})
 
 	// Add foreign key constraints
-	db.Model(models.Choice{}).AddForeignKey("poll_id", "poll(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Poll{}).AddForeignKey("user_id", "user(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Vote{}).AddForeignKey("poll_id", "poll(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Vote{}).AddForeignKey("choice_id", "choice(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Option{}).AddForeignKey("game_id", "game(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Game{}).AddForeignKey("user_id", "user(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Vote{}).AddForeignKey("game_id", "game(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Vote{}).AddForeignKey("option_id", "option(id)", "CASCADE", "RESTRICT")
 	db.Model(models.Vote{}).AddForeignKey("user_id", "user(id)", "CASCADE", "RESTRICT")
 	return
 }
@@ -34,13 +34,13 @@ func CloseTestDB() {
 }
 
 /* POLL CRUD */
-func CreatePoll(poll models.Poll) (err error) {
+func CreateGame(game models.Game) (err error) {
 	// Check if alr exists
-	if !db.NewRecord(poll) {
-		err = errors.New("poll exists")
+	if !db.NewRecord(game) {
+		err = errors.New("game exists")
 		return
 	}
-	res := db.Create(&poll)
+	res := db.Create(&game)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -48,10 +48,10 @@ func CreatePoll(poll models.Poll) (err error) {
 	return
 }
 
-func QueryPoll(desiredPoll models.Poll) (poll models.Poll, err error) {
-	res := db.Where(desiredPoll).First(&poll)
+func QueryGame(desiredGame models.Game) (game models.Game, err error) {
+	res := db.Where(desiredGame).First(&game)
 	if res.RecordNotFound() {
-		err = errors.New("no poll found")
+		err = errors.New("no game found")
 	} else if res.Error != nil {
 		err = res.Error
 	}
@@ -59,24 +59,32 @@ func QueryPoll(desiredPoll models.Poll) (poll models.Poll, err error) {
 	return
 }
 
-func QueryPolls(desiredPolls models.Poll) (polls []models.Poll, err error) {
-	res := db.Where(desiredPolls).Find(&polls)
-	if res.RecordNotFound() {
-		err = errors.New("no poll found")
-	} else if res.Error != nil {
-		err = res.Error
+func SearchGames(searchString string, limit *int, after *int) (games []models.Game, err error) {
+
+	offset := *after
+	if after == nil {
+		offset = 0
 	}
 
+	interm := db.Offset(offset)
+	if limit != nil {
+		interm = interm.Limit(limit)
+	}
+
+	res := interm.Where("body LIKE ?", fmt.Sprintf("%%%s%%", searchString)).Find(&games)
+	if res.Error != nil {
+		err = res.Error
+	}
 	return
 }
 
-func UpdatePoll(poll models.Poll) (err error) {
+func UpdateGame(game models.Game) (err error) {
 	// Check if exists
-	if db.NewRecord(poll) {
-		err = errors.New("poll does not exist")
+	if db.NewRecord(game) {
+		err = errors.New("game does not exist")
 		return
 	}
-	res:= db.Model(&models.Poll{}).Updates(poll)
+	res:= db.Model(&models.Game{}).Updates(game)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -84,13 +92,13 @@ func UpdatePoll(poll models.Poll) (err error) {
 	return
 }
 
-func DeletePoll(poll models.Poll) (err error) {
+func DeleteGame(game models.Game) (err error) {
 	// Check if exists
-	if db.NewRecord(poll) {
-		err = errors.New("poll does not exist")
+	if db.NewRecord(game) {
+		err = errors.New("game does not exist")
 		return
 	}
-	res:= db.Delete(&poll)
+	res:= db.Delete(&game)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -107,6 +115,17 @@ func CreateUser(user models.User) (err error) {
 	}
 	res := db.Create(&user)
 	if res.Error != nil {
+		err = res.Error
+	}
+
+	return
+}
+
+func QueryUser(desiredUser models.User) (user models.User, err error) {
+	res := db.Where(desiredUser).First(&user)
+	if res.RecordNotFound() {
+		err = errors.New("no user found")
+	} else if res.Error != nil {
 		err = res.Error
 	}
 
@@ -141,14 +160,14 @@ func DeleteUser(user models.User) (err error) {
 	return
 }
 
-/* DECISION CRUD */
-func CreateDecision(decision models.Vote) (err error) {
+/* VOTE CRUD */
+func CreateVote(vote models.Vote) (err error) {
 	// Check if alr exists
-	if !db.NewRecord(decision) {
-		err = errors.New("decision exists")
+	if !db.NewRecord(vote) {
+		err = errors.New("vote exists")
 		return
 	}
-	res := db.Create(&decision)
+	res := db.Create(&vote)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -156,13 +175,43 @@ func CreateDecision(decision models.Vote) (err error) {
 	return
 }
 
-func UpdateDecision(decision models.Vote) (err error) {
+func QueryVote(desiredVote models.Vote) (vote models.Vote, err error) {
+	res := db.Where(desiredVote).First(&vote)
+	if res.RecordNotFound() {
+		err = errors.New("no vote found")
+	} else if res.Error != nil {
+		err = res.Error
+	}
+
+	return
+}
+
+func QueryVotes(desiredVote models.Vote, limit *int, after *int) (votes []models.Vote, err error) {
+
+	offset := *after
+	if after == nil {
+		offset = 0
+	}
+
+	interm := db.Offset(offset)
+	if limit != nil {
+		interm = interm.Limit(limit)
+	}
+
+	res := interm.Where(desiredVote).Find(&votes)
+	if res.Error != nil {
+		err = res.Error
+	}
+	return
+}
+
+func UpdateVote(vote models.Vote) (err error) {
 	// Check if exists
-	if db.NewRecord(decision) {
-		err = errors.New("decision does not exist")
+	if db.NewRecord(vote) {
+		err = errors.New("vote does not exist")
 		return
 	}
-	res:= db.Model(&models.Vote{}).Updates(decision)
+	res:= db.Model(&models.Vote{}).Updates(vote)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -170,13 +219,13 @@ func UpdateDecision(decision models.Vote) (err error) {
 	return
 }
 
-func DeleteDecision(decision models.Vote) (err error) {
+func DeleteVote(vote models.Vote) (err error) {
 	// Check if exists
-	if db.NewRecord(decision) {
-		err = errors.New("decision does not exist")
+	if db.NewRecord(vote) {
+		err = errors.New("vote does not exist")
 		return
 	}
-	res:= db.Delete(&decision)
+	res:= db.Delete(&vote)
 	if res.Error != nil {
 		err = res.Error
 	}
