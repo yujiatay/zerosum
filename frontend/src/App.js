@@ -9,12 +9,12 @@ import PollScreen from './components/GameScreen';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
-  faArrowLeft
+  faArrowLeft, faCoins, faHourglassHalf
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
-  faArrowLeft);
+  faArrowLeft, faCoins, faHourglassHalf);
 
 const theme = createMuiTheme({
   palette: {
@@ -92,6 +92,13 @@ const theme = createMuiTheme({
         color: '#fff',
         fontFamily: '"SuperMario256"',
         fontSize: '1rem'
+      }
+    },
+    MuiCardContent: {
+      root: {
+        '&:last-child': {
+          paddingBottom: 0
+        },
       }
     }
   }
