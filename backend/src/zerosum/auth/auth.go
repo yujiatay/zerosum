@@ -38,7 +38,7 @@ func (a *auth) JwtAuthMiddleware() negroni.Handler {
 	return negroni.HandlerFunc(jwtMiddleware.HandlerWithNext)
 }
 
-func NewAuth(secret, fbAppId, fbSecret string) {
+func NewAuth(secret, fbAppId, fbAccessToken string) {
 	Auth = auth{
 		secret:        secret,
 		signingMethod: jwt.SigningMethodHS256,
