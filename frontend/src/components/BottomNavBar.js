@@ -3,11 +3,6 @@ import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import AddBox from '@material-ui/icons/AddCircle';
-import Home from '@material-ui/icons/Home';
-import Shop from '@material-ui/icons/ShoppingCart';
-import AddCircle from './assets/add-circle.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const styles = theme => ({
