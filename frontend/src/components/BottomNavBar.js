@@ -29,7 +29,7 @@ class BottomNavBar extends Component {
         value={value}
         onChange={this.handleChange}
         className={classes.stickToBottom}
-        showLabels='false'
+        showLabels={false}
       >
         <BottomNavigationAction icon={<FontAwesomeIcon icon="home" size="lg"/>} component={Link} to='/games'/>
         <BottomNavigationAction icon={<FontAwesomeIcon icon="shopping-cart" size="lg"/>} component={Link} to='/shop'/>

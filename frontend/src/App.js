@@ -71,7 +71,7 @@ const theme = createMuiTheme({
         minWidth: 0,
         '&$selected': {
           color: '#fff',
-          paddingTop: 8,
+          paddingTop: 16,
           backgroundColor: '#01283b'
         },
       }
