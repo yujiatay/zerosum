@@ -1,18 +1,20 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gin-gonic/gin"
+	"github.com/gorilla/mux"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
+	"github.com/rs/cors"
 	"github.com/urfave/negroni"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"zerosum/auth"
 	"zerosum/repository"
 )
 
-func getSchema(path string) (string, error) {
+func readSchema(path string) (string, error) {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
 		return "", err
@@ -20,17 +22,47 @@ func getSchema(path string) (string, error) {
 	return string(b), nil
 }
 
-func main() {
-	_ = gin.Default()
-	err := repository.InitTestDB()
-	fmt.Print(err)
-	s, err := getSchema("schema/schema.graphql")
-	rootResolver := resolver.resolver // TODO: Add resolver path here
+func NewGqlHandler(schemaPath string, rootResolver resolver.Resolver) (http.Handler, error) {
+	s, err := readSchema(schemaPath)
 	schema := graphql.MustParseSchema(s, &rootResolver)
-	apiHandler := relay.Handler{Schema: schema}
-	mux := http.NewServeMux()
-	mux.Handle("/query", &apiHandler)
+	handler := &relay.Handler{Schema: schema}
+	return handler, err
+}
+
+const SCHEMA_PATH = "schema/schema.graphql"
+
+func main() {
+	err := repository.InitTestDB()
+	if err != nil {
+		log.Print(err)
+	}
+	rootResolver := resolver.Resolver // TODO: Add resolver path here
+	gqlHandler, err := NewGqlHandler(SCHEMA_PATH, rootResolver)
+	if err != nil {
+		log.Print(err)
+	}
+	auth.NewAuth(
+		os.Getenv("ZEROSUM_SECRET"),
+		os.Getenv("FACEBOOK_ACCESS_TOKEN"),
+		os.Getenv("FACEBOOK_APP_ID"),
+	)
+	corsMiddleware := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedHeaders: []string{"X-Requested-With", "Accept", "Content-Type", "Content-Length",
+			"Accept-Encoding", "X-CSRF-Token", "Authorization"},
+		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+	})
+	router := mux.NewRouter()
+	authRouter := mux.NewRouter()
+	router.HandleFunc("/api/login/facebook", auth.Auth.FbLoginHandler).Methods("POST")
+	authRouter.Handle("/api/gql", gqlHandler)
+	an := negroni.New(auth.Auth.JwtAuthMiddleware(), negroni.Wrap(authRouter))
+	// Pass all "/api"-prefixed endpoints through auth middleware and authRouter, except those directly registered
+	// on `router`
+	router.PathPrefix("/api").Handler(an)
+	// Pass all routes through Classic and CORS middlewares before going to main router
 	n := negroni.Classic()
-	n.UseHandler(mux)
-	log.Fatal(http.ListenAndServe("localhost:8080", n))
+	n.Use(corsMiddleware)
+	n.UseHandler(router)
+	n.Run("localhost:8080")
 }
