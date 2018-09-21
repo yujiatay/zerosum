@@ -21,8 +21,8 @@ type FbUser struct {
 var Auth auth
 
 func (a *auth) generateSignedUserToken(user models.User) (string, error) {
-	token := jwt.NewWithClaims(a.signingMethod, jwt.MapClaims{
-		"id": user.Id,
+	token := jwt.NewWithClaims(a.signingMethod, jwt.StandardClaims{
+		Id: user.Id,
 	})
 	return token.SignedString(a.secret)
 }
@@ -45,4 +45,8 @@ func NewAuth(secret, fbAppId, fbAccessToken string) {
 		fbAppId:       fbAppId,
 		fbAccessToken: fbAccessToken,
 	}
+}
+
+func GetClaims(token *jwt.Token) jwt.StandardClaims {
+	return token.Claims.(jwt.StandardClaims)
 }

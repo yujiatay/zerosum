@@ -2,7 +2,9 @@ package resolvers
 
 import (
 	"context"
+	"github.com/dgrijalva/jwt-go"
 	"time"
+	"zerosum/auth"
 	"zerosum/models"
 	"zerosum/repository"
 )
@@ -10,8 +12,7 @@ import (
 type Resolver struct{}
 
 func getIdFromCtx(ctx context.Context) (id string) {
-	// TODO: Implement this
-	return
+	return auth.GetClaims(ctx.Value("user").(*jwt.Token)).Id
 }
 
 type gameSearchQuery struct {
