@@ -9,14 +9,20 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import BottomNavBar from "./BottomNavBar";
+import BottomNavBar from "../BottomNavBar";
 import Button from '@material-ui/core/Button';
+import SectionHeader from "./SectionHeader";
+import OptionList from "./OptionList";
 
 const styles = theme => ({
-  root: {
+  body: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 60,
+    marginTop: 56,
+    marginBottom: 56,
+
+  },
+  form: {
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
   },
@@ -38,19 +44,29 @@ const styles = theme => ({
   },
   button: {
     marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
   },
   header: {
     textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
   },
+  white: {
+    color: '#fff'
+  }
 });
 
-class PostScreen extends Component {
-  state = {
-    topic: '',
-    gmode: 'majority',
-    vmode: 'nostakes',
-    endTime: ''
-  };
+class CreateScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      topic: '',
+      options: [],
+      gmode: 'majority',
+      vmode: 'nostakes',
+      endTime: ''
+    };
+  }
 
   handleChange = name => event => {
     this.setState({
@@ -62,6 +78,19 @@ class PostScreen extends Component {
     this.setState({ [mode] : event.target.value });
   };
 
+  handleOptions = options => {
+    this.setState({
+      options: options
+    })
+  };
+
+  handleEditOption = (option, index) => {
+    var options = this.state.options.slice();
+    options[index] = option;
+    this.setState({
+      options: options
+    })
+  };
 
   render() {
     const { classes } = this.props;
@@ -81,31 +110,22 @@ class PostScreen extends Component {
           </Toolbar>
         </AppBar>
 
-        <div className={classes.root}>
-          <form style={{display: 'flex', flexWrap: 'wrap'}}>
+        <div className={classes.body}>
+          <SectionHeader text="Topic"/>
+          <form className={classes.form}>
             <TextField
-              id="outlined-bare"
-              className={classes.textField}
-              defaultValue="Bare"
+              id="topic"
+              placeholder="I want to ask..."
+              value={this.state.name}
+              onChange={this.handleChange('topic')}
               margin="normal"
-              variant="outlined"
+              fullWidth
             />
-
           </form>
-          <FormControl components="fieldset" className={classes.formControl}>
-
-            {/*<TextField*/}
-              {/*id="topic"*/}
-              {/*label="Topic"*/}
-              {/*value={this.state.name}*/}
-              {/*onChange={this.handleChange('topic')}*/}
-              {/*margin="normal"*/}
-              {/*fullWidth*/}
-            {/*/>*/}
-          </FormControl>
-
+          <SectionHeader text="Options"/>
+          <OptionList options={this.state.options} addHandler={this.handleOptions} editHandler={this.handleEditOption}/>
+          <SectionHeader text="Game Mode"/>
           <FormControl component="fieldset" className={classes.formControl}>
-            <FormLabel component="legend">Game mode</FormLabel>
             <RadioGroup
               aria-label="Game mode"
               name="gmode"
@@ -117,8 +137,8 @@ class PostScreen extends Component {
               <FormControlLabel value="minority" control={<Radio />} label="Minority" />
             </RadioGroup>
           </FormControl>
+          <SectionHeader text="Stakes"/>
           <FormControl component="fieldset" className={classes.formControl}>
-            <FormLabel component="legend">Voting mode</FormLabel>
             <RadioGroup
               aria-label="Voting mode"
               name="vmode"
@@ -132,6 +152,7 @@ class PostScreen extends Component {
               <FormControlLabel value="nolimit" control={<Radio />} label="No Limit" />
             </RadioGroup>
           </FormControl>
+          <SectionHeader text="Time"/>
           <FormControl component="fieldset" className={classes.formControl}>
             <TextField
               id="datetime-local"
@@ -145,7 +166,9 @@ class PostScreen extends Component {
             />
           </FormControl>
           <Button variant="contained" color="primary" className={classes.button}>
-            POST
+            <Typography variant="subheading" className={classes.white}>
+              Submit
+            </Typography>
           </Button>
         </div>
 
@@ -155,4 +178,4 @@ class PostScreen extends Component {
   }
 }
 
-export default withStyles(styles)(PostScreen);
+export default withStyles(styles)(CreateScreen);
