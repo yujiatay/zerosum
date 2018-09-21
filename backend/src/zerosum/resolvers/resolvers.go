@@ -62,8 +62,8 @@ func (r *Resolver) GetGame(ctx context.Context, args *struct{ id string }) (game
 	return
 }
 
-func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (game []models.Game, err error) {
-	game, err = repository.SearchGames(args.Filter, args.Limit, args.After)
+func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (games []models.Game, err error) {
+	games, err = repository.SearchGames(args.Filter, args.Limit, args.After)
 	return
 }
 

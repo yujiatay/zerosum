@@ -24,7 +24,6 @@ type Game struct {
 	EndTime      time.Time
 	Stakes       Stakes
 	GameMode     GameMode
-	MoneySum     int //TODO: confirm if necessary
 	Options      []Option `gorm:"foreignkey:GameId"`
 	Participants []User   `gorm:"many2many:votes;foreignkey:GameId"`
 }

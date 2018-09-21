@@ -8,8 +8,8 @@ schema {
 # The query type, represents all of the entry points into our object graph
 type Query {
     getUser(id: ID!): User
-    getGame(id: ID!): Post
-    getGames(filter: String!, limit: Int, after: String): Post
+    getGame(id: ID!): Game
+    getGames(filter: String!, limit: Int, after: String): Game
 
     # Private, can only get own votes
     getVote(gameId: ID!): Vote
@@ -28,7 +28,6 @@ type Mutation {
 
     addVote(vote: VoteInput!): Vote
 }
-
 enum GameMode {
     MAJORITY
     MINORITY
@@ -41,50 +40,45 @@ enum Stakes {
     NO_LIMIT
 }
 
-type GameResult {
-    option: Option
-    votes: Int
-}
 
 type VoteResult {
     win: Boolean
     netChange: Int
 }
 
+type OptionResult {
+    option: Option
+    voteCount: Int
+    totalValue: Int
+    winner: Boolean
+}
+
 # what is needed for a game
 type Game {
-    id: ID
+    id: ID!
     owner: User
     topic: String
-    startTime: Date
-    endTime: Date
-    totalMoney: Date
+    startTime: Time
+    endTime: Time
+    totalMoney: Time
     gameMode: GameMode
     stakes: Stakes
     options: [Option]
     participants: [User]
-    result: [GameResult]
+    result: [OptionResult]
 }
 
-# what is needed for a game summary
-type GameSummary {
-    id: ID
-    owner: User
-    title: String
-    startTime: Date
-    endTime: Date
-    totalMoney: Date
-    gameMode: GameMode
-    stakes: Stakes
-    result: [GameResult]
+type Option {
+    id: ID!
+    body: String
 }
 
 # what is needed for a user
 type User {
-    id: ID
+    id: ID!
     money: Int
-    gamesCreated: [GameSummary]
-    gamesParticipated: [GameSummary]
+    gamesCreated: [Game]
+    gamesParticipated: [Game]
     #other deets
 }
 
