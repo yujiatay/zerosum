@@ -12,6 +12,7 @@ import (
 	"os"
 	"zerosum/auth"
 	"zerosum/repository"
+	"zerosum/resolvers"
 )
 
 func readSchema(path string) (string, error) {
@@ -22,9 +23,9 @@ func readSchema(path string) (string, error) {
 	return string(b), nil
 }
 
-func NewGqlHandler(schemaPath string, rootResolver resolver.Resolver) (http.Handler, error) {
+func NewGqlHandler(schemaPath string, rootResolver *resolvers.Resolver) (http.Handler, error) {
 	s, err := readSchema(schemaPath)
-	schema := graphql.MustParseSchema(s, &rootResolver)
+	schema := graphql.MustParseSchema(s, rootResolver)
 	handler := &relay.Handler{Schema: schema}
 	return handler, err
 }
@@ -36,8 +37,8 @@ func main() {
 	if err != nil {
 		log.Print(err)
 	}
-	rootResolver := resolver.Resolver // TODO: Add resolver path here
-	gqlHandler, err := NewGqlHandler(SCHEMA_PATH, rootResolver)
+	rootResolver := resolvers.Resolver{}
+	gqlHandler, err := NewGqlHandler(SCHEMA_PATH, &rootResolver)
 	if err != nil {
 		log.Print(err)
 	}
@@ -56,7 +57,7 @@ func main() {
 	authRouter := mux.NewRouter()
 	router.HandleFunc("/api/login/facebook", auth.Auth.FbLoginHandler).Methods("POST")
 	authRouter.Handle("/api/gql", gqlHandler)
-	an := negroni.New(auth.Auth.JwtAuthMiddleware(), negroni.Wrap(authRouter))
+	an := negroni.New(auth.Auth.GetJwtMiddleware(), negroni.Wrap(authRouter))
 	// Pass all "/api"-prefixed endpoints through auth middleware and authRouter, except those directly registered
 	// on `router`
 	router.PathPrefix("/api").Handler(an)

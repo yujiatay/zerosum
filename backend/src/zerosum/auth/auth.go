@@ -27,7 +27,7 @@ func (a *auth) generateSignedUserToken(user models.User) (string, error) {
 	return token.SignedString(a.secret)
 }
 
-func (a *auth) JwtAuthMiddleware() negroni.Handler {
+func (a *auth) GetJwtMiddleware() negroni.Handler {
 	jwtMiddleware := jwtmiddleware.New(jwtmiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			return []byte(a.secret), nil
