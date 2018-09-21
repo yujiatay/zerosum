@@ -70,10 +70,10 @@ class PostScreen extends Component {
         <AppBar position="fixed">
           <Toolbar>
             <Typography className={classes.header} variant="display2" noWrap>
-              P
+              C
             </Typography>
             <Typography className={classes.header} variant="display1" noWrap>
-              ost
+              reate game
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionMobile}>
@@ -82,17 +82,28 @@ class PostScreen extends Component {
         </AppBar>
 
         <div className={classes.root}>
-          <FormControl components="fieldset" className={classes.formControl}>
+          <form style={{display: 'flex', flexWrap: 'wrap'}}>
             <TextField
-              id="topic"
-              label="Topic"
-              value={this.state.name}
-              onChange={this.handleChange('topic')}
+              id="outlined-bare"
+              className={classes.textField}
+              defaultValue="Bare"
               margin="normal"
-              fullWidth
+              variant="outlined"
             />
+
+          </form>
+          <FormControl components="fieldset" className={classes.formControl}>
+
+            {/*<TextField*/}
+              {/*id="topic"*/}
+              {/*label="Topic"*/}
+              {/*value={this.state.name}*/}
+              {/*onChange={this.handleChange('topic')}*/}
+              {/*margin="normal"*/}
+              {/*fullWidth*/}
+            {/*/>*/}
           </FormControl>
-          Show Options
+
           <FormControl component="fieldset" className={classes.formControl}>
             <FormLabel component="legend">Game mode</FormLabel>
             <RadioGroup
