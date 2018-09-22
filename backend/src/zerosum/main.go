@@ -30,7 +30,7 @@ func NewGqlHandler(schemaPath string, rootResolver *resolvers.Resolver) (http.Ha
 	return handler, err
 }
 
-const SCHEMA_PATH = "schema/schema.graphql"
+const SCHEMA_PATH = "models/schema/schema.graphql"
 
 func main() {
 	err := repository.InitTestDB()
