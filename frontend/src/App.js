@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import PollsScreen from "./components/Feed/GamesScreen";
-import PostScreen from "./components/CreateGame/CreateScreen";
+import GamesScreen from "./components/Feed/GamesScreen";
+import CreateScreen from "./components/CreateGame/CreateScreen";
 import ProfileScreen from "./components/ProfileScreen";
-import PollScreen from './components/GameScreen';
-
+import GameScreen from './components/GameScreen';
+import ShopScreen from "./components/ShopScreen";
+import SocialScreen from "./components/SocialScreen";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
@@ -110,10 +111,12 @@ class App extends Component {
       <MuiThemeProvider theme={theme}>
         <Router>
           <div>
-            <Route path="/games" component={PollsScreen} />
-            <Route path="/post" component={PostScreen} />
+            <Route path="/games" component={GamesScreen} />
+            <Route path="/create" component={CreateScreen} />
             <Route path="/profile" component={ProfileScreen} />
-            <Route path="/game" component={PollScreen} />
+            <Route path="/game" component={GameScreen} />
+            <Route path="/shop" component={ShopScreen} />
+            <Route path="/leaderboard" component={SocialScreen} />
           </div>
         </Router>
       </MuiThemeProvider>

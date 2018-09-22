@@ -33,7 +33,7 @@ class BottomNavBar extends Component {
       >
         <BottomNavigationAction icon={<FontAwesomeIcon icon="home" size="lg"/>} component={Link} to='/games'/>
         <BottomNavigationAction icon={<FontAwesomeIcon icon="shopping-cart" size="lg"/>} component={Link} to='/shop'/>
-        <BottomNavigationAction icon={<FontAwesomeIcon icon="plus-circle" size="lg"/>} component={Link} to='/post'/>
+        <BottomNavigationAction icon={<FontAwesomeIcon icon="plus-circle" size="lg"/>} component={Link} to='/create'/>
         <BottomNavigationAction icon={<FontAwesomeIcon icon="trophy" size="lg"/>} component={Link} to='/leaderboard'/>
         <BottomNavigationAction icon={<FontAwesomeIcon icon="user-circle" size="lg"/>} component={Link} to='/profile'/>
       </BottomNavigation>
