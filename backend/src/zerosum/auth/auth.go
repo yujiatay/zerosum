@@ -20,7 +20,7 @@ func (a *auth) generateSignedUserToken(user models.User) (string, error) {
 	token := jwt.NewWithClaims(a.signingMethod, jwt.StandardClaims{
 		Id: user.Id,
 	})
-	return token.SignedString(a.secret)
+	return token.SignedString([]byte(a.secret))
 }
 
 func (a *auth) GetJwtMiddleware() negroni.Handler {
