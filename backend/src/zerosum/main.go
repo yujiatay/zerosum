@@ -65,5 +65,5 @@ func main() {
 	n := negroni.Classic()
 	n.Use(corsMiddleware)
 	n.UseHandler(router)
-	n.Run("localhost:8080")
+	n.Run(":8080")
 }
