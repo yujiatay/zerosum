@@ -13,10 +13,6 @@ type auth struct {
 	fbAppId       string
 	fbAccessToken string
 }
-type FbUser struct {
-	name string
-	id   string
-}
 
 var Auth auth
 
