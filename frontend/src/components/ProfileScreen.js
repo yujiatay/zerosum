@@ -84,6 +84,11 @@ class ProfileScreen extends Component {
     this.setState({ value });
   };
 
+  logout = () => {
+    localStorage.removeItem("token");
+    this.props.history.push("/")
+  };
+
   render() {
     const { value } = this.state;
     const { classes } = this.props;
@@ -99,7 +104,7 @@ class ProfileScreen extends Component {
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionMobile}>
-              <Button className={classes.logout}>
+              <Button className={classes.logout} onClick={this.logout}>
                 LOGOUT
               </Button>
             </div>

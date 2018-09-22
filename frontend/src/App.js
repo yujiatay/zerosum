@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
 import GamesScreen from "./components/Feed/GamesScreen";
 import CreateScreen from "./components/CreateGame/CreateScreen";
+import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import ProfileScreen from "./components/ProfileScreen";
 import GameScreen from './components/GameScreen';
 import ShopScreen from "./components/ShopScreen";
 import SocialScreen from "./components/Leaderboard/SocialScreen";
+import LoginScreen from './components/LoginScreen'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
@@ -105,18 +106,44 @@ const theme = createMuiTheme({
   }
 });
 
+class AppRoutes extends Component {
+  isLoggedIn() {
+    return localStorage.getItem("token") !== null;
+  }
+
+  render() {
+    const mainApp = (
+      <Switch>
+        <Route path="/games" component={PollsScreen}/>
+        <Route path="/create" component={CreateScreen} />
+        <Route path="/profile" component={ProfileScreen} />
+        <Route path="/game" component={GameScreen} />
+        <Route path="/shop" component={ShopScreen} />
+        <Route path="/leaderboard" component={SocialScreen} />
+        <Redirect to="/games"/>
+      </Switch>
+    );
+    const loginRoute = (
+      <Switch>
+        <Route path="/" component={LoginScreen}/>
+        <Redirect to="/"/>
+      </Switch>
+    );
+    return this.isLoggedIn() ? mainApp : loginRoute
+  }
+}
+
 class App extends Component {
+
   render() {
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
           <div>
-            <Route path="/games" component={GamesScreen} />
-            <Route path="/create" component={CreateScreen} />
-            <Route path="/profile" component={ProfileScreen} />
-            <Route path="/game" component={GameScreen} />
-            <Route path="/shop" component={ShopScreen} />
-            <Route path="/leaderboard" component={SocialScreen} />
+            <Switch>
+              <Route path="/" exact component={AppRoutes}/>
+              <Route path="/:param" component={AppRoutes}/>
+            </Switch>
           </div>
         </Router>
       </MuiThemeProvider>
