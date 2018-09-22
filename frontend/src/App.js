@@ -6,7 +6,7 @@ import CreateScreen from "./components/CreateGame/CreateScreen";
 import ProfileScreen from "./components/ProfileScreen";
 import GameScreen from './components/GameScreen';
 import ShopScreen from "./components/ShopScreen";
-import SocialScreen from "./components/SocialScreen";
+import SocialScreen from "./components/Leaderboard/SocialScreen";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,

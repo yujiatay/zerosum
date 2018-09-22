@@ -51,7 +51,7 @@ const styles = theme => ({
     width: 24
   },
   moneyInfo: {
-  display: 'flex',
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
