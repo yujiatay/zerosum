@@ -20,11 +20,11 @@ class OptionList extends Component {
     this.setState(prevState => ({
       counter: prevState.counter + 1
     }), () => {
-      this.handleAddOption({ index: this.state.counter, value: 'nil' })
+      this.handleAddOption();
     })
   };
 
-  handleAddOption = newElement => {
+  handleAddOption = () => {
     this.props.addHandler([...this.props.options, 'nil' ])
   };
 

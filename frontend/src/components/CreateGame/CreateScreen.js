@@ -13,6 +13,9 @@ import BottomNavBar from "../BottomNavBar";
 import Button from '@material-ui/core/Button';
 import SectionHeader from "./SectionHeader";
 import OptionList from "./OptionList";
+import GameMode from "./GameMode";
+import TimeChoice from "./TimeChoice";
+import StakesMode from "./StakesMode";
 
 const styles = theme => ({
   body: {
@@ -63,8 +66,9 @@ class CreateScreen extends Component {
       topic: '',
       options: [],
       gmode: 'majority',
-      vmode: 'nostakes',
-      endTime: ''
+      smode: 'nostakes',
+      sinput: -1,
+      time: 5 // in minutes
     };
   }
 
@@ -73,22 +77,36 @@ class CreateScreen extends Component {
       [name]: event.target.value,
     });
   };
-
-  handleChangeRadio = mode => event => {
-    this.setState({ [mode] : event.target.value });
-  };
-
   handleOptions = options => {
     this.setState({
       options: options
     })
   };
-
   handleEditOption = (option, index) => {
     var options = this.state.options.slice();
     options[index] = option;
     this.setState({
       options: options
+    })
+  };
+  handleGameMode = mode => {
+    this.setState({
+      gmode: mode
+    })
+  };
+  handleStakes = stake => {
+    this.setState({
+      smode: stake
+    })
+  };
+  handleStakesInput = input => {
+    this.setState({
+      sinput: input
+    })
+  };
+  handleTime = time => {
+    this.setState({
+      time: time
     })
   };
 
@@ -125,46 +143,25 @@ class CreateScreen extends Component {
           <SectionHeader text="Options"/>
           <OptionList options={this.state.options} addHandler={this.handleOptions} editHandler={this.handleEditOption}/>
           <SectionHeader text="Game Mode"/>
-          <FormControl component="fieldset" className={classes.formControl}>
-            <RadioGroup
-              aria-label="Game mode"
-              name="gmode"
-              className={classes.group}
-              value={this.state.gmode}
-              onChange={this.handleChangeRadio('gmode')}
-            >
-              <FormControlLabel value="majority" control={<Radio />} label="Majority" />
-              <FormControlLabel value="minority" control={<Radio />} label="Minority" />
-            </RadioGroup>
-          </FormControl>
+          <GameMode modeHandler={this.handleGameMode}/>
           <SectionHeader text="Stakes"/>
-          <FormControl component="fieldset" className={classes.formControl}>
-            <RadioGroup
-              aria-label="Voting mode"
-              name="vmode"
-              className={classes.group}
-              value={this.state.vmode}
-              onChange={this.handleChangeRadio('vmode')}
-            >
-              <FormControlLabel value="nostakes" control={<Radio />} label="No Stakes" />
-              <FormControlLabel value="fixedstakes" control={<Radio />} label="Fixed Stakes" />
-              <FormControlLabel value="limit" control={<Radio />} label="Limit" />
-              <FormControlLabel value="nolimit" control={<Radio />} label="No Limit" />
-            </RadioGroup>
-          </FormControl>
+          <StakesMode clickHandler={this.handleStakes} inputHandler={this.handleStakesInput}/>
+          {/*<FormControl component="fieldset" className={classes.formControl}>*/}
+            {/*<RadioGroup*/}
+              {/*aria-label="Voting mode"*/}
+              {/*name="vmode"*/}
+              {/*className={classes.group}*/}
+              {/*value={this.state.vmode}*/}
+              {/*onChange={this.handleChangeRadio('vmode')}*/}
+            {/*>*/}
+              {/*<FormControlLabel value="nostakes" control={<Radio />} label="No Stakes" />*/}
+              {/*<FormControlLabel value="fixedstakes" control={<Radio />} label="Fixed Stakes" />*/}
+              {/*<FormControlLabel value="limit" control={<Radio />} label="Limit" />*/}
+              {/*<FormControlLabel value="nolimit" control={<Radio />} label="No Limit" />*/}
+            {/*</RadioGroup>*/}
+          {/*</FormControl>*/}
           <SectionHeader text="Time"/>
-          <FormControl component="fieldset" className={classes.formControl}>
-            <TextField
-              id="datetime-local"
-              label="End time"
-              type="datetime-local"
-              // defaultValue="2018-09-16T10:30"
-              value={this.state.endTime}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </FormControl>
+          <TimeChoice choiceHandler={this.handleTime}/>
           <Button variant="contained" color="primary" className={classes.button}>
             <Typography variant="subheading" className={classes.white}>
               Submit
