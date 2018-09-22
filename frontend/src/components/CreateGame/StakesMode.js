@@ -65,7 +65,7 @@ class StakesMode extends Component {
     this.state = {
       firstRow: ['No Stakes', 'Fixed Stakes'],
       secondRow: ['Limit', 'No Limit'],
-      selected: 1,
+      selected: 0,
       input: ''
     }
   }
