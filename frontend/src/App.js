@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import PollsScreen from "./components/GamesScreen";
+import PollsScreen from "./components/Feed/GamesScreen";
 import PostScreen from "./components/CreateGame/CreateScreen";
 import ProfileScreen from "./components/ProfileScreen";
 import PollScreen from './components/GameScreen';

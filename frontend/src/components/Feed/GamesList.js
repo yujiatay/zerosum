@@ -7,8 +7,8 @@ import Paper from "@material-ui/core/Paper/Paper";
 import { withStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Dice from './assets/dice-logo-blue.png';
-import Money from './assets/money-bag.png';
+import Dice from '../assets/dice-logo-blue.png';
+import Money from '../assets/money-bag.png';
 
 const styles = theme => ({
   card: {

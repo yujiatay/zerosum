@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import BottomNavBar from "./BottomNavBar";
+import BottomNavBar from "../BottomNavBar";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import AppBar from "@material-ui/core/AppBar/AppBar";
@@ -10,8 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from "@material-ui/core/Tabs/Tabs";
 import Tab from "@material-ui/core/Tab/Tab";
 import GamesList from "./GamesList";
-import Money from "./assets/money-bag.png";
-import HattleCoin from "./assets/hattlecoin.png";
+import HattleCoin from "../assets/hattlecoin.png";
 
 const styles = theme => ({
   root: {
