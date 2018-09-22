@@ -131,6 +131,7 @@
     "github.com/dgrijalva/jwt-go",
     "github.com/gorilla/mux",
     "github.com/graph-gophers/graphql-go",
+    "github.com/graph-gophers/graphql-go/errors",
     "github.com/graph-gophers/graphql-go/relay",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/postgres",
