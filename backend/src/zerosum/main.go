@@ -44,8 +44,8 @@ func main() {
 	}
 	auth.NewAuth(
 		os.Getenv("ZEROSUM_SECRET"),
-		os.Getenv("FACEBOOK_ACCESS_TOKEN"),
 		os.Getenv("FACEBOOK_APP_ID"),
+		os.Getenv("FACEBOOK_ACCESS_TOKEN"),
 	)
 	corsMiddleware := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
