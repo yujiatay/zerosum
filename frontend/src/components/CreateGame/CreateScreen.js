@@ -4,11 +4,6 @@ import AppBar from "@material-ui/core/AppBar/AppBar";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import BottomNavBar from "../BottomNavBar";
 import Button from '@material-ui/core/Button';
 import SectionHeader from "./SectionHeader";
@@ -146,20 +141,6 @@ class CreateScreen extends Component {
           <GameMode modeHandler={this.handleGameMode}/>
           <SectionHeader text="Stakes"/>
           <StakesMode clickHandler={this.handleStakes} inputHandler={this.handleStakesInput}/>
-          {/*<FormControl component="fieldset" className={classes.formControl}>*/}
-            {/*<RadioGroup*/}
-              {/*aria-label="Voting mode"*/}
-              {/*name="vmode"*/}
-              {/*className={classes.group}*/}
-              {/*value={this.state.vmode}*/}
-              {/*onChange={this.handleChangeRadio('vmode')}*/}
-            {/*>*/}
-              {/*<FormControlLabel value="nostakes" control={<Radio />} label="No Stakes" />*/}
-              {/*<FormControlLabel value="fixedstakes" control={<Radio />} label="Fixed Stakes" />*/}
-              {/*<FormControlLabel value="limit" control={<Radio />} label="Limit" />*/}
-              {/*<FormControlLabel value="nolimit" control={<Radio />} label="No Limit" />*/}
-            {/*</RadioGroup>*/}
-          {/*</FormControl>*/}
           <SectionHeader text="Time"/>
           <TimeChoice choiceHandler={this.handleTime}/>
           <Button variant="contained" color="primary" className={classes.button}>
