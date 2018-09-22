@@ -22,7 +22,7 @@ class ShopScreen extends Component {
               S
             </Typography>
             <Typography className={classes.header} variant="display1" noWrap>
-              hopp
+              hop
             </Typography>
             <div className={classes.grow} />
           </Toolbar>
