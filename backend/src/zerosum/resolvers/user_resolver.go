@@ -18,12 +18,12 @@ func (u *UserResolver) MONEY(ctx context.Context) int {
 
 func (u *UserResolver) GAMESCREATED(ctx context.Context) *[]*GameResolver {
 	// TODO: search games created
-	return
+	return nil
 }
 
 func (u *UserResolver) GAMESPARTICIPATED(ctx context.Context) *[]*GameResolver {
 	// TODO: search games participated
-	return
+	return nil
 }
 
 // Other deets

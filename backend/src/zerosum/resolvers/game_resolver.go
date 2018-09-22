@@ -41,6 +41,7 @@ func (g *GameResolver) ENDTIME(ctx context.Context) *graphql.Time {
 
 func (g *GameResolver) TOTALMONEY(ctx context.Context) *int {
 	//TODO: implement summer
+	return nil
 }
 
 func (g *GameResolver) GAMEMODE(ctx context.Context) *models.GameMode{
@@ -53,5 +54,5 @@ func (g *GameResolver) STAKES(ctx context.Context) *models.Stakes{
 
 func (g *GameResolver) Result(ctx context.Context) *[]*OptionResultResolver {
 	//TODO: count each option
-	return
+	return nil
 }
