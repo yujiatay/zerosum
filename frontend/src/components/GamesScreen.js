@@ -11,6 +11,7 @@ import Tabs from "@material-ui/core/Tabs/Tabs";
 import Tab from "@material-ui/core/Tab/Tab";
 import GamesList from "./GamesList";
 import Money from "./assets/money-bag.png";
+import HattleCoin from "./assets/hattlecoin.png";
 
 const styles = theme => ({
   root: {
@@ -69,6 +70,7 @@ const styles = theme => ({
     width: 30,
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
     left: -15
   },
@@ -124,7 +126,7 @@ class GamesScreen extends Component {
           </Typography>
           <Paper elevation={0} className={classes.moneyInfo}>
             <Paper elevation={0} className={classes.blueCircle}>
-              <img src={Money} className={classes.moneybag}/>
+              <img src={HattleCoin} className={classes.moneybag}/>
             </Paper>
             <Paper elevation={0} className={classes.blueRect}>
               <Typography variant="subheading"  className={classes.moneyText}>
