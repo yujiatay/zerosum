@@ -36,7 +36,15 @@ func GetCorsMiddleware() (negroni.Handler) {
 	})
 }
 
+func redirectTLSHandler(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "https://" + r.Host + r.RequestURI, http.StatusMovedPermanently)
+}
+
 func main() {
+	DEBUG := false
+	if os.Getenv("DEBUG") == "TRUE" {
+		DEBUG = true
+	}
 	err := repository.InitTestDB()
 	if err != nil {
 		log.Print(err)
@@ -56,12 +64,29 @@ func main() {
 	router.HandleFunc("/api/login/facebook", auth.Auth.FbLoginHandler).Methods("POST")
 	authRouter.Handle("/api/gql", gqlHandler)
 	an := negroni.New(auth.Auth.GetJwtMiddleware(), negroni.Wrap(authRouter))
-	// Pass all "/api"-prefixed endpoints through auth middleware and authRouter, except those directly registered
+	if DEBUG {
+		router.Handle("/noauth/gql", gqlHandler)
+	}
+	// Pass all endpoints through auth middleware and authRouter, except those directly registered
 	// on `router`
 	router.PathPrefix("/api").Handler(an)
 	// Pass all routes through Classic and CORS middlewares before going to main router
 	n := negroni.Classic()
 	n.Use(GetCorsMiddleware())
 	n.UseHandler(router)
-	n.Run(":8080")
+
+	if DEBUG {
+		n.Run(":80")
+	} else {
+		// Serve on HTTPS only
+		sslCertPath := os.Getenv("SSL_CERT_PATH")
+		sslKeyPath := os.Getenv("SSL_KEY_PATH")
+		go func() {
+			// Redirect HTTP -> HTTPS
+			if err := http.ListenAndServe(":80", http.HandlerFunc(redirectTLSHandler)); err != nil {
+				log.Fatal(err)
+			}
+		}()
+		log.Fatal(http.ListenAndServeTLS(":443", sslCertPath, sslKeyPath, n))
+	}
 }
