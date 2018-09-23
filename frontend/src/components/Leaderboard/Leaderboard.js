@@ -85,7 +85,7 @@ class Leaderboard extends Component {
         {
           list &&
           list.map((user, index) => (
-          <div>
+          <div key={index}>
             <Paper elevation={0} className={classes.card}>
               <ButtonBase className={classes.button}>
                 <div className={classes.innerCard}>

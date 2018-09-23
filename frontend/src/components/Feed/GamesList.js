@@ -77,51 +77,46 @@ class GamesList extends Component {
     const { classes } = this.props;
     return (
       <Paper elevation={0} className={classes.body}>
-        {[0, 1, 2, 3, 4].map(value => (
-          <div>
-            <Card className={classes.card}>
-              <ButtonBase className={classes.button} component={Link}
-                          to={{ pathname: "/game",
-                            state: { title: "Democracy vs Communism?",
-                              options: ['Forever', '2000', '2010', '2020']}}}>
-                <CardContent className={classes.cardContent}>
-                  <CardContent className={classes.moneyInfo}>
-                    <img alt="Pot" src={Money} className={classes.moneybag}/>
-                    <Typography variant="subheading" className={classes.moneyText}>
-                      99999
-                    </Typography>
-                  </CardContent>
-                  <Typography className={classes.cardTitle} variant="title" component="h2">
-                    Has everything been here forever, or when did it begin to exist?
+        {[0, 1, 2, 3, 4].map((game, index) => (
+          <Card className={classes.card} key={index}>
+            <ButtonBase className={classes.button} component={Link}
+                        to={{ pathname: "/game",
+                          state: { title: "Democracy vs Communism?",
+                            options: ['Forever', '2000', '2010', '2020']}}}>
+              <CardContent className={classes.cardContent}>
+                <CardContent className={classes.moneyInfo}>
+                  <img alt="Pot" src={Money} className={classes.moneybag}/>
+                  <Typography variant="subheading" className={classes.moneyText}>
+                    99999
                   </Typography>
                 </CardContent>
-                <CardContent className={classes.cardContentRow}>
-                  <CardContent className={classes.cardInfo}>
-                    <img alt="Game Mode" src={Dice} className={classes.dice}/>
-                    <Typography color="textPrimary" className={classes.textInfo}>
-                      Majority
-                    </Typography>
-                  </CardContent>
-                  <CardContent className={classes.cardInfo}>
-                    <FontAwesomeIcon icon="coins" size="1x" className={classes.icon}/>
-                    <Typography color="textPrimary" className={classes.textInfo}>
-                      Fixed Stakes
-                    </Typography>
-                  </CardContent>
-                  <CardContent className={classes.cardInfo}>
-                    <FontAwesomeIcon icon="hourglass-half" size="1x" className={classes.icon}/>
-                    <Typography color="textPrimary" className={classes.textInfo}>
-                      23h 39min
-                    </Typography>
-                  </CardContent>
+                <Typography className={classes.cardTitle} variant="title" component="h2">
+                  Has everything been here forever, or when did it begin to exist?
+                </Typography>
+              </CardContent>
+              <CardContent className={classes.cardContentRow}>
+                <CardContent className={classes.cardInfo}>
+                  <img alt="Game Mode" src={Dice} className={classes.dice}/>
+                  <Typography color="textPrimary" className={classes.textInfo}>
+                    Majority
+                  </Typography>
                 </CardContent>
-              </ButtonBase>
-            </Card>
-          </div>
+                <CardContent className={classes.cardInfo}>
+                  <FontAwesomeIcon icon="coins" size="1x" className={classes.icon}/>
+                  <Typography color="textPrimary" className={classes.textInfo}>
+                    Fixed Stakes
+                  </Typography>
+                </CardContent>
+                <CardContent className={classes.cardInfo}>
+                  <FontAwesomeIcon icon="hourglass-half" size="1x" className={classes.icon}/>
+                  <Typography color="textPrimary" className={classes.textInfo}>
+                    23h 39min
+                  </Typography>
+                </CardContent>
+              </CardContent>
+            </ButtonBase>
+          </Card>
         ))}
-        {/*<Typography component="div" style={{ padding: 8 * 3 }}>*/}
-        {/*{props.children}*/}
-        {/*</Typography>*/}
       </Paper>
     );
   }
