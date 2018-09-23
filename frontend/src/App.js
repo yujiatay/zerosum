@@ -114,7 +114,7 @@ class AppRoutes extends Component {
   render() {
     const mainApp = (
       <Switch>
-        <Route path="/games" component={PollsScreen}/>
+        <Route path="/games" component={GamesScreen}/>
         <Route path="/create" component={CreateScreen} />
         <Route path="/profile" component={ProfileScreen} />
         <Route path="/game" component={GameScreen} />
