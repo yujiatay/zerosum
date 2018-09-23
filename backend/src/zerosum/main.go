@@ -61,15 +61,15 @@ func main() {
 	)
 	router := mux.NewRouter()
 	authRouter := mux.NewRouter()
-	router.HandleFunc("/api/login/facebook", auth.Auth.FbLoginHandler).Methods("POST")
-	authRouter.Handle("/api/gql", gqlHandler)
+	router.HandleFunc("/login/facebook", auth.Auth.FbLoginHandler).Methods("POST")
+	authRouter.Handle("/gql", gqlHandler)
 	an := negroni.New(auth.Auth.GetJwtMiddleware(), negroni.Wrap(authRouter))
 	if DEBUG {
 		router.Handle("/noauth/gql", gqlHandler)
 	}
 	// Pass all endpoints through auth middleware and authRouter, except those directly registered
 	// on `router`
-	router.PathPrefix("/api").Handler(an)
+	router.PathPrefix("/").Handler(an)
 	// Pass all routes through Classic and CORS middlewares before going to main router
 	n := negroni.Classic()
 	n.Use(GetCorsMiddleware())
