@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/gobuffalo/packr"
 	"github.com/gorilla/mux"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 	"github.com/rs/cors"
 	"github.com/urfave/negroni"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -15,16 +15,13 @@ import (
 	"zerosum/resolvers"
 )
 
-func readSchema(path string) (string, error) {
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		return "", err
-	}
-	return string(b), nil
+func readSchema() (string, error) {
+	box := packr.NewBox("./models/schema")
+	return box.MustString("schema.graphql")
 }
 
-func NewGqlHandler(schemaPath string, rootResolver *resolvers.Resolver) (http.Handler, error) {
-	s, err := readSchema(schemaPath)
+func NewGqlHandler(rootResolver *resolvers.Resolver) (http.Handler, error) {
+	s, err := readSchema()
 	schema := graphql.MustParseSchema(s, rootResolver)
 	handler := &relay.Handler{Schema: schema}
 	return handler, err
@@ -38,7 +35,7 @@ func main() {
 		log.Print(err)
 	}
 	rootResolver := resolvers.Resolver{}
-	gqlHandler, err := NewGqlHandler(SCHEMA_PATH, &rootResolver)
+	gqlHandler, err := NewGqlHandler(&rootResolver)
 	if err != nil {
 		log.Print(err)
 	}
