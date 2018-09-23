@@ -75,10 +75,6 @@ const styles = theme => ({
 });
 
 class GameScreen extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { classes } = this.props;
     const { title, options } = this.props.location.state;

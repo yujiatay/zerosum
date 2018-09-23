@@ -62,7 +62,7 @@ class InfoBar extends Component {
         </Typography>
         <Paper elevation={0} className={classes.moneyInfo}>
           <Paper elevation={0} className={classes.blueCircle}>
-            <img src={HattleCoin} className={classes.coin}/>
+            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
           </Paper>
           <Paper elevation={0} className={classes.blueRect}>
             <Typography variant="subheading"  className={classes.moneyText}>

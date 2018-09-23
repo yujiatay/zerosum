@@ -100,9 +100,9 @@ class Leaderboard extends Component {
                                         : classes.rank}>
                       {index + 1}
                     </Typography>
-                    { index === 0 && <img src={GoldFeather} className={classes.feather}/> }
-                    { index === 1 && <img src={SilverFeather} className={classes.feather}/> }
-                    { index === 2 && <img src={BronzeFeather} className={classes.feather}/> }
+                    { index === 0 && <img alt="GoldFeather" src={GoldFeather} className={classes.feather}/> }
+                    { index === 1 && <img alt="SilverFeather" src={SilverFeather} className={classes.feather}/> }
+                    { index === 2 && <img alt="BronzeFeather" src={BronzeFeather} className={classes.feather}/> }
                   </Paper>
                   <Paper elevation={0} className={classes.user}>
                     <Avatar

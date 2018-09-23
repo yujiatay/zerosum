@@ -86,7 +86,7 @@ class GamesList extends Component {
                               options: ['Forever', '2000', '2010', '2020']}}}>
                 <CardContent className={classes.cardContent}>
                   <CardContent className={classes.moneyInfo}>
-                    <img src={Money} className={classes.moneybag}/>
+                    <img alt="Pot" src={Money} className={classes.moneybag}/>
                     <Typography variant="subheading" className={classes.moneyText}>
                       99999
                     </Typography>
@@ -97,7 +97,7 @@ class GamesList extends Component {
                 </CardContent>
                 <CardContent className={classes.cardContentRow}>
                   <CardContent className={classes.cardInfo}>
-                    <img src={Dice} className={classes.dice}/>
+                    <img alt="Game Mode" src={Dice} className={classes.dice}/>
                     <Typography color="textPrimary" className={classes.textInfo}>
                       Majority
                     </Typography>
