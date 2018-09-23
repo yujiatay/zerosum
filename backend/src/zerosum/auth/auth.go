@@ -4,6 +4,8 @@ import (
 	"github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/urfave/negroni"
+	"net/http"
+	"time"
 	"zerosum/models"
 )
 
@@ -12,6 +14,7 @@ type auth struct {
 	signingMethod jwt.SigningMethod
 	fbAppId       string
 	fbAccessToken string
+	httpClient    *http.Client
 }
 
 var Auth auth
@@ -40,6 +43,9 @@ func NewAuth(secret, fbAppId, fbAccessToken string) {
 		signingMethod: jwt.SigningMethodHS256,
 		fbAppId:       fbAppId,
 		fbAccessToken: fbAccessToken,
+		httpClient: &http.Client{
+			Timeout: time.Second * 10,
+		},
 	}
 }
 

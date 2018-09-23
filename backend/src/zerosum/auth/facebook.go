@@ -54,7 +54,7 @@ func (a *auth) FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *auth) getFbProfile(token string) (profile fbProfile, err error) {
-	res, err := http.Get(fmt.Sprintf("https://graph.facebook.com/me?access_token=%s", token))
+	res, err := a.httpClient.Get(fmt.Sprintf("https://graph.facebook.com/me?access_token=%s", token))
 	if err != nil {
 		return
 	}
@@ -67,7 +67,7 @@ func (a *auth) getFbProfile(token string) (profile fbProfile, err error) {
 }
 func (a *auth) verifyFbToken(loginRequest fbLoginRequest) (err error) {
 	// Fb token verification API
-	res, err := http.Get(fmt.Sprintf("https://graph.facebook.com/debug_token?input_token=%s&access_token=%s",
+	res, err := a.httpClient.Get(fmt.Sprintf("https://graph.facebook.com/debug_token?input_token=%s&access_token=%s",
 		loginRequest.AccessToken, a.fbAccessToken))
 	if err != nil {
 		return
