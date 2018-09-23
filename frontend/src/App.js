@@ -7,16 +7,24 @@ import ProfileScreen from "./components/ProfileScreen";
 import GameScreen from './components/GameScreen';
 import ShopScreen from "./components/Shop/ShopScreen";
 import SocialScreen from "./components/Leaderboard/SocialScreen";
-import LoginScreen from './components/LoginScreen'
-import { library } from '@fortawesome/fontawesome-svg-core'
+import LoginScreen from './components/LoginScreen';
+import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
   faArrowLeft, faCoins, faHourglassHalf
-} from '@fortawesome/free-solid-svg-icons'
-
+} from '@fortawesome/free-solid-svg-icons';
+import ReactGA from 'react-ga';
 library.add(faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
   faArrowLeft, faCoins, faHourglassHalf);
+
+ReactGA.initialize('UA-125447140-2', {
+  debug: true,
+  titleCase: false,
+  gaOptions: {
+    userId: 123
+  }
+});
 
 const theme = createMuiTheme({
   palette: {
