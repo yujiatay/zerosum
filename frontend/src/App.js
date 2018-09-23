@@ -5,7 +5,7 @@ import CreateScreen from "./components/CreateGame/CreateScreen";
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import ProfileScreen from "./components/ProfileScreen";
 import GameScreen from './components/GameScreen';
-import ShopScreen from "./components/ShopScreen";
+import ShopScreen from "./components/Shop/ShopScreen";
 import SocialScreen from "./components/Leaderboard/SocialScreen";
 import LoginScreen from './components/LoginScreen'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -108,7 +108,8 @@ const theme = createMuiTheme({
 
 class AppRoutes extends Component {
   isLoggedIn() {
-    return localStorage.getItem("token") !== null;
+    return true
+    // return localStorage.getItem("token") !== null;
   }
 
   render() {
