@@ -42,7 +42,8 @@ const styles = theme => ({
     padding: 10
   },
   cardTitle: {
-    color: '#08ABBE'
+    color: '#08ABBE',
+    textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #FFF`,
   },
   coin: {
     height: 24,
