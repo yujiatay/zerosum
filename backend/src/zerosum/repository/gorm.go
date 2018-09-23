@@ -14,18 +14,18 @@ var db *gorm.DB
 /* DATABASE CONFIG*/
 func InitTestDB() (err error) {
 	db, err = gorm.Open("postgres", fmt.Sprintf(
-		"user=%s password=%s dbname=%s host=%s port=%d",
+		"user=%s password=%s dbname=%s host=%s port=%d sslmode=disable",
 		"postgres", "password", "zerosum", "localhost", 5432))
 
 	// Set up database tables
 	db.AutoMigrate(&models.Game{}, &models.Vote{}, &models.Option{}, &models.User{})
 
 	// Add foreign key constraints
-	db.Model(models.Option{}).AddForeignKey("game_id", "game(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Game{}).AddForeignKey("user_id", "user(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Vote{}).AddForeignKey("game_id", "game(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Vote{}).AddForeignKey("option_id", "option(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Vote{}).AddForeignKey("user_id", "user(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Game{}).AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Option{}).AddForeignKey("game_id", "games(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Vote{}).AddForeignKey("game_id", "games(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Vote{}).AddForeignKey("option_id", "options(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Vote{}).AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
 	return
 }
 
