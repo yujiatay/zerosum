@@ -139,8 +139,8 @@ class GameScreen extends Component {
                 Choose One Option
               </Typography>
               {
-                options.map(option =>
-                  <Card className={classes.optionCard}>
+                options.map((option, index) =>
+                  <Card key={index} className={classes.optionCard}>
                     <ButtonBase className={classes.button} component={Link} to="/games">
                       <CardContent>
                         <Typography variant="body2" align="center">

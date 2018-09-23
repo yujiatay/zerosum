@@ -86,7 +86,7 @@ class TimeChoice extends Component {
     this.setState(prevState => ({
       selected: index + row * 4
     }), () => {
-      console.log(calcTime(index, row));
+      // console.log(calcTime(index, row));
       this.props.choiceHandler(calcTime(index, row));
     })
   };
