@@ -27,7 +27,14 @@ func NewGqlHandler(rootResolver *resolvers.Resolver) (http.Handler, error) {
 	return handler, err
 }
 
-const SCHEMA_PATH = "src/zerosum/models/schema/schema.graphql"
+func GetCorsMiddleware() (negroni.Handler) {
+	return cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedHeaders: []string{"X-Requested-With", "Accept", "Content-Type", "Content-Length",
+			"Accept-Encoding", "X-CSRF-Token", "Authorization"},
+		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+	})
+}
 
 func main() {
 	err := repository.InitTestDB()
@@ -44,12 +51,6 @@ func main() {
 		os.Getenv("FACEBOOK_APP_ID"),
 		os.Getenv("FACEBOOK_ACCESS_TOKEN"),
 	)
-	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedHeaders: []string{"X-Requested-With", "Accept", "Content-Type", "Content-Length",
-			"Accept-Encoding", "X-CSRF-Token", "Authorization"},
-		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
-	})
 	router := mux.NewRouter()
 	authRouter := mux.NewRouter()
 	router.HandleFunc("/api/login/facebook", auth.Auth.FbLoginHandler).Methods("POST")
@@ -60,7 +61,7 @@ func main() {
 	router.PathPrefix("/api").Handler(an)
 	// Pass all routes through Classic and CORS middlewares before going to main router
 	n := negroni.Classic()
-	n.Use(corsMiddleware)
+	n.Use(GetCorsMiddleware())
 	n.UseHandler(router)
 	n.Run(":8080")
 }
