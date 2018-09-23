@@ -15,15 +15,15 @@ func (o *OptionResultResolver) OPTION(ctx context.Context) *OptionResolver {
 	return &OptionResolver{option: &o.option}
 }
 
-func (o *OptionResultResolver) VOTECOUNT(ctx context.Context) *int {
-	numVotes := len(o.votes)
+func (o *OptionResultResolver) VOTECOUNT(ctx context.Context) *int32 {
+	numVotes := int32(len(o.votes))
 	return &numVotes
 }
 
-func (o *OptionResultResolver) TOTALVALUE(ctx context.Context) *int {
-	sum := 0
+func (o *OptionResultResolver) TOTALVALUE(ctx context.Context) *int32 {
+	sum := int32(0)
 	for _, vote := range o.votes {
-		sum += vote.Money
+		sum += int32(vote.Money)
 	}
 	return &sum
 }

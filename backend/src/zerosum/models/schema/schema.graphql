@@ -1,5 +1,7 @@
 # Following https://github.com/deltaskelta/graphql-go-pets-example
 
+scalar Time
+
 schema {
     query: Query
     mutation: Mutation
@@ -9,7 +11,7 @@ schema {
 type Query {
     getUser(id: ID!): User
     getGame(id: ID!): Game
-    getGames(filter: String!, limit: Int, after: String): Game
+    getGames(filter: String!, limit: Int, after: String): [Game]
 
     # Private, can only get own votes
     getVote(gameId: ID!): Vote
@@ -22,7 +24,7 @@ type Mutation {
     # Private, can only mutate own stuff
     createUser(user: UserInput!): User
     updateUser(user: UserInput!): User
-    deleteUser(): Boolean
+    deleteUser(): Boolean!
 
     addGame(game: GameInput!): Game
 
@@ -60,7 +62,7 @@ type Game {
     topic: String
     startTime: Time
     endTime: Time
-    totalMoney: Time
+    totalMoney: Int
     gameMode: GameMode
     stakes: Stakes
     options: [Option]
@@ -84,30 +86,30 @@ type User {
 
 # what is needed for a vote
 type Vote {
-    gameId: ID
-    optionId: Id
+    game: Game
+    option: Option
     money: Int
     result: VoteResult
 }
 
-type UserInput {
+input UserInput {
     #deets
 }
 
-type OptionInput {
+input OptionInput {
     body: String!
 }
 
-type GameInput {
-    topic: String
-    duration: Int
-    gameMode: GameMode
-    stakes: Stakes
+input GameInput {
+    topic: String!
+    duration: Int!
+    gameMode: GameMode!
+    stakes: Stakes!
     options: [OptionInput!]!
 }
 
-type VoteInput {
-    gameId: ID
-    optionId: ID
-    amount: Int
+input VoteInput {
+    gameId: ID!
+    optionId: ID!
+    amount: Int!
 }

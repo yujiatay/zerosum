@@ -2,18 +2,20 @@ package resolvers
 
 import (
 	"context"
+	"github.com/graph-gophers/graphql-go"
 	"zerosum/models"
 )
 type UserResolver struct {
 	user *models.User
 }
 
-func (u *UserResolver) ID(ctx context.Context) string {
-	return u.user.Id
+func (u *UserResolver) ID(ctx context.Context) graphql.ID {
+	return graphql.ID(u.user.Id)
 }
 
-func (u *UserResolver) MONEY(ctx context.Context) int {
-	return u.user.MoneyTotal
+func (u *UserResolver) MONEY(ctx context.Context) *int32 {
+	money := int32(u.user.MoneyTotal)
+	return &money
 }
 
 func (u *UserResolver) GAMESCREATED(ctx context.Context) *[]*GameResolver {

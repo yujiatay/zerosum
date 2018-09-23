@@ -31,6 +31,7 @@ type userVoteQuery struct {
 }
 
 type userInput struct {
+	// TODO: Cfm user input fields
 }
 
 type optionInput struct {
@@ -51,44 +52,53 @@ type voteInput struct {
 	Amount   int
 }
 
-func (r *Resolver) GetUser(ctx context.Context, args *struct{ id string }) (user models.User, err error) {
-	// TODO: Add field restriction when id != id in ctx
-	user, err = repository.QueryUser(models.User{Id: args.id})
+func (r *Resolver) GetUser(ctx context.Context, args *struct{ Id string }) (userResolver *UserResolver, err error) {
+	// TODO: Add field restriction when Id != Id in ctx
+	user, err := repository.QueryUser(models.User{Id: args.Id})
+	*userResolver = UserResolver{user: &user}
 	return
 }
 
-func (r *Resolver) GetGame(ctx context.Context, args *struct{ id string }) (game models.Game, err error) {
-	game, err = repository.QueryGame(models.Game{Id: args.id})
+func (r *Resolver) GetGame(ctx context.Context, args *struct{ Id string }) (gameResolver *GameResolver, err error) {
+	game, err := repository.QueryGame(models.Game{Id: args.Id})
+	*gameResolver = GameResolver{game: &game}
 	return
 }
 
-func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (games []models.Game, err error) {
-	games, err = repository.SearchGames(args.Filter, args.Limit, args.After)
+func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (gameResolvers *[]*GameResolver, err error) {
+	games, err := repository.SearchGames(args.Filter, args.Limit, args.After)
+	for _, game := range games {
+		*gameResolvers = append(*gameResolvers, &GameResolver{game: &game})
+	}
 	return
 }
 
-func (r *Resolver) GetVote(ctx context.Context, args voteQuery) (vote models.Vote, err error) {
-	vote, err = repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
+func (r *Resolver) GetVote(ctx context.Context, args voteQuery) (voteResolver *VoteResolver, err error) {
+	_, err = repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
+	*voteResolver = VoteResolver{}
 	return
 }
 
-func (r *Resolver) GetVotes(ctx context.Context, args userVoteQuery) (votes []models.Vote, err error) {
-	votes, err = repository.QueryVotes(models.Vote{UserId: getIdFromCtx(ctx)}, args.Limit, args.After)
+func (r *Resolver) GetVotes(ctx context.Context, args userVoteQuery) (voteResolvers *[]*VoteResolver, err error) {
+	votes, err := repository.QueryVotes(models.Vote{UserId: getIdFromCtx(ctx)}, args.Limit, args.After)
+	for _, vote := range votes {
+		*voteResolvers = append(*voteResolvers, &VoteResolver{vote: &vote})
+	}
 	return
 }
 
-func (r *Resolver) AddUser(ctx context.Context, args *struct{ user userInput }) (user models.User, err error) {
+func (r *Resolver) CreateUser(ctx context.Context, args *struct{ User userInput }) (userResolver *UserResolver, err error) {
 	// TODO: Cfm new user flow
 	return
 }
 
-func (r *Resolver) UpdateUser(ctx context.Context, args *struct{ user userInput }) (user models.User, err error) {
+func (r *Resolver) UpdateUser(ctx context.Context, args *struct{ User userInput }) (userResolver *UserResolver, err error) {
 	// TODO: Set User Deets
 	return
 }
 
-func (r *Resolver) DeleteUser(ctx context.Context, args *struct{ id string }) (success bool) {
-	err := repository.DeleteUser(models.User{Id: args.id})
+func (r *Resolver) DeleteUser(ctx context.Context) (success bool) {
+	err := repository.DeleteUser(models.User{Id: getIdFromCtx(ctx)})
 	if err != nil {
 		success = false
 	} else {
@@ -97,41 +107,47 @@ func (r *Resolver) DeleteUser(ctx context.Context, args *struct{ id string }) (s
 	return
 }
 
-func (r *Resolver) AddGame(ctx context.Context, args *struct{ game gameInput }) (game models.Game, err error) {
+func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) (gameResolver *GameResolver, err error) {
 	var options []models.Option
 
-	for _, option := range args.game.Options {
+	for _, option := range args.Game.Options {
 		options = append(options, models.Option{Body: option.Body})
 	}
 
 	newGame := models.Game{
-		Topic: args.game.Topic,
+		Topic: args.Game.Topic,
 		UserId: getIdFromCtx(ctx),
 		StartTime: time.Now(),
-		EndTime: time.Now().Add(time.Minute * time.Duration(args.game.Duration)),
-		Stakes: args.game.Stakes,
+		EndTime: time.Now().Add(time.Minute * time.Duration(args.Game.Duration)),
+		Stakes: args.Game.Stakes,
 		Options: options,
 
 	}
 	err = repository.CreateGame(newGame)
 	if err == nil {
-		game, err = repository.QueryGame(newGame)
+		game, err := repository.QueryGame(newGame)
+		if err == nil {
+			*gameResolver = GameResolver{game: &game}
+		}
 	}
 	return
 }
 
-func (r *Resolver) AddVote(ctx context.Context, args *struct{ vote voteInput }) (vote models.Vote	, err error) {
-	// TODO: Add validation for money left and correct choice id
+func (r *Resolver) AddVote(ctx context.Context, args *struct{ Vote voteInput }) (voteResolver *VoteResolver, err error) {
+	// TODO: Add validation for money left and correct choice Id
 	newVote := models.Vote{
-		GameId: args.vote.GameId,
+		GameId: args.Vote.GameId,
 		UserId: getIdFromCtx(ctx),
-		OptionId: args.vote.OptionId,
-		Money: args.vote.Amount,
+		OptionId: args.Vote.OptionId,
+		Money: args.Vote.Amount,
 	}
 
 	err = repository.CreateVote(newVote)
 	if err == nil {
-		vote, err = repository.QueryVote(newVote)
+		vote, err := repository.QueryVote(newVote)
+		if err == nil {
+			*voteResolver = VoteResolver{vote: &vote}
+		}
 	}
 	return
 }

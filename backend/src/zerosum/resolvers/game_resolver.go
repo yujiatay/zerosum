@@ -11,8 +11,8 @@ type GameResolver struct {
 	game *models.Game
 }
 
-func (g *GameResolver) ID(ctx context.Context) *string {
-	return &g.game.Id
+func (g *GameResolver) ID(ctx context.Context) graphql.ID {
+	return graphql.ID(g.game.Id)
 }
 
 func (g *GameResolver) OWNER(ctx context.Context) (userResolver *UserResolver) {
@@ -39,7 +39,7 @@ func (g *GameResolver) ENDTIME(ctx context.Context) *graphql.Time {
 	return &graphql.Time{Time: g.game.EndTime}
 }
 
-func (g *GameResolver) TOTALMONEY(ctx context.Context) *int {
+func (g *GameResolver) TOTALMONEY(ctx context.Context) *int32 {
 	//TODO: implement summer
 	return nil
 }
@@ -50,6 +50,16 @@ func (g *GameResolver) GAMEMODE(ctx context.Context) *models.GameMode{
 
 func (g *GameResolver) STAKES(ctx context.Context) *models.Stakes{
 	return &g.game.Stakes
+}
+
+func (g *GameResolver) OPTIONS(ctx context.Context) *[]*OptionResolver{
+	//TODO: Show related options
+	return nil
+}
+
+func (g *GameResolver) PARTICIPANTS(ctx context.Context) *[]*UserResolver{
+	//TODO: Show related users
+	return nil
 }
 
 func (g *GameResolver) Result(ctx context.Context) *[]*OptionResultResolver {
