@@ -3,7 +3,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import GamesScreen from "./components/Feed/GamesScreen";
 import CreateScreen from "./components/CreateGame/CreateScreen";
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
-import ProfileScreen from "./components/ProfileScreen";
+import ProfileScreen from "./components/Profile/ProfileScreen";
 import GameScreen from './components/GameScreen';
 import ShopScreen from "./components/Shop/ShopScreen";
 import SocialScreen from "./components/Leaderboard/SocialScreen";

@@ -4,11 +4,13 @@ import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
 import Button from '@material-ui/core/Button';
 import AppBar from "@material-ui/core/AppBar/AppBar";
-import BottomNavBar from "./BottomNavBar";
+import BottomNavBar from "../BottomNavBar";
 import Avatar from '@material-ui/core/Avatar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Paper from '@material-ui/core/Paper';
+import Currency from "../Currency";
+import ProgressBar from "./ProgressBar";
 
 const styles = theme => ({
   root: {
@@ -30,8 +32,20 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  moneyRow: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 15,
+    paddingBottom: 15,
+  },
+  progressBar: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: 15
+  },
   bigAvatar: {
-    margin: 10,
     width: 120,
     height: 120,
     backgroundColor: 'grey'
@@ -112,6 +126,9 @@ class ProfileScreen extends Component {
         </AppBar>
 
         <div className={classes.body}>
+          <div className={classes.moneyRow}>
+            <Currency money={100}/>
+          </div>
           <div className={classes.row}>
             <Avatar
               alt="Profile Pic"
@@ -119,24 +136,24 @@ class ProfileScreen extends Component {
               className={classes.bigAvatar}
             />
           </div>
-            <Typography variant="headline" align="center">
-              MadHatter
-            </Typography>
-            <Typography className={classes.winrate} variant="title" align="center">
-              Win rate: 100%
-            </Typography>
-            <Typography variant="title" align="center">
-              --- Progress bar ---
-            </Typography>
+          <Typography variant="headline" align="center">
+            MadHatter
+          </Typography>
+          <Typography className={classes.winrate} variant="title" align="center">
+            Win rate: 100%
+          </Typography>
+          <div className={classes.progressBar}>
+            <ProgressBar/>
+          </div>
 
-            <AppBar position="static">
-              <Tabs value={value} onChange={this.handleChange}
-                    textColor="primary" fullWidth elevation={0}
-              >
-                <Tab label="Hats" className={classes.tab}/>
-                <Tab label="Achievements" className={classes.tab}/>
-              </Tabs>
-            </AppBar>
+          <AppBar position="static">
+            <Tabs value={value} onChange={this.handleChange}
+                  textColor="primary" fullWidth elevation={0}
+            >
+              <Tab label="Hats" className={classes.tab}/>
+              <Tab label="Achievements" className={classes.tab}/>
+            </Tabs>
+          </AppBar>
 
         </div>
         {value === 0 && <TabContainer>Item One</TabContainer>}
