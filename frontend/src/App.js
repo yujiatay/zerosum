@@ -25,6 +25,7 @@ ReactGA.initialize('UA-125447140-2', {
     userId: 123
   }
 });
+ReactGA.pageview('Main');
 
 const theme = createMuiTheme({
   palette: {
