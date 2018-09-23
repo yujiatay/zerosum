@@ -11,6 +11,13 @@ import Dice from '../assets/dice-logo-blue.png';
 import Money from '../assets/money-bag.png';
 
 const styles = theme => ({
+  body: {
+    backgroundColor: '#068D9D',
+    borderRadius: 0,
+    overflowY: 'auto',
+    marginBottom: 56,
+    height: `calc(100vh - 13.375rem)` // deduct height of everything else from viewport
+  },
   card: {
     minWidth: 275,
     margin: 10,
@@ -69,13 +76,7 @@ class GamesList extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Paper elevation={0} style={{
-        backgroundColor: '#068D9D',
-        borderRadius: 0,
-        overflowY: 'auto',
-        marginBottom: 56,
-        height: `calc(100vh - 13.375rem)` // deduct height of everything else from viewport
-      }}>
+      <Paper elevation={0} className={classes.body}>
         {[0, 1, 2, 3, 4].map(value => (
           <div>
             <Card className={classes.card}>
