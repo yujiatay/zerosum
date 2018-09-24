@@ -78,9 +78,8 @@ func main() {
 	// Pass all endpoints through auth middleware and authRouter, except those directly registered
 	// on `router`
 	router.PathPrefix("/").Handler(an)
-	// Pass all routes through Classic and CORS middlewares before going to main router
-	n := negroni.Classic()
-	n.Use(GetCorsMiddleware())
+	// Set up middleware in front of main router
+	n := negroni.New(negroni.NewRecovery(), negroni.NewLogger(), GetCorsMiddleware())
 	n.UseHandler(router)
 
 	if DEBUG {
