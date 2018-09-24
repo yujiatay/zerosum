@@ -13,6 +13,8 @@ type Query {
     getGame(id: ID!): Game
     getGames(filter: String!, limit: Int, after: String): [Game]
 
+    getLeaderboard(limit: Int!): [User]
+
     # Private, can only get own votes
     getVote(gameId: ID!): Vote
     getVotes(limit: Int, after: String): [Vote]
@@ -81,6 +83,7 @@ type User {
     money: Int
     gamesCreated: [Game]
     gamesParticipated: [Game]
+    winRate: Float
     #other deets
 }
 

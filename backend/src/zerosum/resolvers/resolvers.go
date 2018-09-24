@@ -75,6 +75,16 @@ func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (gameReso
 	return
 }
 
+func (r *Resolver) GetLeaderboard(ctx context.Context, args *struct{ Limit int32 }) (userResolvers *[]*UserResolver, err error) {
+	users, err := repository.QueryTopUsers(10, 9)
+	var userList []*UserResolver
+	for index := range users {
+		userList = append(userList, &UserResolver{user: &users[index]})
+	}
+	userResolvers = &userList
+	return
+}
+
 func (r *Resolver) GetVote(ctx context.Context, args voteQuery) (voteResolver *VoteResolver, err error) {
 	_, err = repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
 	*voteResolver = VoteResolver{}

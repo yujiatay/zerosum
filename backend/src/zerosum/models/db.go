@@ -2,8 +2,8 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
-	"time"
 	"github.com/segmentio/ksuid"
+	"time"
 )
 
 type Stakes string
@@ -45,6 +45,9 @@ type User struct {
 	GamesCreated      []Game `gorm:"foreignkey:UserId"`
 	GamesParticipated []Game `gorm:"foreignkey:UserId"`
 	FbId              string `gorm:"unique_index"`
+	GamesPlayed       int32
+	GamesWon          int32
+	WinRate			  float64
 }
 
 type Vote struct {
@@ -68,4 +71,3 @@ func (user *Option) BeforeCreate(scope *gorm.Scope) error {
 	scope.SetColumn("Id", ksuid.New().String())
 	return nil
 }
-

@@ -18,6 +18,11 @@ func (u *UserResolver) MONEY(ctx context.Context) *int32 {
 	return &money
 }
 
+func (u *UserResolver) WINRATE(ctx context.Context) *float64 {
+	winRate := float64(u.user.WinRate)
+	return &winRate
+}
+
 func (u *UserResolver) GAMESCREATED(ctx context.Context) *[]*GameResolver {
 	// TODO: search games created
 	return nil
