@@ -20,10 +20,15 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    height: `calc(100vh - 3.5rem)`
   },
   logo: {
-    width: '100vw',
+    [theme.breakpoints.down('sm')]: {
+      width: '100vw',
+    },
+    [theme.breakpoints.up('sm')]: {
+      marginTop: 10,
+      width: 512,
+    }
   }
 });
 
