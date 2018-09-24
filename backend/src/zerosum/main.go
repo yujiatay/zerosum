@@ -63,11 +63,12 @@ func main() {
 		os.Getenv("FACEBOOK_APP_ID"),
 		os.Getenv("FACEBOOK_ACCESS_TOKEN"),
 	)
-	router := mux.NewRouter()
 	authRouter := mux.NewRouter()
-	router.HandleFunc("/login/facebook", auth.Auth.FbLoginHandler).Methods("POST")
 	authRouter.Handle("/gql", gqlHandler)
 	an := negroni.New(auth.Auth.GetJwtMiddleware(), negroni.Wrap(authRouter))
+
+	router := mux.NewRouter()
+	router.HandleFunc("/login/facebook", auth.Auth.FbLoginHandler).Methods("POST")
 	if DEBUG {
 		router.Handle("/noauth/gql", gqlHandler)
 	}
