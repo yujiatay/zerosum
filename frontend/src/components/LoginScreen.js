@@ -68,6 +68,7 @@ class LoginScreen extends Component {
           <FacebookLogin
             appId="470572713427485"
             callback={this.fbLoginResponse}
+            icon="fa-facebook-square"
           />
         </div>
       </div>
