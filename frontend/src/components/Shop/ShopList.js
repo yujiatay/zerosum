@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from "@material-ui/core/Typography/Typography";
 import ButtonBase from '@material-ui/core/ButtonBase';
 import HattleCoin from "../assets/hattlecoin.png";
+import ZeroSumCap from '../assets/hat-zero-sum.png';
 
 const styles = theme => ({
   body: {
@@ -60,6 +61,9 @@ const styles = theme => ({
     color: '#fff',
     lineHeight: 'inherit',
     fontSize: '1.1rem'
+  },
+  hat: {
+    width: '25vw'
   }
 });
 
@@ -83,12 +87,13 @@ class ShopList extends Component {
                   <Typography variant="display1" className={classes.cardTitle}>
                     Mario Cap
                   </Typography>
-                </Paper>
-                <Paper elevation={0} className={classes.moneyInfo}>
-                  <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                  <Typography variant="subheading"  className={classes.moneyText}>
-                    1000
-                  </Typography>
+                  <img alt="Hat" src={ZeroSumCap} className={classes.hat}/>
+                  <Paper elevation={0} className={classes.moneyInfo}>
+                    <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                    <Typography variant="subheading"  className={classes.moneyText}>
+                      1000
+                    </Typography>
+                  </Paper>
                 </Paper>
               </ButtonBase>
             </Paper>
