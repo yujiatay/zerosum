@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"github.com/jinzhu/gorm"
+	"time"
+	"github.com/segmentio/ksuid"
+)
 
 type Stakes string
 type GameMode string
@@ -37,7 +41,7 @@ type Option struct {
 
 type User struct {
 	Id                string `gorm:"primary_key"`
-	MoneyTotal        int
+	MoneyTotal        int32
 	GamesCreated      []Game `gorm:"foreignkey:UserId"`
 	GamesParticipated []Game `gorm:"foreignkey:UserId"`
 	FbId              string `gorm:"unique_index"`
@@ -47,5 +51,21 @@ type Vote struct {
 	GameId   string `gorm:"primary_key"` //foreign key from game
 	UserId   string `gorm:"primary_key"` // foreign key from user
 	OptionId string                      // foreign key from option
-	Money    int
+	Money    int32
 }
+
+func (user *User) BeforeCreate(scope *gorm.Scope) error {
+	scope.SetColumn("Id", ksuid.New().String())
+	return nil
+}
+
+func (user *Game) BeforeCreate(scope *gorm.Scope) error {
+	scope.SetColumn("Id", ksuid.New().String())
+	return nil
+}
+
+func (user *Option) BeforeCreate(scope *gorm.Scope) error {
+	scope.SetColumn("Id", ksuid.New().String())
+	return nil
+}
+

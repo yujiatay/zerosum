@@ -40,6 +40,7 @@ func CreateGame(game models.Game) (err error) {
 		err = errors.New("game exists")
 		return
 	}
+
 	res := db.Create(&game)
 	if res.Error != nil {
 		err = res.Error
@@ -59,7 +60,7 @@ func QueryGame(desiredGame models.Game) (game models.Game, err error) {
 	return
 }
 
-func SearchGames(searchString string, limit *int, after *int) (games []models.Game, err error) {
+func SearchGames(searchString string, limit *int32, after *int32) (games []models.Game, err error) {
 
 	offset := *after
 	if after == nil {
@@ -186,7 +187,7 @@ func QueryVote(desiredVote models.Vote) (vote models.Vote, err error) {
 	return
 }
 
-func QueryVotes(desiredVote models.Vote, limit *int, after *int) (votes []models.Vote, err error) {
+func QueryVotes(desiredVote models.Vote, limit *int32, after *int32) (votes []models.Vote, err error) {
 
 	offset := *after
 	if after == nil {

@@ -2,7 +2,9 @@ package resolvers
 
 import (
 	"context"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"os"
 	"time"
 	"zerosum/auth"
 	"zerosum/models"
@@ -12,13 +14,16 @@ import (
 type Resolver struct{}
 
 func getIdFromCtx(ctx context.Context) (id string) {
+	if os.Getenv("DEBUG") == "TRUE" {
+		return "testuser"
+	}
 	return auth.GetClaims(ctx.Value("user").(*jwt.Token)).Id
 }
 
 type gameSearchQuery struct {
 	Filter string
-	Limit  *int
-	After  *int
+	Limit  *int32
+	After  *int32
 }
 
 type voteQuery struct {
@@ -26,30 +31,26 @@ type voteQuery struct {
 }
 
 type userVoteQuery struct {
-	Limit *int
-	After *int
+	Limit *int32
+	After *int32
 }
 
 type userInput struct {
 	// TODO: Cfm user input fields
 }
 
-type optionInput struct {
-	Body string
-}
-
 type gameInput struct {
 	Topic      string
-	Duration   int
+	Duration   int32
 	GameMode   models.GameMode
 	Stakes models.Stakes
-	Options    []optionInput
+	Options    []string
 }
 
 type voteInput struct {
 	GameId   string
 	OptionId string
-	Amount   int
+	Amount   int32
 }
 
 func (r *Resolver) GetUser(ctx context.Context, args *struct{ Id string }) (userResolver *UserResolver, err error) {
@@ -111,7 +112,7 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 	var options []models.Option
 
 	for _, option := range args.Game.Options {
-		options = append(options, models.Option{Body: option.Body})
+		options = append(options, models.Option{Body: option})
 	}
 
 	newGame := models.Game{
@@ -120,8 +121,8 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 		StartTime: time.Now(),
 		EndTime: time.Now().Add(time.Minute * time.Duration(args.Game.Duration)),
 		Stakes: args.Game.Stakes,
+		GameMode: args.Game.GameMode,
 		Options: options,
-
 	}
 	err = repository.CreateGame(newGame)
 	if err == nil {

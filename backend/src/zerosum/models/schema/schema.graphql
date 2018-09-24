@@ -96,16 +96,12 @@ input UserInput {
     #deets
 }
 
-input OptionInput {
-    body: String!
-}
-
 input GameInput {
     topic: String!
     duration: Int!
     gameMode: GameMode!
     stakes: Stakes!
-    options: [OptionInput!]!
+    options: [String!]!
 }
 
 input VoteInput {
