@@ -67,9 +67,11 @@ func (r *Resolver) GetGame(ctx context.Context, args *struct{ Id string }) (game
 
 func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (gameResolvers *[]*GameResolver, err error) {
 	games, err := repository.SearchGames(args.Filter, args.Limit, args.After)
-	for _, game := range games {
-		*gameResolvers = append(*gameResolvers, &GameResolver{game: &game})
+	var gamesList []*GameResolver
+	for index := range games {
+		gamesList = append(gamesList, &GameResolver{game: &games[index]})
 	}
+	gameResolvers = &gamesList
 	return
 }
 
@@ -109,7 +111,7 @@ func (r *Resolver) DeleteUser(ctx context.Context) (success bool) {
 
 func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) (gameResolver *GameResolver, err error) {
 	var options []models.Option
-
+	// TODO: INCLUDE STAKE AMOUNT
 	for _, option := range args.Game.Options {
 		options = append(options, models.Option{Body: option})
 	}

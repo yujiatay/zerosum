@@ -62,17 +62,18 @@ func QueryGame(desiredGame models.Game) (game models.Game, err error) {
 
 func SearchGames(searchString string, limit *int32, after *int32) (games []models.Game, err error) {
 
-	offset := *after
-	if after == nil {
-		offset = 0
+	offset := int32(0)
+
+	if after != nil {
+		offset = *after
 	}
 
 	interm := db.Offset(offset)
 	if limit != nil {
-		interm = interm.Limit(limit)
+		interm = interm.Limit(*limit)
 	}
 
-	res := interm.Where("body LIKE ?", fmt.Sprintf("%%%s%%", searchString)).Find(&games)
+	res := interm.Where("topic LIKE ?", fmt.Sprintf("%%%s%%", searchString)).Find(&games)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -104,6 +105,11 @@ func DeleteGame(game models.Game) (err error) {
 		err = res.Error
 	}
 
+	return
+}
+
+func QueryGameOptions(desiredGame models.Game) (options []models.Option, err error) {
+	err = db.Model(&desiredGame).Association("Options").Find(&options).Error
 	return
 }
 
@@ -203,6 +209,11 @@ func QueryVotes(desiredVote models.Vote, limit *int32, after *int32) (votes []mo
 	if res.Error != nil {
 		err = res.Error
 	}
+	return
+}
+
+func QueryGameVotes(desiredGame models.Game) (votes []models.Vote, err error) {
+	err = db.Where("game_id = ?", desiredGame.Id).Find(&votes).Error
 	return
 }
 
