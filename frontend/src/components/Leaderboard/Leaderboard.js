@@ -1,13 +1,27 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from "@material-ui/core/Typography/Typography";
 import {Link} from "react-router-dom";
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import GoldFeather from '../assets/first-place-feather.png';
 import SilverFeather from '../assets/second-place-feather.png';
 import BronzeFeather from '../assets/third-place-feather.png';
+
+import {Query} from 'react-apollo';
+import gql from "graphql-tag";
+
+
+const GET_LEADERBOARD = gql`
+  query GetLeaderboard($limit: Int!) {
+    getLeaderboard(limit: $limit) {
+      id
+      winRate
+    }
+  }
+`;
+
 
 const styles = theme => ({
   body: {
@@ -45,13 +59,13 @@ const styles = theme => ({
   username: {
     fontSize: '1rem'
   },
-  gold : {
+  gold: {
     color: '#FFD700'
   },
-  silver : {
+  silver: {
     color: '#C0C0C0'
   },
-  bronze : {
+  bronze: {
     color: '#CD7F32'
   },
   rank: {
@@ -77,54 +91,71 @@ const styles = theme => ({
   }
 });
 
+let parseWinRate = (rawWinRate) => {
+  let winRate = rawWinRate * 100.0;
+  return winRate.toFixed(1) + "%"
+};
+
+
 class Leaderboard extends Component {
   render() {
-    const { classes, list } = this.props;
+    const {classes, list} = this.props;
     return (
-      <Paper elevation={0} className={classes.body}>
-        {
-          list &&
-          list.map((user, index) => (
-          <div key={index}>
-            <Paper elevation={0} className={classes.card}>
-              <ButtonBase className={classes.button}>
-                <div className={classes.innerCard}>
-                  <Paper elevation={0} className={classes.rankContainer}>
-                    <Typography variant="display2" className={
-                                  index === 0
-                                    ? classes.gold
-                                    : index === 1
-                                      ? classes.silver
-                                      : index === 2
-                                        ? classes.bronze
-                                        : classes.rank}>
-                      {index + 1}
-                    </Typography>
-                    { index === 0 && <img alt="GoldFeather" src={GoldFeather} className={classes.feather}/> }
-                    { index === 1 && <img alt="SilverFeather" src={SilverFeather} className={classes.feather}/> }
-                    { index === 2 && <img alt="BronzeFeather" src={BronzeFeather} className={classes.feather}/> }
-                  </Paper>
-                  <Paper elevation={0} className={classes.user}>
-                    <Avatar
-                      alt="Profile Pic"
-                      src="https://via.placeholder.com/128x128"
-                      className={classes.avatar}
-                    />
-                    <Typography variant="title" className={classes.username}>
-                      Mad Hatter
-                    </Typography>
-                  </Paper>
-                  <Paper elevation={0}>
-                    <Typography variant="subheading">
-                      75.0%
-                    </Typography>
-                  </Paper>
-                </div>
-              </ButtonBase>
+      <Query query={GET_LEADERBOARD} variables={{limit: 10}}>
+        {({loading, error, data}) => {
+          if (loading) return <div>Fetching</div>;
+          if (error) return <div>Error</div>;
+
+          const leaders = data.getLeaderboard;
+          console.log(leaders);
+          return (
+            <Paper elevation={0} className={classes.body}>
+              {
+                leaders &&
+                leaders.map((user, index) => (
+                  <div key={index}>
+                    <Paper elevation={0} className={classes.card}>
+                      <ButtonBase className={classes.button}>
+                        <div className={classes.innerCard}>
+                          <Paper elevation={0} className={classes.rankContainer}>
+                            <Typography variant="display2" className={
+                              index === 0
+                                ? classes.gold
+                                : index === 1
+                                ? classes.silver
+                                : index === 2
+                                  ? classes.bronze
+                                  : classes.rank}>
+                              {index + 1}
+                            </Typography>
+                            {index === 0 && <img alt="GoldFeather" src={GoldFeather} className={classes.feather}/>}
+                            {index === 1 && <img alt="SilverFeather" src={SilverFeather} className={classes.feather}/>}
+                            {index === 2 && <img alt="BronzeFeather" src={BronzeFeather} className={classes.feather}/>}
+                          </Paper>
+                          <Paper elevation={0} className={classes.user}>
+                            <Avatar
+                              alt="Profile Pic"
+                              src="https://via.placeholder.com/128x128"
+                              className={classes.avatar}
+                            />
+                            <Typography variant="title" className={classes.username}>
+                              {user.id}
+                            </Typography>
+                          </Paper>
+                          <Paper elevation={0}>
+                            <Typography variant="subheading">
+                              {parseWinRate(user.winRate)}
+                            </Typography>
+                          </Paper>
+                        </div>
+                      </ButtonBase>
+                    </Paper>
+                  </div>
+                ))}
             </Paper>
-          </div>
-        ))}
-      </Paper>
+          )
+        }}
+      </Query>
     );
   }
 }
