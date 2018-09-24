@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gobuffalo/packr"
 	"github.com/gorilla/mux"
 	"github.com/graph-gophers/graphql-go"
@@ -22,6 +23,9 @@ func readSchema() (string, error) {
 
 func NewGqlHandler(rootResolver *resolvers.Resolver) (http.Handler, error) {
 	s, err := readSchema()
+	if err != nil {
+		return nil, fmt.Errorf("failed to read graphql schema: %v", err)
+	}
 	schema := graphql.MustParseSchema(s, rootResolver)
 	handler := &relay.Handler{Schema: schema}
 	return handler, err
@@ -47,12 +51,12 @@ func main() {
 	}
 	err := repository.InitTestDB()
 	if err != nil {
-		log.Print(err)
+		log.Printf("Failed to init DB: %v", err)
 	}
 	rootResolver := resolvers.Resolver{}
 	gqlHandler, err := NewGqlHandler(&rootResolver)
 	if err != nil {
-		log.Print(err)
+		log.Printf("Failed to init graphql handler: %v", err)
 	}
 	auth.NewAuth(
 		os.Getenv("ZEROSUM_SECRET"),
@@ -84,9 +88,9 @@ func main() {
 		go func() {
 			// Redirect HTTP -> HTTPS
 			if err := http.ListenAndServe(":80", http.HandlerFunc(redirectTLSHandler)); err != nil {
-				log.Fatal(err)
+				log.Fatalf("HTTP (redirect handler) listener error: %v", err)
 			}
 		}()
-		log.Fatal(http.ListenAndServeTLS(":443", sslCertPath, sslKeyPath, n))
+		log.Fatalf("HTTPS listener error: %v", http.ListenAndServeTLS(":443", sslCertPath, sslKeyPath, n))
 	}
 }
