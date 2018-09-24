@@ -12,6 +12,19 @@ import GameMode from "./GameMode";
 import TimeChoice from "./TimeChoice";
 import StakesMode from "./StakesMode";
 
+import { Mutation } from 'react-apollo';
+import gql from "graphql-tag";
+
+
+const CREATE_GAME = gql`
+  mutation CreateGame($gameInput: GameInput!) {
+    addGame(game: $gameInput) {
+      id
+      endTime
+    }
+  }
+`;
+
 const styles = theme => ({
   body: {
     display: 'flex',
@@ -60,8 +73,8 @@ class CreateScreen extends Component {
     this.state = {
       topic: '',
       options: [],
-      gmode: 'majority',
-      smode: 'nostakes',
+      gmode: 'MAJORITY',
+      smode: 'NO_STAKES',
       sinput: -1,
       time: 5 // in minutes
     };
@@ -143,11 +156,21 @@ class CreateScreen extends Component {
           <StakesMode clickHandler={this.handleStakes} inputHandler={this.handleStakesInput}/>
           <SectionHeader text="Time"/>
           <TimeChoice choiceHandler={this.handleTime}/>
-          <Button variant="contained" color="primary" className={classes.button}>
-            <Typography variant="subheading" className={classes.white}>
-              Submit
-            </Typography>
-          </Button>
+          <Mutation mutation={CREATE_GAME} variables={{ gameInput: {
+            topic: this.state.topic,
+            duration: this.state.time,
+            gameMode: this.state.gmode,
+            stakes: this.state.smode,
+            options: this.state.options
+          }}}>
+            {createGame => (
+            <Button variant="contained" color="primary" className={classes.button} onClick={createGame}>
+              <Typography variant="subheading" className={classes.white}>
+                Submit
+              </Typography>
+            </Button>
+            )}
+          </Mutation>
         </div>
 
         <BottomNavBar value={2}/>

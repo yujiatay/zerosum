@@ -58,9 +58,9 @@ class GameMode extends Component {
       selected: !prevState.selected
     }), () => {
       if (this.state.selected) {
-        this.props.modeHandler('majority')
+        this.props.modeHandler('MAJORITY')
       } else {
-        this.props.modeHandler('minority')
+        this.props.modeHandler('MINORITY')
       }
     })
   };

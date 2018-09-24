@@ -74,13 +74,13 @@ class StakesMode extends Component {
       selected: index + row * 2
     }), () => {
       if (this.state.selected === 0) {
-        this.props.clickHandler('nostakes');
+        this.props.clickHandler('NO_STAKES');
       } else if (this.state.selected === 1) {
-        this.props.clickHandler('fixedstakes');
+        this.props.clickHandler('FIXED_STAKES');
       } else if (this.state.selected === 2) {
-        this.props.clickHandler('limit');
+        this.props.clickHandler('FIXED_LIMIT');
       } else if (this.state.selected === 3) {
-        this.props.clickHandler('nolimit');
+        this.props.clickHandler('NO_LIMIT');
       } else {
         this.props.clickHandler('nil');
       }
