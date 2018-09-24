@@ -14,6 +14,7 @@ import StakesMode from "./StakesMode";
 
 import { Mutation } from 'react-apollo';
 import gql from "graphql-tag";
+import ReactGA from "react-ga";
 
 
 const CREATE_GAME = gql`
@@ -79,7 +80,9 @@ class CreateScreen extends Component {
       time: 5 // in minutes
     };
   }
-
+  componentDidMount() {
+    ReactGA.pageview('Create Game');
+  };
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value,

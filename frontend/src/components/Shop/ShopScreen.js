@@ -7,6 +7,7 @@ import BottomNavBar from "../BottomNavBar";
 import Paper from "@material-ui/core/Paper/Paper";
 import InfoBar from "../Feed/InfoBar";
 import ShopList from "./ShopList";
+import ReactGA from "react-ga";
 
 const styles = theme => ({
   header: {
@@ -27,6 +28,9 @@ const styles = theme => ({
 });
 
 class ShopScreen extends Component {
+  componentDidMount() {
+    ReactGA.pageview('Shop');
+  };
   render() {
     const { classes } = this.props;
     return (

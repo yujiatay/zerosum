@@ -9,6 +9,7 @@ import Tab from "@material-ui/core/Tab/Tab";
 import Leaderboard from "./Leaderboard";
 import Paper from "@material-ui/core/Paper/Paper";
 import Avatar from "@material-ui/core/Avatar/Avatar";
+import ReactGA from "react-ga";
 
 const styles = theme => ({
   header: {
@@ -82,7 +83,9 @@ class SocialScreen extends Component {
       userRankState: false
     }
   }
-
+  componentDidMount() {
+    ReactGA.pageview('Leaderboard');
+  };
   handleChange = (event, value) => {
     this.setState({ value });
   };

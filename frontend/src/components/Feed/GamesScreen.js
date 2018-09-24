@@ -10,6 +10,7 @@ import Tabs from "@material-ui/core/Tabs/Tabs";
 import Tab from "@material-ui/core/Tab/Tab";
 import GamesList from "./GamesList";
 import InfoBar from "./InfoBar";
+import ReactGA from 'react-ga';
 
 const styles = theme => ({
   root: {
@@ -44,7 +45,9 @@ class GamesScreen extends Component {
       value: 0
     }
   }
-
+  componentDidMount() {
+    ReactGA.pageview('Games Feed');
+  };
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -83,7 +86,6 @@ class GamesScreen extends Component {
             <Tab label="Your Games" className={classes.tab}/>
           </Tabs>
         </AppBar>
-
 
         {value === 0 && <GamesList/>}
         {value === 1 && <GamesList/>}

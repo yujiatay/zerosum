@@ -13,6 +13,7 @@ import Currency from "../Currency";
 import ProgressBar from "./ProgressBar";
 import ProfileHats from './ProfileHats';
 import ProfileAchievements from "./ProfileAchievements";
+import ReactGA from "react-ga";
 
 const styles = theme => ({
   root: {
@@ -78,6 +79,9 @@ class ProfileScreen extends Component {
       value: 0
     }
   }
+  componentDidMount() {
+    ReactGA.pageview('Profile');
+  };
 
   handleChange = (event, value) => {
     this.setState({ value });
