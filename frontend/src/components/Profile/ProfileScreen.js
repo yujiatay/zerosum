@@ -11,6 +11,8 @@ import Tab from '@material-ui/core/Tab';
 import Paper from '@material-ui/core/Paper';
 import Currency from "../Currency";
 import ProgressBar from "./ProgressBar";
+import ProfileHats from './ProfileHats';
+import ProfileAchievements from "./ProfileAchievements";
 
 const styles = theme => ({
   root: {
@@ -68,23 +70,6 @@ const styles = theme => ({
     flexDirection: 'column',
   }
 });
-
-function TabContainer(props) {
-  return (
-    <Paper elevation={0} style={{
-      backgroundColor: '#068D9D',
-      borderRadius: 0,
-      overflowY: 'auto',
-      marginBottom: 56,
-      height: `calc(100vh - 23.375rem)` // deduct height of everything else from viewport
-    }}>
-
-      <Typography component="div" style={{ padding: 8 * 3 }}>
-        {props.children}
-      </Typography>
-    </Paper>
-  );
-}
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -156,8 +141,8 @@ class ProfileScreen extends Component {
           </AppBar>
 
         </div>
-        {value === 0 && <TabContainer>Item One</TabContainer>}
-        {value === 1 && <TabContainer>Item Two</TabContainer>}
+        {value === 0 && <ProfileHats/>}
+        {value === 1 && <ProfileAchievements/>}
         <BottomNavBar value={4}/>
       </div>
     );
