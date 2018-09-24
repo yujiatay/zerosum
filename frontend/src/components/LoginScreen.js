@@ -5,7 +5,7 @@ import axios from 'axios'
 export default class LoginScreen extends Component {
   fbLoginResponse = res => {
     if (res.userID) {
-      axios.post("http://localhost:8080/api/login/facebook", {
+      axios.post("https://api.zerosum.ml/login/facebook", {
         accessToken: res.accessToken,
         userID: res.userID
       }).then(r => {
