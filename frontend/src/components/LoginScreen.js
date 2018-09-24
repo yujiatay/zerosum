@@ -59,7 +59,7 @@ class LoginScreen extends Component {
           </Toolbar>
         </AppBar>
         <div className={classes.container}>
-          <img alt="Hat" src={LoginLogo} className={classes.logo}/>
+          <img alt="ZeroSum" src={LoginLogo} className={classes.logo}/>
           <FacebookLogin
             appId="470572713427485"
             callback={this.fbLoginResponse}
