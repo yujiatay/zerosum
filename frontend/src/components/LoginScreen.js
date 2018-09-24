@@ -8,27 +8,22 @@ import AppBar from "@material-ui/core/AppBar/AppBar";
 import LoginLogo from './assets/login-logo.png';
 
 const styles = theme => ({
-  fullHeight: {
-    height: '100vh'
-  },
   body: {
     backgroundColor: '#068D9D',
-    height: '100%'
+    height: '100vh',
   },
   header: {
     textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
   },
-  facebookButton: {
+  container: {
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  logo: {
-    display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    height: `calc(100vh - 3.5rem)`
+  },
+  logo: {
     width: '100vw',
-    paddingTop: 100
   }
 });
 
@@ -52,25 +47,23 @@ class LoginScreen extends Component {
     const { classes } = this.props;
     return (
       <div className = {classes.body}>
-        <div className={classes.fullHeight}>
-          <AppBar position="static">
-              <Toolbar>
-                <Typography className={classes.header} variant="display2" noWrap>
-                  L
-                </Typography>
-                <Typography className={classes.header} variant="display1" noWrap>
-                  ogin
-                </Typography>
-                <div className={classes.grow} />
-              </Toolbar>
-            </AppBar>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography className={classes.header} variant="display2" noWrap>
+              L
+            </Typography>
+            <Typography className={classes.header} variant="display1" noWrap>
+              ogin
+            </Typography>
+            <div className={classes.grow} />
+          </Toolbar>
+        </AppBar>
+        <div className={classes.container}>
           <img alt="Hat" src={LoginLogo} className={classes.logo}/>
-          <div className={classes.facebookButton}>
-            <FacebookLogin
-              appId="470572713427485"
-              callback={this.fbLoginResponse}
-            />
-          </div>
+          <FacebookLogin
+            appId="470572713427485"
+            callback={this.fbLoginResponse}
+          />
         </div>
       </div>
     )
