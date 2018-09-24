@@ -77,7 +77,7 @@ const styles = theme => ({
 class GameScreen extends Component {
   render() {
     const { classes } = this.props;
-    const { title, options } = this.props.location.state;
+    const { parsedGame } = this.props.location.state;
     return (
       <div className={classes.fullHeight}>
         <AppBar position="static">
@@ -117,18 +117,18 @@ class GameScreen extends Component {
             </CardContent>
             <CardContent className={classes.cardContent}>
               <Typography className={classes.cardTitle} variant="title" component="h2">
-                Has everything been here forever, or when did it begin to exist?
+                {parsedGame.topic}
               </Typography>
             </CardContent>
             <CardContent className={classes.cardContentRow}>
               <Typography>
-                Majority
+                {parsedGame.gameMode}
               </Typography>
               <Typography>
-                Fixed Stakes
+                {parsedGame.stakes}
               </Typography>
               <Typography>
-                23h 39min
+                {parsedGame.timeLeft}
               </Typography>
             </CardContent>
           </Card>
@@ -139,12 +139,12 @@ class GameScreen extends Component {
                 Choose One Option
               </Typography>
               {
-                options.map((option, index) =>
+                parsedGame.options.map((option, index) =>
                   <Card key={index} className={classes.optionCard}>
                     <ButtonBase className={classes.button} component={Link} to="/games">
                       <CardContent>
                         <Typography variant="body2" align="center">
-                          {option}
+                          {option.body}
                         </Typography>
                       </CardContent>
                     </ButtonBase>
