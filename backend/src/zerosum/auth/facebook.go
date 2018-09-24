@@ -10,12 +10,12 @@ import (
 )
 
 type fbProfile struct {
-	Name string `json:"name"`
-	Id   string `json:"id"`
+	Name string                 `json:"name"`
+	Id   string                 `json:"id"`
 	Err  map[string]interface{} `json:"error"`
 }
 type fbVerificationResponse struct {
-	Data  map[string]interface{} `json:"data"`
+	Data map[string]interface{} `json:"data"`
 	Err  map[string]interface{} `json:"error"`
 }
 
