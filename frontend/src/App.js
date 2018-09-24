@@ -117,8 +117,8 @@ const theme = createMuiTheme({
 
 class AppRoutes extends Component {
   isLoggedIn() {
-    return true
-    // return localStorage.getItem("token") !== null;
+    // return true
+    return localStorage.getItem("token") !== null;
   }
 
   render() {
