@@ -1,8 +1,38 @@
 import React, {Component} from 'react';
 import FacebookLogin from 'react-facebook-login'
 import axios from 'axios'
+import { withStyles } from '@material-ui/core/styles';
+import Toolbar from "@material-ui/core/Toolbar/Toolbar";
+import Typography from "@material-ui/core/Typography/Typography";
+import AppBar from "@material-ui/core/AppBar/AppBar";
+import LoginLogo from './assets/login-logo.png';
 
-export default class LoginScreen extends Component {
+const styles = theme => ({
+  fullHeight: {
+    height: '100vh'
+  },
+  body: {
+    backgroundColor: '#068D9D',
+    height: '100%'
+  },
+  header: {
+    textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
+  },
+  facebookButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  logo: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100vw',
+    paddingTop: 100
+  }
+});
+
+class LoginScreen extends Component {
   fbLoginResponse = res => {
     if (res.userID) {
       axios.post("https://api.zerosum.ml/login/facebook", {
@@ -18,12 +48,32 @@ export default class LoginScreen extends Component {
     }
   };
 
-  render() {
+   render() {
+    const { classes } = this.props;
     return (
-      <FacebookLogin
-        appId="470572713427485"
-        callback={this.fbLoginResponse}
-      />
+      <div className = {classes.body}>
+        <div className={classes.fullHeight}>
+          <AppBar position="static">
+              <Toolbar>
+                <Typography className={classes.header} variant="display2" noWrap>
+                  L
+                </Typography>
+                <Typography className={classes.header} variant="display1" noWrap>
+                  ogin
+                </Typography>
+                <div className={classes.grow} />
+              </Toolbar>
+            </AppBar>
+          <img alt="Hat" src={LoginLogo} className={classes.logo}/>
+          <div className={classes.facebookButton}>
+            <FacebookLogin
+              appId="470572713427485"
+              callback={this.fbLoginResponse}
+            />
+          </div>
+        </div>
+      </div>
     )
   }
 }
+export default withStyles(styles)(LoginScreen); 
