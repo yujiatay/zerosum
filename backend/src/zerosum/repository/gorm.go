@@ -143,7 +143,7 @@ func GetOrCreateUser(desiredUser models.User) (user models.User, err error) {
 	// Check if alr exists
 	err = db.Where("fb_id = ?", desiredUser.FbId).Attrs(models.User{
 		FbId: desiredUser.FbId,
-		MoneyTotal: int32(100),
+		MoneyTotal: int32(2000),
 		WinRate: 0,
 		GamesPlayed: 0,
 		GamesWon: 0,
