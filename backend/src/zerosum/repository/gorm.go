@@ -282,5 +282,5 @@ func DeleteVote(vote models.Vote) (err error) {
 
 func CheckVoted(userId string, gameId string) bool {
 	var vote models.Vote
-	return db.Where("user_id = ? AND game_id = ?", userId, gameId).First(&vote).RecordNotFound()
+	return !db.Where("user_id = ? AND game_id = ?", userId, gameId).First(&vote).RecordNotFound()
 }
