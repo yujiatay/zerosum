@@ -146,7 +146,7 @@ class ProfileScreen extends Component {
               {topBar}
               <div className={classes.body}>
                 <div className={classes.moneyRow}>
-                  <Currency money={profile ? profile.money : 999}/>
+                  <Currency money={profile ? profile.money : "???"}/>
                 </div>
                 <div className={classes.row}>
                   <Avatar
