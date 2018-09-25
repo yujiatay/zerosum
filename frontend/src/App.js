@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import GamesScreen from "./components/Feed/GamesScreen";
 import CreateScreen from "./components/CreateGame/CreateScreen";
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
@@ -8,8 +8,9 @@ import GameScreen from './components/GameScreen';
 import ShopScreen from "./components/Shop/ShopScreen";
 import SocialScreen from "./components/Leaderboard/SocialScreen";
 import LoginScreen from './components/LoginScreen';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome, faShoppingCart, faPlusCircle,
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {
+  faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
   faArrowLeft, faCoins, faHourglassHalf
 } from '@fortawesome/free-solid-svg-icons';
@@ -135,11 +136,10 @@ class AppRoutes extends Component {
   }
 
   componentDidMount() {
-    console.log("component mounted");
     window.addEventListener("AUTH_STATE_CHANGED", (e) => {
-        this.setState({
-          isLoggedIn: e.detail
-        })
+      this.setState({
+        isLoggedIn: e.detail
+      })
     });
   }
 
@@ -147,11 +147,11 @@ class AppRoutes extends Component {
     const mainApp = (
       <Switch>
         <Route path="/games" component={GamesScreen}/>
-        <Route path="/create" component={CreateScreen} />
-        <Route path="/profile" component={ProfileScreen} />
-        <Route path="/game" component={GameScreen} />
-        <Route path="/shop" component={ShopScreen} />
-        <Route path="/leaderboard" component={SocialScreen} />
+        <Route path="/create" component={CreateScreen}/>
+        <Route path="/profile" component={ProfileScreen}/>
+        <Route path="/game" component={GameScreen}/>
+        <Route path="/shop" component={ShopScreen}/>
+        <Route path="/leaderboard" component={SocialScreen}/>
         <Redirect to="/games"/>
       </Switch>
     );
