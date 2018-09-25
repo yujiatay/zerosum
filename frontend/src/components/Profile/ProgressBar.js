@@ -3,6 +3,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
+const expBarMaxWidth = 60;
+
 const styles = theme => ({
   moneyInfo: {
     display: 'flex',
@@ -31,7 +33,7 @@ const styles = theme => ({
   },
   expBar: {
     backgroundColor: '#014262',
-    width: '60vw',
+    width: (expBarMaxWidth) + 'vw',
     height: '7vw',
     display: 'flex',
     alignItems: 'center',
@@ -39,27 +41,30 @@ const styles = theme => ({
   },
   expProgress: {
     backgroundColor: '#068D9D',
-    width: '30vw',
     height: '5vw',
     display: 'flex',
     justifyContent: 'flex-end',
-    borderRadius: 2
+    borderRadius: 2,
+    margin: '1vw'
   },
 });
 
 class ProgressBar extends Component {
+  getProgressWidth = (progress) => {
+    return (progress * expBarMaxWidth) + 'vw'
+  };
   render() {
-    const { classes } = this.props;
+    const { classes, level, expProgress } = this.props;
 
     return (
       <Paper elevation={0} className={classes.moneyInfo}>
         <Paper elevation={0} className={classes.blueCircle}>
           <Typography variant="subheading"  className={classes.moneyText}>
-            10
+            {level}
           </Typography>
         </Paper>
         <Paper elevation={0} className={classes.expBar}>
-          <Paper elevation={0} className={classes.expProgress}>
+          <Paper elevation={0} className={classes.expProgress} style={{width: this.getProgressWidth(expProgress)}}>
 
           </Paper>
         </Paper>

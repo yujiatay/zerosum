@@ -160,7 +160,7 @@ class ProfileScreen extends Component {
                   Win rate: {data ? data.winRate : 0}%
                 </Typography>
                 <div className={classes.progressBar}>
-                  <ProgressBar/>
+                  <ProgressBar level={data ? data.level : 10} expProgress={data ? data.expProgress : 0.8}/>
                 </div>
                 {hatAndAchievementsTabBar}
               </div>
