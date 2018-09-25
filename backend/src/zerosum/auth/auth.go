@@ -76,6 +76,6 @@ func (a *auth) JWTMiddleware(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newReq := r.WithContext(context.WithValue(r.Context(), "Id", token.Claims.(jwt.StandardClaims).Id))
+	newReq := r.WithContext(context.WithValue(r.Context(), "Id", token.Claims.(*jwt.StandardClaims).Id))
 	*r = *newReq
 }
