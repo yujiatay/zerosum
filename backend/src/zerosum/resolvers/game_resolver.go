@@ -75,6 +75,11 @@ func (g *GameResolver) OPTIONS(ctx context.Context) *[]*OptionResolver{
 //	return nil
 //}
 
+func (g *GameResolver) VOTED(ctx context.Context) *bool {
+	voted := repository.CheckVoted(getIdFromCtx(ctx), g.game.Id)
+	return &voted
+}
+
 func (g *GameResolver) RESOLVED(ctx context.Context) *bool {
 	return &g.game.Resolved
 }
