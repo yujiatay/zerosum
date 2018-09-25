@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment } from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
@@ -10,10 +10,18 @@ import CardContent from "@material-ui/core/CardContent/CardContent";
 import Card from "@material-ui/core/Card/Card";
 import Avatar from '@material-ui/core/Avatar';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Currency from "./Currency";
-import Dice from "./assets/dice-logo-blue.png";
+import Currency from "../Currency";
+import Dice from "../assets/dice-logo-blue.png";
 import Paper from '@material-ui/core/Paper';
-import Money from './assets/money-bag.png';
+import Money from '../assets/money-bag.png';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import HattleCoin from "../assets/hattlecoin.png";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
   fullHeight: {
@@ -64,8 +72,10 @@ const styles = theme => ({
     borderRadius: 10,
     marginTop: 10,
     marginBottom: 10,
+    display: 'flex',
   },
   button: {
+    flex: 1,
     display: 'block'
   },
   icon: {
@@ -98,13 +108,87 @@ const styles = theme => ({
   moneyBag: {
     width: 24,
     height: 24
+  },
+  coin: {
+    height: 24,
+    width: 24
+  },
+  dialogTitle: {
+    paddingTop: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit * 3,
+    color: '#014262'
+  },
+  dialogText: {
+    color: '#068D9D',
+  },
+  moneyInput: {
+    backgroundColor: '#d7f1f5',
+    borderRadius: 5,
+    paddingLeft: 5,
+    paddingRight: 5
+  },
+  progress: {
+    margin: theme.spacing.unit * 3
+  },
+  success: {
+    color: '#4bd84b'
+  },
+  failure: {
+    color: '#d62d29'
+  },
+  queryDialog: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   }
 });
 
 class GameScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      choice: -1,
+      playDialog: false,
+      bet: '',
+      loading: false,
+      querySent: false,
+      querySuccess: false
+    }
+  }
+  handleChoice = (choice) => {
+    this.setState({
+      choice: choice,
+      playDialog: true
+    });
+  };
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
+  handleClose = () => {
+    this.setState({
+      playDialog: false,
+      bet: ''
+    });
+  };
+  handleSubmit = () => {
+    this.setState({
+      loading: true,
+      querySent: true
+    }, () => {
+      // TODO: Make gql query to submit request
+      this.setState({
+        loading: false,
+        queryStatus: true // true for successful request
+      })
+    })
+  };
   render() {
     const {classes} = this.props;
     const {parsedGame} = this.props.location.state;
+    const {loading, querySent, queryStatus} = this.state;
     return (
       <div className={classes.fullHeight}>
         <AppBar position="static">
@@ -184,7 +268,7 @@ class GameScreen extends Component {
               {
                 parsedGame.options.map((option, index) =>
                   <Card key={index} className={classes.optionCard}>
-                    <ButtonBase className={classes.button} component={Link} to="/games">
+                    <ButtonBase className={classes.button} onClick={() => this.handleChoice(option.body)}>
                       <CardContent>
                         <Typography variant="body2" align="center">
                           {option.body}
@@ -196,6 +280,72 @@ class GameScreen extends Component {
               }
             </CardContent>
           </Card>
+          {/* Dialog appears after option is chosen. */}
+          <Dialog
+            open={this.state.playDialog}
+            onClose={this.handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            {
+              loading
+              ? <CircularProgress className={classes.progress} size={50} />
+              : querySent
+                ? queryStatus
+                  ?
+                  <DialogContent className={classes.queryDialog}>
+                    <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
+                    <Typography variant="title" className={classes.dialogTitle} align="center">
+                      Your bet has been placed!
+                    </Typography>
+                  </DialogContent>
+                  :
+                  <DialogContent className={classes.queryDialog}>
+                    <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
+                    <Typography variant="title" className={classes.dialogTitle} align="center">
+                      Connection failed. Please try again!
+                    </Typography>
+                  </DialogContent>
+                : <Fragment>
+                  <Typography variant="title" className={classes.dialogTitle} align="center">
+                    How many HattleCoins to bet?
+                  </Typography>
+                  <DialogContent>
+                    <Typography className={classes.dialogText} align="center">
+                      HattleCoins are not refundable after submission!
+                    </Typography>
+                    <TextField
+                      autoFocus
+                      autoComplete="off"
+                      id="amount"
+                      type="number"
+                      fullWidth
+                      className={classes.moneyInput}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                          </InputAdornment>
+                        ),
+                        disableUnderline: true
+                      }}
+                      inputProps={{
+                        min: "1"
+                      }}
+                      value={this.state.bet}
+                      onChange={this.handleChange('bet')}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={this.handleClose} color="primary">
+                      Cancel
+                    </Button>
+                    <Button onClick={this.handleSubmit} color="primary">
+                      Submit
+                    </Button>
+                  </DialogActions>
+                </Fragment>
+            }
+          </Dialog>
         </div>
       </div>
     );

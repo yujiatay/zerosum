@@ -4,7 +4,7 @@ import GamesScreen from "./components/Feed/GamesScreen";
 import CreateScreen from "./components/CreateGame/CreateScreen";
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import ProfileScreen from "./components/Profile/ProfileScreen";
-import GameScreen from './components/GameScreen';
+import GameScreen from './components/Game/GameScreen';
 import ShopScreen from "./components/Shop/ShopScreen";
 import SocialScreen from "./components/Leaderboard/SocialScreen";
 import LoginScreen from './components/LoginScreen';
@@ -12,14 +12,16 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {
   faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
-  faArrowLeft, faCoins, faHourglassHalf
+  faArrowLeft, faCoins, faHourglassHalf, faCheckCircle,
+  faExclamationCircle
 } from '@fortawesome/free-solid-svg-icons';
 import ReactGA from 'react-ga';
 import {getToken} from "./utils/auth";
 
 library.add(faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
-  faArrowLeft, faCoins, faHourglassHalf);
+  faArrowLeft, faCoins, faHourglassHalf, faCheckCircle,
+  faExclamationCircle);
 
 ReactGA.initialize('UA-125447140-2', {
   debug: true,
@@ -114,7 +116,7 @@ const theme = createMuiTheme({
           paddingBottom: 0
         },
       }
-    }
+    },
   }
 });
 
