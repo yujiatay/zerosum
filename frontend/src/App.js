@@ -24,13 +24,9 @@ library.add(faHome, faShoppingCart, faPlusCircle,
   faExclamationCircle);
 
 ReactGA.initialize('UA-125447140-2', {
-  debug: true,
+  debug: false,
   titleCase: false,
-  gaOptions: {
-    userId: 123
-  }
 });
-ReactGA.pageview('Main');
 
 const theme = createMuiTheme({
   palette: {
@@ -130,6 +126,7 @@ class AppRoutes extends Component {
   }
 
   componentDidMount() {
+    ReactGA.pageview('Main');
     // Check if user is already authenticated
     getToken().then((token) => {
       this.setState({
