@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
+import {Link} from 'react-router-dom';
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
 import AppBar from "@material-ui/core/AppBar/AppBar";
@@ -10,22 +10,18 @@ import CardContent from "@material-ui/core/CardContent/CardContent";
 import Card from "@material-ui/core/Card/Card";
 import Avatar from '@material-ui/core/Avatar';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Currency from "./Currency";
+import Dice from "./assets/dice-logo-blue.png";
+import Paper from '@material-ui/core/Paper';
+import Money from './assets/money-bag.png';
 
 const styles = theme => ({
   fullHeight: {
-    height: '100vh'
-  },
-  body: {
-    height: '100%'
+    height: '100vh',
+    backgroundColor: '#068D9D'
   },
   grow: {
     flexGrow: 1,
-  },
-  title: {
-    display: 'block',
-  },
-  sectionMobile: {
-    display: 'flex',
   },
   backButton: {
     justifyContent: 'flex-start'
@@ -61,7 +57,7 @@ const styles = theme => ({
   optionSection: {
     backgroundColor: '#068D9D',
     borderRadius: 0,
-    height: '100%'
+
   },
   optionCard: {
     minWidth: 275,
@@ -71,13 +67,44 @@ const styles = theme => ({
   },
   button: {
     display: 'block'
+  },
+  icon: {
+    color: '#068D9D'
+  },
+  dice: {
+    height: 16,
+    width: 16
+  },
+  cardInfo: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    padding: 0,
+    marginBottom: 10
+  },
+  textInfo: {
+    marginLeft: 5
+  },
+  pot: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+  },
+  potText: {
+    color: '#068D9D',
+    textDecoration: 'underline'
+  },
+  moneyBag: {
+    width: 24,
+    height: 24
   }
 });
 
 class GameScreen extends Component {
   render() {
-    const { classes } = this.props;
-    const { parsedGame } = this.props.location.state;
+    const {classes} = this.props;
+    const {parsedGame} = this.props.location.state;
     return (
       <div className={classes.fullHeight}>
         <AppBar position="static">
@@ -94,11 +121,11 @@ class GameScreen extends Component {
             <Typography className={classes.header} variant="display1" noWrap>
               ame
             </Typography>
-            <div className={classes.grow} />
+            <div className={classes.grow}/>
           </Toolbar>
         </AppBar>
 
-        <div className={classes.body}>
+        <div>
           <Card className={classes.questionCard} elevation={0}>
             <CardContent className={classes.cardContentRow}>
               <CardContent className={classes.poster}>
@@ -108,32 +135,48 @@ class GameScreen extends Component {
                   className={classes.avatar}
                 />
                 <Typography variant="title">
-                  MadHatter
+                  Poster
                 </Typography>
               </CardContent>
-              <Typography variant="subheading">
-                $99999
-              </Typography>
+              <Currency money="100"/>
             </CardContent>
-            <CardContent className={classes.cardContent}>
-              <Typography className={classes.cardTitle} variant="title" component="h2">
+
+            <Paper elevation={0} className={classes.pot}>
+              <img alt="Pot" src={Money} className={classes.moneyBag}/>
+              <Typography className={classes.potText}>
+                0 in the pot!
+              </Typography>
+            </Paper>
+
+            <CardContent>
+              <Typography className={classes.cardTitle} variant="title">
                 {parsedGame.topic}
               </Typography>
             </CardContent>
+
             <CardContent className={classes.cardContentRow}>
-              <Typography>
-                {parsedGame.gameMode}
-              </Typography>
-              <Typography>
-                {parsedGame.stakes}
-              </Typography>
-              <Typography>
-                {parsedGame.timeLeft}
-              </Typography>
+              <CardContent className={classes.cardInfo}>
+                <img alt="Game Mode" src={Dice} className={classes.dice}/>
+                <Typography color="textPrimary" className={classes.textInfo}>
+                  {parsedGame.gameMode}
+                </Typography>
+              </CardContent>
+              <CardContent className={classes.cardInfo}>
+                <FontAwesomeIcon icon="coins" size="1x" className={classes.icon}/>
+                <Typography color="textPrimary" className={classes.textInfo}>
+                  {parsedGame.stakes}
+                </Typography>
+              </CardContent>
+              <CardContent className={classes.cardInfo}>
+                <FontAwesomeIcon icon="hourglass-half" size="1x" className={classes.icon}/>
+                <Typography color="textPrimary" className={classes.textInfo}>
+                  {parsedGame.timeLeft}
+                </Typography>
+              </CardContent>
             </CardContent>
           </Card>
 
-          <Card className={classes.optionSection}>
+          <Card elevation={0} className={classes.optionSection}>
             <CardContent>
               <Typography className={classes.header} variant="display1" noWrap align="center">
                 Choose One Option
