@@ -171,24 +171,24 @@ class GamesList extends Component {
                       </Typography>
                     </CardContent>
                     <CardContent className={classes.cardContentRow}>
-                      <CardContent className={classes.cardInfo}>
+                      <Paper elevation={0} className={classes.cardInfo}>
                         <img alt="Game Mode" src={Dice} className={classes.dice}/>
                         <Typography color="textPrimary" className={classes.textInfo}>
                           {parseGameMode(game.gameMode)}
                         </Typography>
-                      </CardContent>
-                      <CardContent className={classes.cardInfo}>
+                      </Paper>
+                      <Paper elevation={0} className={classes.cardInfo}>
                         <FontAwesomeIcon icon="coins" size="1x" className={classes.icon}/>
                         <Typography color="textPrimary" className={classes.textInfo}>
                           {parseStakes(game.stakes)}
                         </Typography>
-                      </CardContent>
-                      <CardContent className={classes.cardInfo}>
+                      </Paper>
+                      <Paper elevation={0} className={classes.cardInfo}>
                         <FontAwesomeIcon icon="hourglass-half" size="1x" className={classes.icon}/>
                         <Typography color="textPrimary" className={classes.textInfo}>
                           {parseTimeLeft(game.endTime)}
                         </Typography>
-                      </CardContent>
+                      </Paper>
                     </CardContent>
                   </ButtonBase>
                 </Card>
