@@ -14,6 +14,8 @@ import { faHome, faShoppingCart, faPlusCircle,
   faArrowLeft, faCoins, faHourglassHalf
 } from '@fortawesome/free-solid-svg-icons';
 import ReactGA from 'react-ga';
+import {getToken} from "./utils/auth";
+
 library.add(faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
   faArrowLeft, faCoins, faHourglassHalf);
@@ -122,6 +124,16 @@ class AppRoutes extends Component {
       isLoggedIn: false
     }
   }
+
+  componentWillMount() {
+    // Check if user is already authenticated
+    getToken().then((token) => {
+      this.setState({
+        isLoggedIn: token !== null
+      })
+    });
+  }
+
   componentDidMount() {
     console.log("component mounted");
     window.addEventListener("AUTH_STATE_CHANGED", (e) => {

@@ -51,7 +51,3 @@ export async function getToken() {
   }
 }
 
-// Trigger on first load
-getToken().then(() => {
-  dispatchEvent(token ? LOGGED_IN : LOGGED_OUT)
-});
