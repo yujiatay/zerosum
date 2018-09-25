@@ -3,20 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import ApolloClient from "apollo-boost"
 import {ApolloProvider} from "react-apollo"
+import {client, persistor} from "./utils/apolloClient"
 
-const defaults = {
-};
-const client = new ApolloClient({
-  clientState: {
-    defaults: defaults
-  }
-}); //TODO: Set uri
-
-ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App/>
-  </ApolloProvider>,
-  document.getElementById('root'));
-registerServiceWorker();
+persistor.restore().then(() => persistor.persist()).then(() => {
+  ReactDOM.render(
+    <ApolloProvider client={client}>
+      <App/>
+    </ApolloProvider>,
+    document.getElementById('root'));
+  registerServiceWorker();
+});

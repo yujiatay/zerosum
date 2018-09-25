@@ -116,9 +116,19 @@ const theme = createMuiTheme({
 });
 
 class AppRoutes extends Component {
-  isLoggedIn() {
-    // return true
-    return localStorage.getItem("token") !== null;
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: false
+    }
+  }
+  componentDidMount() {
+    console.log("component mounted");
+    window.addEventListener("AUTH_STATE_CHANGED", (e) => {
+        this.setState({
+          isLoggedIn: e.detail
+        })
+    });
   }
 
   render() {
@@ -139,7 +149,7 @@ class AppRoutes extends Component {
         <Redirect to="/"/>
       </Switch>
     );
-    return this.isLoggedIn() ? mainApp : loginRoute
+    return this.state.isLoggedIn ? mainApp : loginRoute
   }
 }
 
