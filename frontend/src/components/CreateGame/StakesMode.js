@@ -146,7 +146,7 @@ class StakesMode extends Component {
               </Typography>
               <Paper elevation={0} className={classes.input}>
                 <Input placeholder="0" disableUnderline fullWidth autoFocus
-                       onChange={this.handleInput}
+                       onChange={this.handleInput} type="number" inputProps={{ min: "1"}}
                 />
               </Paper>
             </Paper>
