@@ -38,11 +38,11 @@ type userVoteQuery struct {
 //}
 
 type gameInput struct {
-	Topic      string
-	Duration   int32
-	GameMode   models.GameMode
-	Stakes models.Stakes
-	Options    []string
+	Topic    string
+	Duration int32
+	GameMode models.GameMode
+	Stakes   models.Stakes
+	Options  []string
 }
 
 type voteInput struct {
@@ -124,13 +124,13 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 	}
 
 	newGame := models.Game{
-		Topic: args.Game.Topic,
-		UserId: getIdFromCtx(ctx),
+		Topic:     args.Game.Topic,
+		UserId:    getIdFromCtx(ctx),
 		StartTime: time.Now(),
-		EndTime: time.Now().Add(time.Minute * time.Duration(args.Game.Duration)),
-		Stakes: args.Game.Stakes,
-		GameMode: args.Game.GameMode,
-		Options: options,
+		EndTime:   time.Now().Add(time.Minute * time.Duration(args.Game.Duration)),
+		Stakes:    args.Game.Stakes,
+		GameMode:  args.Game.GameMode,
+		Options:   options,
 	}
 
 	err = logic.AllocateHostExp(getIdFromCtx(ctx))
@@ -148,10 +148,10 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 
 func (r *Resolver) AddVote(ctx context.Context, args *struct{ Vote voteInput }) (voteResolver *VoteResolver, err error) {
 	newVote := models.Vote{
-		GameId: args.Vote.GameId,
-		UserId: getIdFromCtx(ctx),
+		GameId:   args.Vote.GameId,
+		UserId:   getIdFromCtx(ctx),
 		OptionId: args.Vote.OptionId,
-		Money: args.Vote.Amount,
+		Money:    args.Vote.Amount,
 	}
 
 	// TODO: Add validation for correct choice Id
