@@ -152,8 +152,6 @@ const styles = theme => ({
   moneyInput: {
     backgroundColor: '#d7f1f5',
     borderRadius: 5,
-    paddingLeft: 5,
-    paddingRight: 5
   },
   progress: {
     margin: theme.spacing.unit * 3
@@ -320,7 +318,6 @@ class GameScreen extends Component {
                         id="amount"
                         type="number"
                         fullWidth
-                        className={classes.moneyInput}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
