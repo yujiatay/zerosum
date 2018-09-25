@@ -77,12 +77,13 @@ const styles = theme => ({
 });
 
 const GET_PROFILE = gql`
-  query Profile {
-    profile {
+  {
+    getProfile {
       name
       winRate
       money
-      profilePic
+      level
+      expProgress
     }
   }
 `;
@@ -139,12 +140,19 @@ class ProfileScreen extends Component {
     return (
       <Query query={GET_PROFILE}>
         {({loading, error, data}) => {
+
+          if (loading) return <div>Fetching</div>;
+          if (error) return <div>Error</div>;
+
+          const profile = data.getProfile;
+          console.log(profile);
+
           return (
             <div className={classes.root}>
               {topBar}
               <div className={classes.body}>
                 <div className={classes.moneyRow}>
-                  <Currency money={data ? data.money : 999}/>
+                  <Currency money={profile ? profile.money : 999}/>
                 </div>
                 <div className={classes.row}>
                   <Avatar
@@ -154,13 +162,13 @@ class ProfileScreen extends Component {
                   />
                 </div>
                 <Typography variant="headline" align="center">
-                  {data ? data.username : "..."}
+                  {profile ? profile.name : "..."}
                 </Typography>
                 <Typography className={classes.winrate} variant="title" align="center">
-                  Win rate: {data ? data.winRate : 0}%
+                  Win rate: {profile ? profile.winRate : 0}%
                 </Typography>
                 <div className={classes.progressBar}>
-                  <ProgressBar level={data ? data.level : 10} expProgress={data ? data.expProgress : 0.8}/>
+                  <ProgressBar level={profile ? profile.level : 10} expProgress={profile ? profile.expProgress : 0.8}/>
                 </div>
                 {hatAndAchievementsTabBar}
               </div>
