@@ -25,7 +25,6 @@ type Query {
 type Mutation {
 
     # Private, can only mutate own stuff
-    createUser(user: UserInput!): User
     updateUser(user: UserInput!): User
     deleteUser(): Boolean!
 

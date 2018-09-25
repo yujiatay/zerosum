@@ -102,11 +102,6 @@ func (r *Resolver) GetVotes(ctx context.Context, args userVoteQuery) (voteResolv
 	return
 }
 
-func (r *Resolver) CreateUser(ctx context.Context, args *struct{ User userInput }) (*UserResolver, error) {
-	// TODO: Cfm new user flow
-	return nil, nil
-}
-
 func (r *Resolver) UpdateUser(ctx context.Context, args *struct{ User userInput }) (*UserResolver, error) {
 	// TODO: Set User Deets
 	return nil, nil
