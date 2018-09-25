@@ -51,7 +51,8 @@ const styles = theme => ({
 
 class ProgressBar extends Component {
   getProgressWidth = (progress) => {
-    return (progress * expBarMaxWidth) + 'vw'
+    let offset = 10.5;
+    return (offset + progress * (expBarMaxWidth - offset)) + 'vw'
   };
   render() {
     const { classes, level, expProgress } = this.props;
