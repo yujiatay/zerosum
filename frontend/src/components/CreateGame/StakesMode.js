@@ -145,7 +145,7 @@ class StakesMode extends Component {
                 Please enter the amount of hattlecoins.
               </Typography>
               <Paper elevation={0} className={classes.input}>
-                <Input placeholder="0" disableUnderline fullWidth
+                <Input placeholder="0" disableUnderline fullWidth autoFocus
                        onChange={this.handleInput}
                 />
               </Paper>
