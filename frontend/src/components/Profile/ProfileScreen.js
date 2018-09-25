@@ -140,13 +140,7 @@ class ProfileScreen extends Component {
     return (
       <Query query={GET_PROFILE}>
         {({loading, error, data}) => {
-
-          if (loading) return <div>Fetching</div>;
-          if (error) return <div>Error</div>;
-
-          const profile = data.getProfile;
-          console.log(profile);
-
+          let profile = data ? data.getProfile : null;
           return (
             <div className={classes.root}>
               {topBar}
