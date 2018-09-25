@@ -1,4 +1,4 @@
-import React, {Component, Fragment } from 'react';
+import React, {Component, Fragment} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
@@ -22,6 +22,19 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import HattleCoin from "../assets/hattlecoin.png";
 import CircularProgress from '@material-ui/core/CircularProgress';
+
+import {Mutation} from 'react-apollo';
+import gql from "graphql-tag";
+
+
+const CREATE_VOTE = gql`
+  mutation CreateVote($voteInput: VoteInput!) {
+    addVote(vote: $voteInput) {
+      money
+    }
+  }
+`;
+
 
 const styles = theme => ({
   fullHeight: {
@@ -148,7 +161,7 @@ class GameScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      choice: -1,
+      choice: '',
       playDialog: false,
       bet: '',
       loading: false,
@@ -156,6 +169,7 @@ class GameScreen extends Component {
       querySuccess: false
     }
   }
+
   handleChoice = (choice) => {
     this.setState({
       choice: choice,
@@ -185,6 +199,7 @@ class GameScreen extends Component {
       })
     })
   };
+
   render() {
     const {classes} = this.props;
     const {parsedGame} = this.props.location.state;
@@ -268,7 +283,7 @@ class GameScreen extends Component {
               {
                 parsedGame.options.map((option, index) =>
                   <Card key={index} className={classes.optionCard}>
-                    <ButtonBase className={classes.button} onClick={() => this.handleChoice(option.body)}>
+                    <ButtonBase className={classes.button} onClick={() => this.handleChoice(option.id)}>
                       <CardContent>
                         <Typography variant="body2" align="center">
                           {option.body}
@@ -281,71 +296,81 @@ class GameScreen extends Component {
             </CardContent>
           </Card>
           {/* Dialog appears after option is chosen. */}
-          <Dialog
-            open={this.state.playDialog}
-            onClose={this.handleClose}
-            aria-labelledby="form-dialog-title"
-          >
-            {
-              loading
-              ? <CircularProgress className={classes.progress} size={50} />
-              : querySent
-                ? queryStatus
-                  ?
-                  <DialogContent className={classes.queryDialog}>
-                    <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
-                    <Typography variant="title" className={classes.dialogTitle} align="center">
-                      Your bet has been placed!
-                    </Typography>
-                  </DialogContent>
-                  :
-                  <DialogContent className={classes.queryDialog}>
-                    <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
-                    <Typography variant="title" className={classes.dialogTitle} align="center">
-                      Connection failed. Please try again!
-                    </Typography>
-                  </DialogContent>
-                : <Fragment>
-                  <Typography variant="title" className={classes.dialogTitle} align="center">
-                    How many HattleCoins to bet?
-                  </Typography>
-                  <DialogContent>
-                    <Typography className={classes.dialogText} align="center">
-                      HattleCoins are not refundable after submission!
-                    </Typography>
-                    <TextField
-                      autoFocus
-                      autoComplete="off"
-                      id="amount"
-                      type="number"
-                      fullWidth
-                      className={classes.moneyInput}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                          </InputAdornment>
-                        ),
-                        disableUnderline: true
-                      }}
-                      inputProps={{
-                        min: "1"
-                      }}
-                      value={this.state.bet}
-                      onChange={this.handleChange('bet')}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={this.handleClose} color="primary">
-                      Cancel
-                    </Button>
-                    <Button onClick={this.handleSubmit} color="primary">
-                      Submit
-                    </Button>
-                  </DialogActions>
-                </Fragment>
+          <Mutation mutation={CREATE_VOTE} variables={{
+            voteInput: {
+              gameId: parsedGame.id,
+              optionId: this.state.choice,
+              amount: parseInt(this.state.bet)
             }
-          </Dialog>
+          }}>
+            {(createVote, {loading, error, called}) => (
+              <Dialog
+                open={this.state.playDialog}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title"
+              >
+                {
+                  loading
+                    ? <CircularProgress className={classes.progress} size={50}/>
+                    : called
+                    ? (error === null)
+                      ?
+                      <DialogContent className={classes.queryDialog}>
+                        <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
+                        <Typography variant="title" className={classes.dialogTitle} align="center">
+                          Your bet has been placed!
+                        </Typography>
+                      </DialogContent>
+                      :
+                      <DialogContent className={classes.queryDialog}>
+                        <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
+                        <Typography variant="title" className={classes.dialogTitle} align="center">
+                          Connection failed. Please try again!
+                        </Typography>
+                      </DialogContent>
+                    : <Fragment>
+                      <Typography variant="title" className={classes.dialogTitle} align="center">
+                        How many HattleCoins to bet?
+                      </Typography>
+                      <DialogContent>
+                        <Typography className={classes.dialogText} align="center">
+                          HattleCoins are not refundable after submission!
+                        </Typography>
+                        <TextField
+                          autoFocus
+                          autoComplete="off"
+                          id="amount"
+                          type="number"
+                          fullWidth
+                          className={classes.moneyInput}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                              </InputAdornment>
+                            ),
+                            disableUnderline: true
+                          }}
+                          inputProps={{
+                            min: "1"
+                          }}
+                          value={this.state.bet}
+                          onChange={this.handleChange('bet')}
+                        />
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={this.handleClose} color="primary">
+                          Cancel
+                        </Button>
+                        <Button onClick={createVote} color="primary">
+                          Submit
+                        </Button>
+                      </DialogActions>
+                    </Fragment>
+                }
+              </Dialog>
+            )}
+          </Mutation>
         </div>
       </div>
     );

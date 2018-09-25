@@ -150,6 +150,7 @@ class GamesList extends Component {
                                 pathname: "/game",
                                 state: {
                                   parsedGame: {
+                                    id: game.id,
                                     topic: game.topic,
                                     gameMode: parseGameMode(game.gameMode),
                                     stakes: parseStakes(game.stakes),
