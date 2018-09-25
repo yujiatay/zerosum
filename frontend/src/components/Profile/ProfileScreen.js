@@ -118,7 +118,7 @@ class ProfileScreen extends Component {
           <div className={classes.grow}/>
           <div className={classes.sectionMobile}>
             <Button className={classes.logout} onClick={() => {
-              logout().then(() => this.props.history.push("/"))
+              logout(() => this.props.authStateHandler(false))
             }}>
               LOGOUT
             </Button>
@@ -144,7 +144,7 @@ class ProfileScreen extends Component {
               {topBar}
               <div className={classes.body}>
                 <div className={classes.moneyRow}>
-                  <Currency money={data ? data.money: 999}/>
+                  <Currency money={data ? data.money : 999}/>
                 </div>
                 <div className={classes.row}>
                   <Avatar

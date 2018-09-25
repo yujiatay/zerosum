@@ -4,19 +4,16 @@ import {client, persistor} from './apolloClient'
 
 let token;
 
-let LOGGED_IN = new CustomEvent("AUTH_STATE_CHANGED", {detail: true});
-let LOGGED_OUT = new CustomEvent("AUTH_STATE_CHANGED", {detail: false});
-
 // Returns a Promise that resolves if logging in is successful (i.e. token is stored)
 // and rejects otherwise
-export function loginWithFacebook(fbAccessToken, fbUserID) {
+export function loginWithFacebook(fbAccessToken, fbUserID, loginSuccessCallback) {
   return axios.post("http://api.zerosum.ml/login/facebook", {
     accessToken: fbAccessToken,
     userID: fbUserID
   }).then(r => {
     return localForage.setItem("token", r.data).then(() => {
       token = r.data;
-      dispatchEvent(LOGGED_IN)
+      loginSuccessCallback()
     }).then(() => {
       // Clear any prior cache
       return client.resetStore().then(() => persistor.resume()).catch((e) => {
@@ -26,10 +23,10 @@ export function loginWithFacebook(fbAccessToken, fbUserID) {
   })
 }
 
-export function logout() {
+export function logout(logoutSuccessCallback) {
   return localForage.removeItem("token").then(() => {
     token = null;
-    dispatchEvent(LOGGED_OUT)
+    logoutSuccessCallback()
   }).then(() => {
     persistor.pause();
     return persistor.purge();

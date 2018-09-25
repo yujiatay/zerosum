@@ -36,27 +36,25 @@ class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
-      error: null
+      error: false
     }
   }
 
-  componentWillMount() {
-    this.setState({loading: false, error: null})
-  }
-
   fbLoginResponse = res => {
-    this.setState({loading: true});
+    this.props.loadingStateHandler(true);
     if (res.userID) {
-      loginWithFacebook(res.accessToken, res.userID).then(() => {
-        this.props.history.push("/")
+      loginWithFacebook(res.accessToken, res.userID, () => {
+        this.props.authStateHandler(true);
+        this.props.loadingStateHandler(false)
       }).catch(e => {
         console.log("Login error: " + e);
-        this.setState({loading: false, error: e})
+        this.setState({error: true});
+        this.props.loadingStateHandler(false)
       })
     } else {
       console.log(res);
-      this.setState({loading: false, error: res})
+      this.setState({error: true});
+      this.props.loadingStateHandler(false)
     }
   };
 
@@ -66,8 +64,9 @@ class LoginScreen extends Component {
       <Fragment>
         <FacebookLogin
           appId="470572713427485"
-          onClick={() => this.setState({loading: true})}
+          onClick={() => this.props.loadingStateHandler(true)}
           callback={this.fbLoginResponse}
+          disableMobileRedirect={true}
           icon="fa-facebook-square"
         />
         {this.state.error ? "Error logging in" : null}
@@ -88,7 +87,7 @@ class LoginScreen extends Component {
         </AppBar>
         <div className={classes.container}>
           <img alt="ZeroSum" src={LoginLogo} className={classes.logo}/>
-          {this.state.loading ? "LOADING" : loginButtonWithError}
+          {this.props.isLoading ? "LOADING" : loginButtonWithError}
         </div>
       </div>
     )

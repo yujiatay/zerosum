@@ -122,34 +122,44 @@ class AppRoutes extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false
-    }
+      isLoggedIn: false,
+      isLoading: true
+    };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // Check if user is already authenticated
     getToken().then((token) => {
       this.setState({
-        isLoggedIn: token !== null
+        isLoggedIn: token !== null,
+        isLoading: false
       })
     });
   }
 
-  componentDidMount() {
-    // window.addEventListener("AUTH_STATE_CHANGED", (e) => {
-    //   this.setState({
-    //     isLoggedIn: e.detail
-    //   })
-    // });
-    this.setState({isLoggedIn: true})
-  }
+  authStateHandler = (isLoggedIn) => {
+    this.setState({
+      isLoggedIn: isLoggedIn
+    });
+    this.props.history.push("/")
+  };
+
+  loadingStateHandler = (isLoading) => {
+    this.setState({
+      isLoading: isLoading
+    })
+  };
 
   render() {
     const mainApp = (
       <Switch>
         <Route path="/games" component={GamesScreen}/>
         <Route path="/create" component={CreateScreen}/>
-        <Route path="/profile" component={ProfileScreen}/>
+        <Route path="/profile" render={(props) => {
+          return (
+            <ProfileScreen authStateHandler={this.authStateHandler} {...props} />
+          )
+        }}/>
         <Route path="/game" component={GameScreen}/>
         <Route path="/shop" component={ShopScreen}/>
         <Route path="/leaderboard" component={SocialScreen}/>
@@ -158,7 +168,12 @@ class AppRoutes extends Component {
     );
     const loginRoute = (
       <Switch>
-        <Route path="/" component={LoginScreen}/>
+        <Route path="/" render={(props) => {
+          return (
+            <LoginScreen isLoading={this.state.isLoading} authStateHandler={this.authStateHandler}
+                         loadingStateHandler={this.loadingStateHandler} {...props}/>
+          )
+        }}/>
         <Redirect to="/"/>
       </Switch>
     );
