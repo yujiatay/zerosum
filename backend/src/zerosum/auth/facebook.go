@@ -43,7 +43,6 @@ func (a *auth) FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := repository.GetOrCreateUser(models.User{FbId: profile.Id})
 
 	signedToken, err := a.generateSignedUserToken(user)
-	log.Printf("Issuing token: %s", signedToken)
 	if err != nil {
 		log.Print(err)
 		http.Error(w, err.Error(), 500)
