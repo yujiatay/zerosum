@@ -2,10 +2,8 @@ package resolvers
 
 import (
 	"context"
-	"github.com/dgrijalva/jwt-go"
 	"os"
 	"time"
-	"zerosum/auth"
 	"zerosum/logic"
 	"zerosum/models"
 	"zerosum/repository"
@@ -17,7 +15,7 @@ func getIdFromCtx(ctx context.Context) (id string) {
 	if os.Getenv("DEBUG") == "TRUE" {
 		return "testuser"
 	}
-	return auth.GetClaims(ctx.Value("user").(*jwt.Token)).Id
+	return ctx.Value("Id").(string)
 }
 
 type gameSearchQuery struct {
