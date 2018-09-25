@@ -146,12 +146,12 @@ func ResolveGame(gameId string) (err error) {
 	}
 
 	// Check winning option
-	var winners []int
-	var losers []int
+	var winningOptions []int
+	var losingOptions []int
 	if game.GameMode == models.MAJORITY {
-		winners, losers = resolveMajority(optionTotal)
+		winningOptions, losingOptions = resolveMajority(optionTotal)
 	} else if game.GameMode == models.MINORITY {
-		winners, losers = resolveMinority(optionTotal)
+		winningOptions, losingOptions = resolveMinority(optionTotal)
 	}
 
 	// Update Game Result
@@ -175,22 +175,22 @@ func ResolveGame(gameId string) (err error) {
 	}
 
 	// If all winners or losers, no change
-	if len(winners) == 0 || len(losers) == 0 {
+	if len(winningOptions) == 0 || len(losingOptions) == 0 {
 		return
 	}
 
 	// Allocate money and exp, update vote results
 	winPool := int32(0)
 	losePool := int32(0)
-	for _, index := range winners {
+	for _, index := range winningOptions {
 		winPool += optionTotal[index]
 	}
-	for _, index := range losers {
+	for _, index := range losingOptions {
 		losePool += optionTotal[index]
 	}
 
 	// TODO: Make this one big transaction to prevent corruption, for fun: move rounding error money to dev
-	for _, index := range winners {
+	for _, index := range winningOptions {
 		for _, vote := range votes[index] {
 			moneyGained := vote.Money + (vote.Money/winPool)*losePool
 			// Update Vote Result
@@ -200,7 +200,7 @@ func ResolveGame(gameId string) (err error) {
 			allocateWinOrLoss(vote.UserId, true)
 		}
 	}
-	for _, index := range losers {
+	for _, index := range losingOptions {
 		for _, vote := range votes[index] {
 			_ = vote.Money
 			// Update Vote Result
