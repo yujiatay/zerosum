@@ -23,7 +23,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import HattleCoin from "../assets/hattlecoin.png";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import {Mutation} from 'react-apollo';
+import {Mutation, Query} from 'react-apollo';
 import gql from "graphql-tag";
 
 
@@ -31,6 +31,27 @@ const CREATE_VOTE = gql`
   mutation CreateVote($voteInput: VoteInput!) {
     addVote(vote: $voteInput) {
       money
+    }
+  }
+`;
+
+const GET_VOTE = gql`
+  query GetVote($gameId: ID!, $withResult: Boolean!) {
+    getVote(gameId: $gameId) {
+      option {
+        id
+        body
+        result @include(if: $withResult) {
+          voteCount
+          totalValue
+          winner
+        }
+      }
+      money
+      result @include(if: $withResult) {
+        win
+        netChange
+      }
     }
   }
 `;
@@ -259,7 +280,7 @@ class GameScreen extends Component {
             {
               parsedGame.options.map((option, index) =>
                 <Card key={index} className={classes.optionCard}>
-                  <ButtonBase className={classes.button} onClick={() => this.handleChoice(option.body)}>
+                  <ButtonBase className={classes.button} onClick={() => this.handleChoice(option.id)}>
                     <CardContent>
                       <Typography variant="body2" align="center" className={classes.chosenOptionText}>
                         {option.body}
@@ -356,31 +377,44 @@ class GameScreen extends Component {
             <Typography className={classes.header} variant="display1" noWrap align="center">
               Vote Submitted!
             </Typography>
-            {
-              parsedGame.options.map((option, index) =>
-                <Card key={index} className={index === this.state.selected ? classes.optionCard : classes.disabledOptionCard}>
+            <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: false}}>
+              {({loading, error, data}) => {
+                if (loading) return <div>Fetching</div>;
+                if (error) return <div>Error</div>;
+
+                const vote = data.getVote;
+                console.log(vote);
+
+                return (
+                  parsedGame.options.map((option, index) =>
+                  <Card key={index}
+                        className={option.id === vote.option.id ? classes.optionCard : classes.disabledOptionCard}>
                     <CardContent className={classes.voteOption}>
                       {
                         index === this.state.selected &&
                         <Paper elevation={0} className={classes.voteBet}>
                           <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
                           <Typography variant="title" className={classes.voteBetText}>
-                            bet: 99999
+                            Bet: {vote.money}
                           </Typography>
                         </Paper>
                       }
-                      <Typography variant="body2" align="center" className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
-                        {option.body}
+                      <Typography variant="body2" align="center"
+                                  className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                        {vote.option.body}
                       </Typography>
                     </CardContent>
-                </Card>
-              )
-            }
+                  </Card>
+                  )
+                )
+              }}
+            </Query>
           </CardContent>
         </Card>
       </Fragment>
     );
 
+    // TODO: Implement query for results
     const results = (
       <Fragment>
         <Card elevation={0} className={classes.optionSection}>
@@ -390,9 +424,11 @@ class GameScreen extends Component {
             </Typography>
             {
               parsedGame.options.map((option, index) =>
-                <Card key={index} className={index === this.state.selected ? classes.optionCard : classes.disabledOptionCard}>
+                <Card key={index}
+                      className={index === this.state.selected ? classes.optionCard : classes.disabledOptionCard}>
                   <CardContent className={classes.voteOption}>
-                    <Typography variant="body2" align="center" className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                    <Typography variant="body2" align="center"
+                                className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
                       {option.body}
                     </Typography>
 
@@ -460,7 +496,7 @@ class GameScreen extends Component {
             <Paper elevation={0} className={classes.pot}>
               <img alt="Pot" src={Money} className={classes.moneyBag}/>
               <Typography className={classes.potText}>
-                0 in the pot!
+                {parsedGame.totalMoney} in the pot!
               </Typography>
             </Paper>
 
@@ -492,9 +528,9 @@ class GameScreen extends Component {
             </CardContent>
           </Card>
           {
-            this.state.isGameOver
+            parsedGame.resolved
               ? results
-              : this.state.hasUserVoted
+              : parsedGame.voted
               ? voter
               : bystander
           }

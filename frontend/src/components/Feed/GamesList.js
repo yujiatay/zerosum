@@ -21,6 +21,8 @@ const GET_GAMES = gql`
       topic
       endTime
       totalMoney
+      resolved
+      voted
       stakes
       gameMode
       options {
@@ -155,7 +157,10 @@ class GamesList extends Component {
                                     gameMode: parseGameMode(game.gameMode),
                                     stakes: parseStakes(game.stakes),
                                     timeLeft: parseTimeLeft(game.endTime),
-                                    options: game.options
+                                    options: game.options,
+                                    resolved: game.resolved,
+                                    voted: game.voted,
+                                    totalMoney: game.totalMoney
                                   }
                                 }
                               }}>
