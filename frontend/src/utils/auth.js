@@ -7,7 +7,7 @@ let token;
 // Returns a Promise that resolves if logging in is successful (i.e. token is stored)
 // and rejects otherwise
 export function loginWithFacebook(fbAccessToken, fbUserID, loginSuccessCallback) {
-  return axios.post("http://api.zerosum.ml/login/facebook", {
+  return axios.post("https://api.zerosum.ml/login/facebook", {
     accessToken: fbAccessToken,
     userID: fbUserID
   }).then(r => {
