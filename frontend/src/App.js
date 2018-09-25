@@ -136,11 +136,12 @@ class AppRoutes extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener("AUTH_STATE_CHANGED", (e) => {
-      this.setState({
-        isLoggedIn: e.detail
-      })
-    });
+    // window.addEventListener("AUTH_STATE_CHANGED", (e) => {
+    //   this.setState({
+    //     isLoggedIn: e.detail
+    //   })
+    // });
+    this.setState({isLoggedIn: true})
   }
 
   render() {
