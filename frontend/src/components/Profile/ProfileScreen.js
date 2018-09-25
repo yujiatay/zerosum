@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
 import Button from '@material-ui/core/Button';
@@ -14,6 +14,10 @@ import ProgressBar from "./ProgressBar";
 import ProfileHats from './ProfileHats';
 import ProfileAchievements from "./ProfileAchievements";
 import ReactGA from "react-ga";
+
+import {Query} from 'react-apollo'
+import gql from 'graphql-tag'
+import {logout} from "../../utils/auth";
 
 const styles = theme => ({
   root: {
@@ -72,6 +76,17 @@ const styles = theme => ({
   }
 });
 
+const GET_PROFILE = gql`
+  query Profile {
+    profile {
+      name
+      winRate
+      money
+      profilePic
+    }
+  }
+`;
+
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
@@ -79,76 +94,83 @@ class ProfileScreen extends Component {
       value: 0
     }
   }
+
   componentDidMount() {
     ReactGA.pageview('Profile');
   };
 
   handleChange = (event, value) => {
-    this.setState({ value });
-  };
-
-  logout = () => {
-    localStorage.removeItem("token");
-    this.props.history.push("/")
+    this.setState({value});
   };
 
   render() {
-    const { value } = this.state;
-    const { classes } = this.props;
+    const {value} = this.state;
+    const {classes} = this.props;
+    const topBar = (
+      <AppBar position="static">
+        <Toolbar>
+          <Typography className={classes.header} variant="display2" noWrap>
+            P
+          </Typography>
+          <Typography className={classes.header} variant="display1" noWrap>
+            rofile
+          </Typography>
+          <div className={classes.grow}/>
+          <div className={classes.sectionMobile}>
+            <Button className={classes.logout} onClick={() => {
+              logout().then(() => this.props.history.push("/"))
+            }}>
+              LOGOUT
+            </Button>
+          </div>
+        </Toolbar>
+      </AppBar>
+    );
+    const hatAndAchievementsTabBar = (
+      <AppBar position="static">
+        <Tabs value={value} onChange={this.handleChange}
+              textColor="primary" fullWidth elevation={0}
+        >
+          <Tab label="Hats" className={classes.tab}/>
+          <Tab label="Achievements" className={classes.tab}/>
+        </Tabs>
+      </AppBar>
+    );
     return (
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography className={classes.header} variant="display2" noWrap>
-              P
-            </Typography>
-            <Typography className={classes.header} variant="display1" noWrap>
-              rofile
-            </Typography>
-            <div className={classes.grow} />
-            <div className={classes.sectionMobile}>
-              <Button className={classes.logout} onClick={this.logout}>
-                LOGOUT
-              </Button>
+      <Query query={GET_PROFILE}>
+        {({loading, error, data}) => {
+          return (
+            <div className={classes.root}>
+              {topBar}
+              <div className={classes.body}>
+                <div className={classes.moneyRow}>
+                  <Currency money={data ? data.money: 999}/>
+                </div>
+                <div className={classes.row}>
+                  <Avatar
+                    alt="Profile Pic"
+                    src="https://via.placeholder.com/128x128"
+                    className={classes.bigAvatar}
+                  />
+                </div>
+                <Typography variant="headline" align="center">
+                  {data ? data.username : "..."}
+                </Typography>
+                <Typography className={classes.winrate} variant="title" align="center">
+                  Win rate: {data ? data.winRate : 0}%
+                </Typography>
+                <div className={classes.progressBar}>
+                  <ProgressBar/>
+                </div>
+                {hatAndAchievementsTabBar}
+              </div>
+              {value === 0 && <ProfileHats/>}
+              {value === 1 && <ProfileAchievements/>}
+              <BottomNavBar value={4}/>
             </div>
-          </Toolbar>
-        </AppBar>
-
-        <div className={classes.body}>
-          <div className={classes.moneyRow}>
-            <Currency money={100}/>
-          </div>
-          <div className={classes.row}>
-            <Avatar
-              alt="Profile Pic"
-              src="https://via.placeholder.com/128x128"
-              className={classes.bigAvatar}
-            />
-          </div>
-          <Typography variant="headline" align="center">
-            MadHatter
-          </Typography>
-          <Typography className={classes.winrate} variant="title" align="center">
-            Win rate: 100%
-          </Typography>
-          <div className={classes.progressBar}>
-            <ProgressBar/>
-          </div>
-
-          <AppBar position="static">
-            <Tabs value={value} onChange={this.handleChange}
-                  textColor="primary" fullWidth elevation={0}
-            >
-              <Tab label="Hats" className={classes.tab}/>
-              <Tab label="Achievements" className={classes.tab}/>
-            </Tabs>
-          </AppBar>
-
-        </div>
-        {value === 0 && <ProfileHats/>}
-        {value === 1 && <ProfileAchievements/>}
-        <BottomNavBar value={4}/>
-      </div>
+          )
+        }}
+      </Query>
     );
   }
 }
