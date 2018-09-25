@@ -132,10 +132,10 @@ const styles = theme => ({
     margin: theme.spacing.unit * 3
   },
   success: {
-    color: '#4bd84b'
+    color: '#069d54'
   },
   failure: {
-    color: '#d62d29'
+    color: '#9d0606'
   },
   queryDialog: {
     display: 'flex',
