@@ -116,7 +116,15 @@ func QueryGameOptions(desiredGame models.Game) (options []models.Option, err err
 /* USER CRUD */
 func GetOrCreateUser(desiredUser models.User) (user models.User, err error) {
 	// Check if alr exists
-	err = db.Where("fb_id = ?", desiredUser.FbId).FirstOrCreate(&user).Error
+	err = db.Where("fb_id = ?", desiredUser.FbId).Attrs(models.User{
+		FbId: desiredUser.FbId,
+		MoneyTotal: int32(100),
+		WinRate: 0,
+		GamesPlayed: 0,
+		GamesWon: 0,
+		Experience: 0,
+		Name: "HatMatter",
+		}).FirstOrCreate(&user).Error
 	return
 }
 
