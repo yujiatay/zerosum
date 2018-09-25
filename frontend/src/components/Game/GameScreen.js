@@ -339,6 +339,7 @@ class GameScreen extends Component {
                         id="amount"
                         type="number"
                         fullWidth
+                        className={classes.moneyInput}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
