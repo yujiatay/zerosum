@@ -88,8 +88,8 @@ func (r *Resolver) GetLeaderboard(ctx context.Context, args *struct{ Limit int32
 }
 
 func (r *Resolver) GetVote(ctx context.Context, args voteQuery) (*VoteResolver, error) {
-	_, err := repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
-	return &VoteResolver{}, err
+	vote, err := repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
+	return &VoteResolver{vote: &vote}, err
 }
 
 func (r *Resolver) GetVotes(ctx context.Context, args userVoteQuery) (voteResolvers *[]*VoteResolver, err error) {
@@ -119,7 +119,6 @@ func (r *Resolver) DeleteUser(ctx context.Context) (success bool) {
 
 func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) (gameResolver *GameResolver, err error) {
 	var options []models.Option
-	// TODO: INCLUDE STAKE AMOUNT
 	for _, option := range args.Game.Options {
 		options = append(options, models.Option{Body: option})
 	}
