@@ -61,7 +61,7 @@ func (a *auth) JWTMiddleware(w http.ResponseWriter, r *http.Request) {
 	keyFunc := func(token *jwt.Token) (interface{}, error) {
 		return []byte(a.secret), nil
 	}
-	token, err := request.ParseFromRequest(r, extractor, keyFunc, request.WithClaims(jwt.StandardClaims{}))
+	token, err := request.ParseFromRequest(r, extractor, keyFunc, request.WithClaims(&jwt.StandardClaims{}))
 	if err != nil {
 		log.Printf("error parsing token: %+v", err)
 		return
