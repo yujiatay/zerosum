@@ -217,8 +217,13 @@ func QueryVotes(desiredVote models.Vote, limit *int32, after *int32) (votes []mo
 	return
 }
 
-func QueryGameVotes(desiredGame models.Game) (votes []models.Vote, err error) {
+func QueryAllGameVotes(desiredGame models.Game) (votes []models.Vote, err error) {
 	err = db.Where("game_id = ?", desiredGame.Id).Find(&votes).Error
+	return
+}
+
+func QueryOptionVotes(desiredOption models.Option) (votes []models.Vote, err error) {
+	err = db.Where("option_id = ?", desiredOption.Id).Find(&votes).Error
 	return
 }
 

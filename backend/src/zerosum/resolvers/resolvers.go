@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 	"zerosum/auth"
+	"zerosum/logic"
 	"zerosum/models"
 	"zerosum/repository"
 )
@@ -52,17 +53,20 @@ type voteInput struct {
 	Amount   int32
 }
 
-func (r *Resolver) GetUser(ctx context.Context, args *struct{ Id string }) (userResolver *UserResolver, err error) {
+func (r *Resolver) GetUser(ctx context.Context, args *struct{ Id string }) (*UserResolver, error) {
 	// TODO: Add field restriction when Id != Id in ctx
 	user, err := repository.QueryUser(models.User{Id: args.Id})
-	*userResolver = UserResolver{user: &user}
-	return
+	return &UserResolver{user: &user}, err
 }
 
-func (r *Resolver) GetGame(ctx context.Context, args *struct{ Id string }) (gameResolver *GameResolver, err error) {
+func (r *Resolver) GetProfile(ctx context.Context) (*UserResolver, error) {
+	user, err := repository.QueryUser(models.User{Id: getIdFromCtx(ctx)})
+	return &UserResolver{user: &user}, err
+}
+
+func (r *Resolver) GetGame(ctx context.Context, args *struct{ Id string }) (*GameResolver, error) {
 	game, err := repository.QueryGame(models.Game{Id: args.Id})
-	*gameResolver = GameResolver{game: &game}
-	return
+	return &GameResolver{game: &game}, err
 }
 
 func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (gameResolvers *[]*GameResolver, err error) {
@@ -85,28 +89,29 @@ func (r *Resolver) GetLeaderboard(ctx context.Context, args *struct{ Limit int32
 	return
 }
 
-func (r *Resolver) GetVote(ctx context.Context, args voteQuery) (voteResolver *VoteResolver, err error) {
-	_, err = repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
-	*voteResolver = VoteResolver{}
-	return
+func (r *Resolver) GetVote(ctx context.Context, args voteQuery) (*VoteResolver, error) {
+	_, err := repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
+	return &VoteResolver{}, err
 }
 
 func (r *Resolver) GetVotes(ctx context.Context, args userVoteQuery) (voteResolvers *[]*VoteResolver, err error) {
 	votes, err := repository.QueryVotes(models.Vote{UserId: getIdFromCtx(ctx)}, args.Limit, args.After)
+	var voteList []*VoteResolver
 	for _, vote := range votes {
-		*voteResolvers = append(*voteResolvers, &VoteResolver{vote: &vote})
+		voteList = append(voteList, &VoteResolver{vote: &vote})
 	}
+	voteResolvers = &voteList
 	return
 }
 
-func (r *Resolver) CreateUser(ctx context.Context, args *struct{ User userInput }) (userResolver *UserResolver, err error) {
+func (r *Resolver) CreateUser(ctx context.Context, args *struct{ User userInput }) (*UserResolver, error) {
 	// TODO: Cfm new user flow
-	return
+	return nil, nil
 }
 
-func (r *Resolver) UpdateUser(ctx context.Context, args *struct{ User userInput }) (userResolver *UserResolver, err error) {
+func (r *Resolver) UpdateUser(ctx context.Context, args *struct{ User userInput }) (*UserResolver, error) {
 	// TODO: Set User Deets
-	return
+	return nil, nil
 }
 
 func (r *Resolver) DeleteUser(ctx context.Context) (success bool) {
@@ -135,18 +140,20 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 		GameMode: args.Game.GameMode,
 		Options: options,
 	}
-	err = repository.CreateGame(newGame)
+
+	err = logic.AllocateHostExp(getIdFromCtx(ctx))
 	if err == nil {
+		err = repository.CreateGame(newGame)
 		game, err := repository.QueryGame(newGame)
 		if err == nil {
-			*gameResolver = GameResolver{game: &game}
+			gameRes := GameResolver{game: &game}
+			gameResolver = &gameRes
 		}
 	}
 	return
 }
 
 func (r *Resolver) AddVote(ctx context.Context, args *struct{ Vote voteInput }) (voteResolver *VoteResolver, err error) {
-	// TODO: Add validation for money left and correct choice Id
 	newVote := models.Vote{
 		GameId: args.Vote.GameId,
 		UserId: getIdFromCtx(ctx),
@@ -154,11 +161,15 @@ func (r *Resolver) AddVote(ctx context.Context, args *struct{ Vote voteInput }) 
 		Money: args.Vote.Amount,
 	}
 
-	err = repository.CreateVote(newVote)
+	// TODO: Add validation for correct choice Id
+	err = logic.AllocateMoney(getIdFromCtx(ctx), -args.Vote.Amount)
+	err = logic.AllocateVoteExp(getIdFromCtx(ctx))
 	if err == nil {
+		err = repository.CreateVote(newVote)
 		vote, err := repository.QueryVote(newVote)
 		if err == nil {
-			*voteResolver = VoteResolver{vote: &vote}
+			voteRes := VoteResolver{vote: &vote}
+			voteResolver = &voteRes
 		}
 	}
 	return

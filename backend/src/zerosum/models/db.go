@@ -30,6 +30,7 @@ type Game struct {
 	GameMode     GameMode
 	Options      []Option `gorm:"foreignkey:GameId"`
 	Participants []User   `gorm:"many2many:votes;foreignkey:GameId"`
+	Resolved     bool
 }
 
 type Option struct {
@@ -37,17 +38,23 @@ type Option struct {
 	Body   string
 	GameId string // foreign key from game
 	Users  []User `gorm:"many2many:votes;foreignkey:OptionId"`
+	// Computed values after completion, stored to reduce computation
+	Winner     bool
+	TotalValue int32
+	TotalVotes int32
 }
 
 type User struct {
 	Id                string `gorm:"primary_key"`
+	Name              string
 	MoneyTotal        int32
 	GamesCreated      []Game `gorm:"foreignkey:UserId"`
 	GamesParticipated []Game `gorm:"foreignkey:UserId"`
 	FbId              string `gorm:"unique_index"`
 	GamesPlayed       int32
 	GamesWon          int32
-	WinRate			  float64
+	WinRate           float64
+	Experience        int
 }
 
 type Vote struct {
@@ -55,6 +62,10 @@ type Vote struct {
 	UserId   string `gorm:"primary_key"` // foreign key from user
 	OptionId string                      // foreign key from option
 	Money    int32
+	Resolved bool
+	// Computed values after completion, stored to reduce computation
+	Win    bool
+	Change int32
 }
 
 func (user *User) BeforeCreate(scope *gorm.Scope) error {

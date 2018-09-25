@@ -15,7 +15,8 @@ type Query {
 
     getLeaderboard(limit: Int!): [User]
 
-    # Private, can only get own votes
+    # Private, can only get own votes and profile
+    getProfile(): User
     getVote(gameId: ID!): Vote
     getVotes(limit: Int, after: String): [Vote]
 }
@@ -80,10 +81,13 @@ type Option {
 # what is needed for a user
 type User {
     id: ID!
+    name: String
     money: Int
     gamesCreated: [Game]
     gamesParticipated: [Game]
     winRate: Float
+    level: Int
+    expProgress: Float
     #other deets
 }
 

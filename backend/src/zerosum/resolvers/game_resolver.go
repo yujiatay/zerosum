@@ -2,7 +2,6 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 	"github.com/graph-gophers/graphql-go"
 	"zerosum/models"
 	"zerosum/repository"
@@ -41,11 +40,9 @@ func (g *GameResolver) ENDTIME(ctx context.Context) *graphql.Time {
 }
 
 func (g *GameResolver) TOTALMONEY(ctx context.Context) *int32 {
-	//TODO: implement summer
-	votes, err := repository.QueryGameVotes(*g.game)
+	votes, err := repository.QueryAllGameVotes(*g.game)
 	sum := int32(0)
 	if err == nil {
-		fmt.Printf("HERE: %+v", votes)
 		for _, vote := range votes {
 			sum += vote.Money
 		}
@@ -62,7 +59,6 @@ func (g *GameResolver) STAKES(ctx context.Context) *models.Stakes{
 }
 
 func (g *GameResolver) OPTIONS(ctx context.Context) *[]*OptionResolver{
-	//TODO: Show related options
 	options, err := repository.QueryGameOptions(*g.game)
 	if err == nil {
 		var optionResolvers []*OptionResolver
@@ -79,7 +75,7 @@ func (g *GameResolver) PARTICIPANTS(ctx context.Context) *[]*UserResolver{
 	return nil
 }
 
-func (g *GameResolver) Result(ctx context.Context) *[]*OptionResultResolver {
+func (g *GameResolver) RESULT(ctx context.Context) *[]*OptionResultResolver {
 	//TODO: count each option
 	return nil
 }
