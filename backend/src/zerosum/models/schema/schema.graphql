@@ -51,7 +51,6 @@ type VoteResult {
 }
 
 type OptionResult {
-    option: Option
     voteCount: Int
     totalValue: Int
     winner: Boolean
@@ -67,14 +66,15 @@ type Game {
     totalMoney: Int
     gameMode: GameMode
     stakes: Stakes
+    resolved: Boolean
     options: [Option]
-    participants: [User]
-    result: [OptionResult]
+    #participants: [User]
 }
 
 type Option {
     id: ID!
     body: String
+    result: OptionResult
 }
 
 # what is needed for a user
@@ -95,6 +95,7 @@ type Vote {
     game: Game
     option: Option
     money: Int
+    resolved: Boolean
     result: VoteResult
 }
 

@@ -17,3 +17,11 @@ func (o *OptionResolver) ID(ctx context.Context) graphql.ID {
 func (o * OptionResolver) BODY(ctx context.Context) *string {
 	return &o.option.Body
 }
+
+func (o * OptionResolver) RESULT(ctx context.Context) *OptionResultResolver {
+	if o.option.Resolved == false {
+		return nil
+	} else {
+		return &OptionResultResolver{o.option.TotalVotes, o.option.TotalValue, o.option.Winner}
+	}
+}

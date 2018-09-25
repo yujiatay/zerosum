@@ -70,12 +70,11 @@ func (g *GameResolver) OPTIONS(ctx context.Context) *[]*OptionResolver{
 	return nil
 }
 
-func (g *GameResolver) PARTICIPANTS(ctx context.Context) *[]*UserResolver{
-	//TODO: Show related users
-	return nil
-}
+//func (g *GameResolver) PARTICIPANTS(ctx context.Context) *[]*UserResolver{
+//	//TODO: Show related users
+//	return nil
+//}
 
-func (g *GameResolver) RESULT(ctx context.Context) *[]*OptionResultResolver {
-	//TODO: count each option
-	return nil
+func (g *GameResolver) RESOLVED(ctx context.Context) *bool {
+	return &g.game.Resolved
 }

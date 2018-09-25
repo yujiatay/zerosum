@@ -39,6 +39,7 @@ type Option struct {
 	GameId string // foreign key from game
 	Users  []User `gorm:"many2many:votes;foreignkey:OptionId"`
 	// Computed values after completion, stored to reduce computation
+	Resolved   bool
 	Winner     bool
 	TotalValue int32
 	TotalVotes int32

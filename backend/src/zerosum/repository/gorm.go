@@ -124,6 +124,20 @@ func QueryOption(desiredOption models.Option) (option models.Option, err error) 
 	return
 }
 
+func UpdateOption(option models.Option) (err error) {
+	// Check if exists
+	if db.NewRecord(option) {
+		err = errors.New("option does not exist")
+		return
+	}
+	res:= db.Model(&models.Option{}).Updates(option)
+	if res.Error != nil {
+		err = res.Error
+	}
+
+	return
+}
+
 /* USER CRUD */
 func GetOrCreateUser(desiredUser models.User) (user models.User, err error) {
 	// Check if alr exists

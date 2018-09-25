@@ -6,7 +6,7 @@ import (
 
 type VoteResultResolver struct {
 	win bool
-	change int
+	change int32
 }
 
 func (v *VoteResultResolver) WIN(ctx context.Context) *bool {

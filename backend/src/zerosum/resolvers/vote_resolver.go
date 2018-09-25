@@ -36,7 +36,15 @@ func (v *VoteResolver) MONEY(ctx context.Context) *int32 {
 	return &v.vote.Money
 }
 
-func (v *VoteResolver) RESULT(ctx context.Context) (voteResultResolver *VoteResultResolver) {
-	// TODO: implement result
-	return nil
+func (v *VoteResolver) RESOLVED(ctx context.Context) *bool {
+	return &v.vote.Resolved
+}
+
+func (v *VoteResolver) RESULT(ctx context.Context) *VoteResultResolver {
+	if v.vote.Resolved == false {
+		return nil
+	} else {
+		return &VoteResultResolver{	v.vote.Win, v.vote.Change}
+	}
+
 }
