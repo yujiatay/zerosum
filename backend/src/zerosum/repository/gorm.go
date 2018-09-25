@@ -114,17 +114,9 @@ func QueryGameOptions(desiredGame models.Game) (options []models.Option, err err
 }
 
 /* USER CRUD */
-func CreateUser(user models.User) (err error) {
+func GetOrCreateUser(desiredUser models.User) (user models.User, err error) {
 	// Check if alr exists
-	if !db.NewRecord(user) {
-		err = errors.New("user exists")
-		return
-	}
-	res := db.Create(&user)
-	if res.Error != nil {
-		err = res.Error
-	}
-
+	err = db.Where("fb_id = ?", desiredUser.FbId).FirstOrCreate(&user).Error
 	return
 }
 

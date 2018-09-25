@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"zerosum/models"
+	"zerosum/repository"
 )
 
 type fbProfile struct {
@@ -38,12 +39,9 @@ func (a *auth) FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
-	// TODO: check if user is in db, if no, create entry
-	user := models.User{
-		Id:         "12345",
-		FbId:       profile.Id,
-		MoneyTotal: 100,
-	}
+
+	user, err := repository.GetOrCreateUser(models.User{FbId: profile.Id})
+
 	signedToken, err := a.generateSignedUserToken(user)
 	if err != nil {
 		log.Print(err)

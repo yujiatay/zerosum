@@ -21,7 +21,7 @@ const authMiddleware = setContext(async (_, {headers}) => {
 
 const link = ApolloLink.from([
   authMiddleware,
-  new HttpLink({uri: 'http://api.zerosum.ml/noauth/gql'})
+  new HttpLink({uri: 'https://api.zerosum.ml/gql'})
 ]);
 
 const cache = new InMemoryCache();
