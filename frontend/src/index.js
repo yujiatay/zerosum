@@ -5,6 +5,12 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {ApolloProvider} from "react-apollo"
 import {client, persistor} from "./utils/apolloClient"
+import localForage from "localforage"
+
+localForage.config({
+  name: "zerosum",
+  storeName: "zerosum_store"
+});
 
 persistor.restore().then(() => persistor.persist()).then(() => {
   ReactDOM.render(
