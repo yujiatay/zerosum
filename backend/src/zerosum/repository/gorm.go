@@ -200,7 +200,7 @@ func DeleteUser(user models.User) (err error) {
 /* VOTE CRUD */
 func CreateVote(vote models.Vote) (err error) {
 	// Check if alr exists
-	if !db.NewRecord(vote) {
+	if !db.Where("user_id = ? AND game_id = ?", vote.UserId, vote.GameId).First(&vote).RecordNotFound() {
 		err = errors.New("vote exists")
 		return
 	}
