@@ -113,6 +113,17 @@ func QueryGameOptions(desiredGame models.Game) (options []models.Option, err err
 	return
 }
 
+func QueryOption(desiredOption models.Option) (option models.Option, err error) {
+	res := db.Where(desiredOption).First(&option)
+	if res.RecordNotFound() {
+		err = errors.New("no option found")
+	} else if res.Error != nil {
+		err = res.Error
+	}
+
+	return
+}
+
 /* USER CRUD */
 func GetOrCreateUser(desiredUser models.User) (user models.User, err error) {
 	// Check if alr exists
