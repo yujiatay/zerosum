@@ -33,9 +33,9 @@ type userVoteQuery struct {
 	After *int32
 }
 
-type userInput struct {
-	// TODO: Cfm user input fields
-}
+//type userInput struct {
+//
+//}
 
 type gameInput struct {
 	Topic      string
@@ -102,10 +102,10 @@ func (r *Resolver) GetVotes(ctx context.Context, args userVoteQuery) (voteResolv
 	return
 }
 
-func (r *Resolver) UpdateUser(ctx context.Context, args *struct{ User userInput }) (*UserResolver, error) {
-	// TODO: Set User Deets
-	return nil, nil
-}
+//func (r *Resolver) UpdateUser(ctx context.Context, args *struct{ User userInput }) (*UserResolver, error) {
+//
+//	return nil, nil
+//}
 
 func (r *Resolver) DeleteUser(ctx context.Context) (success bool) {
 	err := repository.DeleteUser(models.User{Id: getIdFromCtx(ctx)})

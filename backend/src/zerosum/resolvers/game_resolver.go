@@ -71,7 +71,7 @@ func (g *GameResolver) OPTIONS(ctx context.Context) *[]*OptionResolver{
 }
 
 //func (g *GameResolver) PARTICIPANTS(ctx context.Context) *[]*UserResolver{
-//	//TODO: Show related users
+//
 //	return nil
 //}
 
