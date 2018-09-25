@@ -109,7 +109,7 @@ const theme = createMuiTheme({
     MuiCardContent: {
       root: {
         '&:last-child': {
-          paddingBottom: 0
+          paddingBottom: 16
         },
       }
     },

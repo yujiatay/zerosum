@@ -78,14 +78,28 @@ const styles = theme => ({
   optionSection: {
     backgroundColor: '#068D9D',
     borderRadius: 0,
-
   },
   optionCard: {
     minWidth: 275,
-    borderRadius: 10,
+    borderRadius: 5,
     marginTop: 10,
     marginBottom: 10,
     display: 'flex',
+  },
+  disabledOptionCard: {
+    minWidth: 275,
+    borderRadius: 5,
+    marginTop: 10,
+    marginBottom: 10,
+    display: 'flex',
+    backgroundColor: '#c1d3d5'
+  },
+  chosenOptionText: {
+    fontSize: '1.1rem',
+    color: '#068D9D'
+  },
+  disabledOptionText: {
+    color: '#949494'
   },
   button: {
     flex: 1,
@@ -154,6 +168,35 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
+  },
+  voteOption: {
+    flex: 1,
+    padding: theme.spacing.unit * 2,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  voteBet: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    backgroundColor: 'transparent'
+  },
+  voteBetText: {
+    fontSize: '1rem',
+    color: '#014262'
+  },
+  headerDivider: {
+    borderLeft: '1px solid #068D9D',
+    height: '100%',
+    marginRight: theme.spacing.unit * 3
+  },
+  result: {
+    backgroundColor: 'transparent',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   }
 });
 
@@ -166,7 +209,10 @@ class GameScreen extends Component {
       bet: '',
       loading: false,
       querySent: false,
-      querySuccess: false
+      querySuccess: false,
+      selected: 1,
+      hasUserVoted: false,
+      isGameOver: false
     }
   }
 
@@ -204,6 +250,180 @@ class GameScreen extends Component {
     const {classes} = this.props;
     const {parsedGame} = this.props.location.state;
     const {loading, querySent, queryStatus} = this.state;
+
+    const bystander = (
+      <Fragment>
+        <Card elevation={0} className={classes.optionSection}>
+          <CardContent>
+            <Typography className={classes.header} variant="display1" noWrap align="center">
+              Choose One Option
+            </Typography>
+            {
+              parsedGame.options.map((option, index) =>
+                <Card key={index} className={classes.optionCard}>
+                  <ButtonBase className={classes.button} onClick={() => this.handleChoice(option.body)}>
+                    <CardContent>
+                      <Typography variant="body2" align="center" className={classes.chosenOptionText}>
+                        {option.body}
+                      </Typography>
+                    </CardContent>
+                  </ButtonBase>
+                </Card>
+              )
+            }
+          </CardContent>
+        </Card>
+        {/* Dialog appears after option is chosen. */}
+        <Mutation mutation={CREATE_VOTE} variables={{
+          voteInput: {
+            gameId: parsedGame.id,
+            optionId: this.state.choice,
+            amount: parseInt(this.state.bet)
+          }
+        }}>
+          {(createVote, {loading, error, called}) => (
+            <Dialog
+              open={this.state.playDialog}
+              onClose={this.handleClose}
+              aria-labelledby="form-dialog-title"
+            >
+              {
+                loading
+                  ? <CircularProgress className={classes.progress} size={50}/>
+                  : called
+                  ? (error === null)
+                    ?
+                    <DialogContent className={classes.queryDialog}>
+                      <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
+                      <Typography variant="title" className={classes.dialogTitle} align="center">
+                        Your bet has been placed!
+                      </Typography>
+                    </DialogContent>
+                    :
+                    <DialogContent className={classes.queryDialog}>
+                      <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
+                      <Typography variant="title" className={classes.dialogTitle} align="center">
+                        Connection failed. Please try again!
+                      </Typography>
+                    </DialogContent>
+                  : <Fragment>
+                    <Typography variant="title" className={classes.dialogTitle} align="center">
+                      How many HattleCoins to bet?
+                    </Typography>
+                    <DialogContent>
+                      <Typography className={classes.dialogText} align="center">
+                        HattleCoins are not refundable after submission!
+                      </Typography>
+                      <TextField
+                        autoFocus
+                        autoComplete="off"
+                        id="amount"
+                        type="number"
+                        fullWidth
+                        className={classes.moneyInput}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                            </InputAdornment>
+                          ),
+                          disableUnderline: true
+                        }}
+                        inputProps={{
+                          min: "1"
+                        }}
+                        value={this.state.bet}
+                        onChange={this.handleChange('bet')}
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={this.handleClose} color="primary">
+                        Cancel
+                      </Button>
+                      <Button onClick={createVote} color="primary">
+                        Submit
+                      </Button>
+                    </DialogActions>
+                  </Fragment>
+              }
+            </Dialog>
+          )}
+        </Mutation>
+      </Fragment>
+    );
+
+    const voter = (
+      <Fragment>
+        <Card elevation={0} className={classes.optionSection}>
+          <CardContent>
+            <Typography className={classes.header} variant="display1" noWrap align="center">
+              Vote Submitted!
+            </Typography>
+            {
+              parsedGame.options.map((option, index) =>
+                <Card key={index} className={index === this.state.selected ? classes.optionCard : classes.disabledOptionCard}>
+                    <CardContent className={classes.voteOption}>
+                      {
+                        index === this.state.selected &&
+                        <Paper elevation={0} className={classes.voteBet}>
+                          <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                          <Typography variant="title" className={classes.voteBetText}>
+                            bet: 99999
+                          </Typography>
+                        </Paper>
+                      }
+                      <Typography variant="body2" align="center" className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                        {option.body}
+                      </Typography>
+                    </CardContent>
+                </Card>
+              )
+            }
+          </CardContent>
+        </Card>
+      </Fragment>
+    );
+
+    const results = (
+      <Fragment>
+        <Card elevation={0} className={classes.optionSection}>
+          <CardContent>
+            <Typography className={classes.header} variant="display1" noWrap align="center">
+              Results!
+            </Typography>
+            {
+              parsedGame.options.map((option, index) =>
+                <Card key={index} className={index === this.state.selected ? classes.optionCard : classes.disabledOptionCard}>
+                  <CardContent className={classes.voteOption}>
+                    <Typography variant="body2" align="center" className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                      {option.body}
+                    </Typography>
+
+                    <Paper elevation={0} className={classes.voteBet}>
+                      <div className={classes.headerDivider}/>
+                      <Paper elevation={0} className={classes.result}>
+                        <Typography variant="display1">
+                          33.33%
+                        </Typography>
+                        {
+                          index === this.state.selected &&
+                          <Fragment>
+                            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                            <Typography variant="title" className={classes.voteBetText}>
+                              won: 999
+                            </Typography>
+                          </Fragment>
+                        }
+                      </Paper>
+                    </Paper>
+                  </CardContent>
+                </Card>
+              )
+            }
+          </CardContent>
+        </Card>
+      </Fragment>
+    );
     return (
       <div className={classes.fullHeight}>
         <AppBar position="static">
@@ -254,123 +474,33 @@ class GameScreen extends Component {
             </CardContent>
 
             <CardContent className={classes.cardContentRow}>
-              <CardContent className={classes.cardInfo}>
+              <Paper elevation={0} className={classes.cardInfo}>
                 <img alt="Game Mode" src={Dice} className={classes.dice}/>
                 <Typography color="textPrimary" className={classes.textInfo}>
                   {parsedGame.gameMode}
                 </Typography>
-              </CardContent>
-              <CardContent className={classes.cardInfo}>
+              </Paper>
+              <Paper elevation={0} className={classes.cardInfo}>
                 <FontAwesomeIcon icon="coins" size="1x" className={classes.icon}/>
                 <Typography color="textPrimary" className={classes.textInfo}>
                   {parsedGame.stakes}
                 </Typography>
-              </CardContent>
-              <CardContent className={classes.cardInfo}>
+              </Paper>
+              <Paper elevation={0} className={classes.cardInfo}>
                 <FontAwesomeIcon icon="hourglass-half" size="1x" className={classes.icon}/>
                 <Typography color="textPrimary" className={classes.textInfo}>
                   {parsedGame.timeLeft}
                 </Typography>
-              </CardContent>
+              </Paper>
             </CardContent>
           </Card>
-
-          <Card elevation={0} className={classes.optionSection}>
-            <CardContent>
-              <Typography className={classes.header} variant="display1" noWrap align="center">
-                Choose One Option
-              </Typography>
-              {
-                parsedGame.options.map((option, index) =>
-                  <Card key={index} className={classes.optionCard}>
-                    <ButtonBase className={classes.button} onClick={() => this.handleChoice(option.id)}>
-                      <CardContent>
-                        <Typography variant="body2" align="center">
-                          {option.body}
-                        </Typography>
-                      </CardContent>
-                    </ButtonBase>
-                  </Card>
-                )
-              }
-            </CardContent>
-          </Card>
-          {/* Dialog appears after option is chosen. */}
-          <Mutation mutation={CREATE_VOTE} variables={{
-            voteInput: {
-              gameId: parsedGame.id,
-              optionId: this.state.choice,
-              amount: parseInt(this.state.bet)
-            }
-          }}>
-            {(createVote, {loading, error, called}) => (
-              <Dialog
-                open={this.state.playDialog}
-                onClose={this.handleClose}
-                aria-labelledby="form-dialog-title"
-              >
-                {
-                  loading
-                    ? <CircularProgress className={classes.progress} size={50}/>
-                    : called
-                    ? (error === null)
-                      ?
-                      <DialogContent className={classes.queryDialog}>
-                        <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
-                        <Typography variant="title" className={classes.dialogTitle} align="center">
-                          Your bet has been placed!
-                        </Typography>
-                      </DialogContent>
-                      :
-                      <DialogContent className={classes.queryDialog}>
-                        <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
-                        <Typography variant="title" className={classes.dialogTitle} align="center">
-                          Connection failed. Please try again!
-                        </Typography>
-                      </DialogContent>
-                    : <Fragment>
-                      <Typography variant="title" className={classes.dialogTitle} align="center">
-                        How many HattleCoins to bet?
-                      </Typography>
-                      <DialogContent>
-                        <Typography className={classes.dialogText} align="center">
-                          HattleCoins are not refundable after submission!
-                        </Typography>
-                        <TextField
-                          autoFocus
-                          autoComplete="off"
-                          id="amount"
-                          type="number"
-                          fullWidth
-                          className={classes.moneyInput}
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                              </InputAdornment>
-                            ),
-                            disableUnderline: true
-                          }}
-                          inputProps={{
-                            min: "1"
-                          }}
-                          value={this.state.bet}
-                          onChange={this.handleChange('bet')}
-                        />
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">
-                          Cancel
-                        </Button>
-                        <Button onClick={createVote} color="primary">
-                          Submit
-                        </Button>
-                      </DialogActions>
-                    </Fragment>
-                }
-              </Dialog>
-            )}
-          </Mutation>
+          {
+            this.state.isGameOver
+              ? results
+              : this.state.hasUserVoted
+              ? voter
+              : bystander
+          }
         </div>
       </div>
     );
