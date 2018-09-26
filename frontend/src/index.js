@@ -12,7 +12,8 @@ localForage.config({
   storeName: "zerosum_store"
 });
 
-persistor.restore().then(() => persistor.persist()).then(() => {
+// persistor.restore().then(() => persistor.persist()).then(() => {
+persistor.purge().then(() => {
   ReactDOM.render(
     <ApolloProvider client={client}>
       <App/>
