@@ -156,13 +156,13 @@ func ResolveGame(gameId string) (err error) {
 
 	// Update Game Result
 	optionResults := make([]optionResult, len(options))
-	for _, index := range winners {
+	for _, index := range winningOptions {
 		optionResults[index].Id = options[index].Id
 		optionResults[index].Winner = true
 		optionResults[index].TotalValue = optionTotal[index]
 		optionResults[index].TotalVotes = optionCount[index]
 	}
-	for _, index := range losers {
+	for _, index := range losingOptions {
 		optionResults[index].Id = options[index].Id
 		optionResults[index].Winner = false
 		optionResults[index].TotalValue = optionTotal[index]
