@@ -390,8 +390,12 @@ class GameScreen extends Component {
                   <Card key={index}
                         className={option.id === vote.option.id ? classes.optionCard : classes.disabledOptionCard}>
                     <CardContent className={classes.voteOption}>
+                      <Typography variant="body2" align="center"
+                                  className={option.id === vote.option.id ? classes.chosenOptionText : classes.disabledOptionText}>
+                        {vote.option.body}
+                      </Typography>
                       {
-                        index === this.state.selected &&
+                        option.id === vote.option.id &&
                         <Paper elevation={0} className={classes.voteBet}>
                           <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
                           <Typography variant="title" className={classes.voteBetText}>
@@ -399,10 +403,7 @@ class GameScreen extends Component {
                           </Typography>
                         </Paper>
                       }
-                      <Typography variant="body2" align="center"
-                                  className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
-                        {vote.option.body}
-                      </Typography>
+
                     </CardContent>
                   </Card>
                   )
