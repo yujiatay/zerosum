@@ -136,8 +136,8 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 	err = logic.AllocateHostExp(getIdFromCtx(ctx))
 	if err == nil {
 		err = repository.CreateGame(newGame)
-		logic.Controller.AddGame(&newGame)
 		game, err := repository.QueryGame(newGame)
+		logic.Controller.AddGame(&newGame)
 		if err == nil {
 			gameRes := GameResolver{game: &game}
 			gameResolver = &gameRes
