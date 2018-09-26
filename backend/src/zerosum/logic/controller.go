@@ -20,7 +20,7 @@ func init() {
 	Controller = &GameController{
 		incomingGames: make(chan *models.Game, 100),
 		finishedGames: make(chan *models.Game, 100),
-		queue:         make(TimedGameQueue, 1),
+		queue:         make(TimedGameQueue, 0),
 	}
 	go Controller.gameLoop()
 }
