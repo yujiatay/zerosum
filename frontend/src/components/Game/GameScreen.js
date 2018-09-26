@@ -392,7 +392,7 @@ class GameScreen extends Component {
                     <CardContent className={classes.voteOption}>
                       <Typography variant="body2" align="center"
                                   className={option.id === vote.option.id ? classes.chosenOptionText : classes.disabledOptionText}>
-                        {vote.option.body}
+                        {option.body}
                       </Typography>
                       {
                         option.id === vote.option.id &&
