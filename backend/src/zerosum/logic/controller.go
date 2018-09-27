@@ -2,9 +2,12 @@ package logic
 
 import (
 	"container/heap"
+	"log"
 	"time"
 	"zerosum/models"
 )
+
+const TIME_FORMAT = "2-Jan-2006 15:04:05"
 
 type GameController struct {
 	incomingGames  chan *models.Game
@@ -51,6 +54,9 @@ func (c *GameController) consumeIncoming(game *models.Game) {
 
 func (c *GameController) setTimer(game *models.Game) {
 	if !game.EndTime.After(time.Now()) {
+		log.Printf("EXPIRED_GAME: game %s ended at %s (time now is %s)", game.Id,
+			time.Now().Format(TIME_FORMAT), game.EndTime.Format(TIME_FORMAT),
+		)
 		c.finishedGames <- game
 	} else {
 		c.timer = time.AfterFunc(game.EndTime.Sub(time.Now()), func() {
@@ -63,6 +69,8 @@ func (c *GameController) gameLoop() {
 	for {
 		select {
 		case game := <-c.incomingGames:
+			log.Printf("GAME_RECEIVED: %s, %s, ends at %s (created by %s)", game.Id, game.GameMode,
+				game.EndTime.Format(TIME_FORMAT), game.UserId)
 			c.consumeIncoming(game)
 		case game := <-c.finishedGames:
 			// Schedule the next game, if it has not already been updated
@@ -75,6 +83,7 @@ func (c *GameController) gameLoop() {
 					c.nextEndingGame = nil
 				}
 			}
+			log.Printf("GAME_ENDED: %s", game.Id)
 			go ResolveGame(game.Id)
 		}
 	}
