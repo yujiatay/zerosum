@@ -18,6 +18,7 @@ import StakesMode from "../CreateGame/StakesMode";
 import CancelButton from "../shared/CancelButton";
 import SubmitButton from "../shared/SubmitButton";
 import Input from '@material-ui/core/Input';
+import Paper from '@material-ui/core/Paper';
 
 import {Query} from 'react-apollo';
 import gql from "graphql-tag";
