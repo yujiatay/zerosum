@@ -24,6 +24,16 @@ const styles = theme => ({
   body: {
     backgroundColor: '#068D9D',
     display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    padding: theme.spacing.unit,
+    borderRadius: 0,
+    overflowY: 'auto',
+    height: `calc(100vh - 26.703125rem)`, // deduct height of everything else from viewport
+  },
+  body2: {
+    backgroundColor: '#068D9D',
+    display: 'flex',
     justifyContent: 'center',
     borderRadius: 0,
     overflowY: 'auto',
@@ -45,6 +55,11 @@ const styles = theme => ({
   },
   hatperor: {
     width: 250
+  },
+  hat: {
+    width: 75,
+    height: 75,
+    margin: theme.spacing.unit
   }
 });
 
@@ -56,14 +71,14 @@ class ProfileAchievements extends Component {
       <Query query={GET_ACHIEVED_HATS} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
           if (loading) return (
-            <Paper elevation={0} className={classes.body}>
+            <Paper elevation={0} className={classes.body2}>
               <div className={classes.container}>
                 <CircularProgress color="primary"/>
               </div>
             </Paper>
           );
           if (!data) return (
-            <Paper elevation={0} className={classes.body}>
+            <Paper elevation={0} className={classes.body2}>
               <div className={classes.container}>
                 <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
                 <Typography variant="display1" color="textSecondary">
@@ -76,7 +91,7 @@ class ProfileAchievements extends Component {
           console.log(hats);
           if (hats === undefined || hats.length === 0) {
             return (
-              <Paper elevation={0} className={classes.body}>
+              <Paper elevation={0} className={classes.body2}>
                 <div className={classes.textContainer}>
                   <Typography variant="title" color="textPrimary" className={classes.text}>
                     Start playing now to earn achievements!
@@ -86,26 +101,10 @@ class ProfileAchievements extends Component {
             );
           } else {
             return (
-              // TODO: Set how hats are displayed
               <Paper elevation={0} className={classes.body}>
                 {
                   hats.map((hat, index) => (
-                    <Paper key={index} className={classes.card}>
-                      <ButtonBase className={classes.button}>
-                        <Paper elevation={0} className={classes.innerCard}>
-                          <Typography variant="display1" className={classes.cardTitle}>
-                            {hat.name}
-                          </Typography>
-                          <img alt="Hat" src={hat.img} className={classes.hat}/>
-                          <Paper elevation={0} className={classes.moneyInfo}>
-                            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                            <Typography variant="subheading" className={classes.moneyText}>
-                              {hat.price}
-                            </Typography>
-                          </Paper>
-                        </Paper>
-                      </ButtonBase>
-                    </Paper>
+                    <img key={index} alt="Hat" src={hat.img} className={classes.hat}/>
                   ))
                 }
               </Paper>

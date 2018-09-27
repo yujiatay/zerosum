@@ -46,6 +46,10 @@ const styles = theme => ({
   },
   hatperor: {
     width: 250
+  },
+  hat: {
+    width: 75,
+    height: 75
   }
 });
 
@@ -90,22 +94,7 @@ class ProfileHats extends Component {
               <Paper elevation={0} className={classes.body}>
                 {
                   hats.map((hat, index) => (
-                    <Paper key={index} className={classes.card}>
-                      <ButtonBase className={classes.button}>
-                        <Paper elevation={0} className={classes.innerCard}>
-                          <Typography variant="display1" className={classes.cardTitle}>
-                            {hat.name}
-                          </Typography>
-                          <img alt="Hat" src={hat.img} className={classes.hat}/>
-                          <Paper elevation={0} className={classes.moneyInfo}>
-                            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                            <Typography variant="subheading" className={classes.moneyText}>
-                              {hat.price}
-                            </Typography>
-                          </Paper>
-                        </Paper>
-                      </ButtonBase>
-                    </Paper>
+                    <img key={index} alt="Hat" src={hat.img} className={classes.hat}/>
                   ))
                 }
               </Paper>
