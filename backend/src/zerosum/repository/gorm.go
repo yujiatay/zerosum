@@ -34,7 +34,7 @@ func CloseTestDB() {
 }
 
 /* POLL CRUD */
-func CreateGame(game models.Game) (err error) {
+func CreateGame(game models.Game) (createdGame models.Game, err error) {
 	// Check if alr exists
 	if !db.NewRecord(game) {
 		err = errors.New("game exists")
@@ -45,7 +45,7 @@ func CreateGame(game models.Game) (err error) {
 	if res.Error != nil {
 		err = res.Error
 	}
-
+	createdGame = game
 	return
 }
 

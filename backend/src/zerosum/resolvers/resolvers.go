@@ -2,6 +2,7 @@ package resolvers
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"time"
 	"zerosum/logic"
@@ -135,8 +136,7 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 
 	err = logic.AllocateHostExp(getIdFromCtx(ctx))
 	if err == nil {
-		err = repository.CreateGame(newGame)
-		game, err := repository.QueryGame(newGame)
+		game, err := repository.CreateGame(newGame)
 		logic.Controller.AddGame(&game)
 		if err == nil {
 			gameRes := GameResolver{game: &game}
