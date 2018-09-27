@@ -94,7 +94,7 @@ class CreateScreen extends Component {
     super(props);
     this.state = {
       topic: '',
-      options: [],
+      options: ['nil', 'nil'],
       gmode: 'MAJORITY',
       smode: 'FIXED_STAKES',
       sinput: -1,
