@@ -17,6 +17,9 @@ const styles = theme => ({
   },
   body: {
     backgroundColor: '#068D9D',
+  },
+  tableTitle: {
+    backgroundColor: '#068D9D',
     paddingTop: 10,
     paddingLeft: 10,
     paddingRight: 10,
@@ -39,7 +42,8 @@ const styles = theme => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10
+    padding: 10,
+    backgroundColor: '#fff'
   },
   user: {
     display: 'flex',
@@ -66,7 +70,8 @@ const styles = theme => ({
     padding: 10,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#fff'
   },
   lockedText: {
     color: '#014262',
@@ -95,7 +100,7 @@ class SocialScreen extends Component {
     const { value, userRankState } = this.state;
 
     return (
-      <div>
+      <div className={classes.body}>
         <AppBar position="static">
           <Toolbar>
             <Typography className={classes.header} variant="display2" noWrap>
@@ -116,7 +121,7 @@ class SocialScreen extends Component {
             <Tab label="Friends" className={classes.tab}/>
           </Tabs>
         </AppBar>
-        <div className={classes.body}>
+        <div className={classes.tableTitle}>
           <Paper elevation={0} className={classes.subHeaders}>
             <Typography variant="subheading" className={classes.subHeader}>
               Rank
