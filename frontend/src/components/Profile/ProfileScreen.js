@@ -156,13 +156,13 @@ class ProfileScreen extends Component {
                   />
                 </div>
                 <Typography variant="headline" align="center">
-                  {profile ? profile.name : "..."}
+                  {profile ? profile.name : "???"}
                 </Typography>
                 <Typography className={classes.winrate} variant="title" align="center">
                   Win rate: {profile ? profile.winRate : 0}%
                 </Typography>
                 <div className={classes.progressBar}>
-                  <ProgressBar level={profile ? profile.level : 10} expProgress={profile ? profile.expProgress : 0.8}/>
+                  <ProgressBar level={profile ? profile.level : "?"} expProgress={profile ? profile.expProgress : 0.8}/>
                 </div>
                 {hatAndAchievementsTabBar}
               </div>
