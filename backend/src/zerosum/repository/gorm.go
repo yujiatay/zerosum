@@ -367,7 +367,7 @@ func QueryUserHats(userId string, owned bool, achievement bool) (hats []models.H
 			err = internalErr
 			return
 		}
-		if desiredHat.Achieve == achievement {
+		if desiredHat.Achievement == achievement {
 			hats = append(hats, desiredHat)
 		}
 	}

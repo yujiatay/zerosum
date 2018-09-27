@@ -59,12 +59,12 @@ type User struct {
 }
 
 type Hat struct {
-	Id        string `gorm:"primary_key"`
-	Name      string
-	Price     int32
-	StoreLink string
-	ImgLink   string
-	Achieve   bool
+	Id          string `gorm:"primary_key"`
+	Name        string
+	Price       int32
+	StoreLink   string
+	ImgLink     string
+	Achievement bool
 }
 
 type HatOwnership struct {
