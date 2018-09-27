@@ -60,7 +60,7 @@ func FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 func getFbProfile(token string) (profile fbProfile, err error) {
 	res, err := settings.httpClient.Get(fmt.Sprintf("https://graph.facebook.com/me?access_token=%s", token))
 	if err != nil {
-		return
+		return profile, err
 	}
 	if err = json.NewDecoder(res.Body).Decode(&profile); err != nil {
 		return
@@ -71,32 +71,32 @@ func getFbProfile(token string) (profile fbProfile, err error) {
 	}
 	return
 }
-func verifyFbToken(loginRequest fbLoginRequest) (err error) {
+func verifyFbToken(loginRequest fbLoginRequest) (error) {
 	// Fb token verification API
 	res, err := settings.httpClient.Get(fmt.Sprintf("https://graph.facebook.com/debug_token?input_token=%s&access_token=%s",
 		loginRequest.AccessToken, settings.fbAccessToken))
 	if err != nil {
-		return
+		return err
 	}
 	var body fbVerificationResponse
 	if err = json.NewDecoder(res.Body).Decode(&body); err != nil {
-		return
+		return err
 	}
 	//fmt.Printf("%+v\n", body)
 	if body.Err != nil {
 		err = errors.Errorf(body.Err["message"].(string))
-		return
+		return err
 	}
 	if !body.Data["is_valid"].(bool) {
 		err = errors.Errorf("Invalid token")
-		return
+		return err
 	}
 	if body.Data["app_id"].(string) != settings.fbAppId {
 		err = errors.Errorf("App ID mismatch")
-		return
+		return err
 	}
 	if body.Data["user_id"].(string) != loginRequest.UserID {
 		err = errors.Errorf("User ID mismatch")
 	}
-	return
+	return nil
 }
