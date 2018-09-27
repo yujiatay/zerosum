@@ -130,6 +130,9 @@ let parseStakes = (stakesEnum) => {
 
 let parseTimeLeft = (endTime) => {
   let diff = Date.parse(endTime) - Date.now();
+  if (diff < 0) {
+    return "Game ended"
+  }
   let totalMinutes = Math.floor(diff / 60000);
   let hours = Math.floor(totalMinutes / 60);
   let minutes = totalMinutes % 60;
