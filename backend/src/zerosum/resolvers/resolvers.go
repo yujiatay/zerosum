@@ -2,21 +2,14 @@ package resolvers
 
 import (
 	"context"
-	"os"
 	"time"
+	"zerosum/auth"
 	"zerosum/logic"
 	"zerosum/models"
 	"zerosum/repository"
 )
 
 type Resolver struct{}
-
-func getIdFromCtx(ctx context.Context) (id string) {
-	if os.Getenv("DEBUG") == "TRUE" {
-		return "testuser"
-	}
-	return ctx.Value("Id").(string)
-}
 
 type gameSearchQuery struct {
 	Filter string
@@ -58,7 +51,7 @@ func (r *Resolver) USER(ctx context.Context, args *struct{ Id string }) (*UserRe
 }
 
 func (r *Resolver) PROFILE(ctx context.Context) (*UserResolver, error) {
-	user, err := repository.QueryUser(models.User{Id: getIdFromCtx(ctx)})
+	user, err := repository.QueryUser(models.User{Id: auth.GetIdFromCtx(ctx)})
 	return &UserResolver{user: &user}, err
 }
 
@@ -92,12 +85,12 @@ func (r *Resolver) LEADERBOARD(ctx context.Context, args *struct{ Limit int32 })
 }
 
 func (r *Resolver) VOTE(ctx context.Context, args voteQuery) (*VoteResolver, error) {
-	vote, err := repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
+	vote, err := repository.QueryVote(models.Vote{GameId: args.GameId, UserId: auth.GetIdFromCtx(ctx)})
 	return &VoteResolver{vote: &vote}, err
 }
 
 func (r *Resolver) VOTES(ctx context.Context, args userVoteQuery) (voteResolvers []*VoteResolver, err error) {
-	votes, err := repository.QueryVotes(models.Vote{UserId: getIdFromCtx(ctx)}, args.Limit, args.After)
+	votes, err := repository.QueryVotes(models.Vote{UserId: auth.GetIdFromCtx(ctx)}, args.Limit, args.After)
 	var voteList []*VoteResolver
 	for index := range votes {
 		voteList = append(voteList, &VoteResolver{vote: &votes[index]})
@@ -107,7 +100,7 @@ func (r *Resolver) VOTES(ctx context.Context, args userVoteQuery) (voteResolvers
 }
 
 func (r *Resolver) STOREHATS(ctx context.Context, args *struct { Owned bool }) (hatResolvers []*HatResolver, err error) {
-	hats, err := repository.QueryUserHats(getIdFromCtx(ctx), args.Owned, false)
+	hats, err := repository.QueryUserHats(auth.GetIdFromCtx(ctx), args.Owned, false)
 	var hatList []*HatResolver
 	for index := range hats {
 		hatList = append(hatList, &HatResolver{hat: &hats[index], owned: args.Owned, achieved: false})
@@ -117,7 +110,7 @@ func (r *Resolver) STOREHATS(ctx context.Context, args *struct { Owned bool }) (
 }
 
 func (r *Resolver) ACHIEVEDHATS(ctx context.Context) (hatResolvers []*HatResolver, err error) {
-	hats, err := repository.QueryUserHats(getIdFromCtx(ctx), true, true)
+	hats, err := repository.QueryUserHats(auth.GetIdFromCtx(ctx), true, true)
 	var hatList []*HatResolver
 	for index := range hats {
 		hatList = append(hatList, &HatResolver{hat: &hats[index], owned: true, achieved: true})
@@ -132,7 +125,7 @@ func (r *Resolver) ACHIEVEDHATS(ctx context.Context) (hatResolvers []*HatResolve
 //}
 
 func (r *Resolver) DeleteUser(ctx context.Context) (success bool) {
-	err := repository.DeleteUser(models.User{Id: getIdFromCtx(ctx)})
+	err := repository.DeleteUser(models.User{Id: auth.GetIdFromCtx(ctx)})
 	if err != nil {
 		success = false
 	} else {
@@ -149,7 +142,7 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 
 	newGame := models.Game{
 		Topic:     args.Game.Topic,
-		UserId:    getIdFromCtx(ctx),
+		UserId:    auth.GetIdFromCtx(ctx),
 		StartTime: time.Now(),
 		EndTime:   time.Now().Add(time.Minute * time.Duration(args.Game.Duration)),
 		Stakes:    args.Game.Stakes,
@@ -157,7 +150,7 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 		Options:   options,
 	}
 
-	err = logic.AllocateHostExp(getIdFromCtx(ctx))
+	err = logic.AllocateHostExp(auth.GetIdFromCtx(ctx))
 	if err == nil {
 		game, err := repository.CreateGame(newGame)
 		logic.Controller.AddGame(&game)
@@ -172,14 +165,14 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 func (r *Resolver) AddVote(ctx context.Context, args *struct{ Vote voteInput }) (voteResolver *VoteResolver, err error) {
 	newVote := models.Vote{
 		GameId:   args.Vote.GameId,
-		UserId:   getIdFromCtx(ctx),
+		UserId:   auth.GetIdFromCtx(ctx),
 		OptionId: args.Vote.OptionId,
 		Money:    args.Vote.Amount,
 	}
 
 	// TODO: Add validation for correct choice Id
-	err = logic.AllocateMoney(getIdFromCtx(ctx), -args.Vote.Amount)
-	err = logic.AllocateVoteExp(getIdFromCtx(ctx))
+	err = logic.AllocateMoney(auth.GetIdFromCtx(ctx), -args.Vote.Amount)
+	err = logic.AllocateVoteExp(auth.GetIdFromCtx(ctx))
 	if err == nil {
 		err = repository.CreateVote(newVote)
 		vote, err := repository.QueryVote(newVote)

@@ -1,8 +1,10 @@
 package auth
 
 import (
+	"context"
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
+	"os"
 	"zerosum/models"
 )
 
@@ -31,4 +33,10 @@ func InitAuthWithSettings(secret, fbAppId, fbAccessToken string, httpClient *htt
 		fbAccessToken: fbAccessToken,
 		httpClient:    httpClient,
 	}
+}
+func GetIdFromCtx(ctx context.Context) (id string) {
+	if os.Getenv("DEBUG") == "TRUE" {
+		return "testuser"
+	}
+	return ctx.Value("Id").(string)
 }

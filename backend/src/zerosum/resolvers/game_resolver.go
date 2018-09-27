@@ -3,6 +3,7 @@ package resolvers
 import (
 	"context"
 	"github.com/graph-gophers/graphql-go"
+	"zerosum/auth"
 	"zerosum/models"
 	"zerosum/repository"
 )
@@ -76,7 +77,7 @@ func (g *GameResolver) OPTIONS(ctx context.Context) *[]*OptionResolver{
 //}
 
 func (g *GameResolver) VOTED(ctx context.Context) *bool {
-	voted := repository.CheckVoted(getIdFromCtx(ctx), g.game.Id)
+	voted := repository.CheckVoted(auth.GetIdFromCtx(ctx), g.game.Id)
 	return &voted
 }
 
