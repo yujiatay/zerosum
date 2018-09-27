@@ -73,7 +73,7 @@ func SearchGames(searchString string, limit *int32, after *int32) (games []model
 		interm = interm.Limit(*limit)
 	}
 
-	res := interm.Where("topic LIKE ?", fmt.Sprintf("%%%s%%", searchString)).Find(&games)
+	res := interm.Where("topic LIKE ? AND end_time < ", fmt.Sprintf("%%%s%%", searchString), time.Now()).Find(&games)
 	if res.Error != nil {
 		err = res.Error
 	}
