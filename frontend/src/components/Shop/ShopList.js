@@ -7,7 +7,7 @@ import HattleCoin from "../assets/hattlecoin.png";
 import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 import AngryHatperor from "../assets/angry-hatperor.png";
 
-import {Query} from "react-apollo";
+import {Mutation, Query} from "react-apollo";
 import gql from "graphql-tag";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import CancelButton from "../shared/CancelButton";
@@ -28,6 +28,14 @@ const GET_STORE_HATS = gql`
   }
 `;
 
+const BUY_HAT = gql`
+  mutation BuyHat($id: ID!) {
+    buyHat(id: $id) {
+      img
+      name
+    }
+  }
+`;
 
 const styles = theme => ({
   body: {
@@ -122,6 +130,7 @@ class ShopList extends Component {
       selectedHat: {}
     }
   }
+
   handleClose = () => {
     this.setState({
       dialog: false
@@ -181,22 +190,37 @@ class ShopList extends Component {
                   </Paper>
                 ))
               }
-              <Dialog
-                open={this.state.dialog}
-                onClose={this.handleClose}
-                aria-labelledby="form-dialog-title"
-              >
-                <CancelButton closeHandler={this.handleClose}/>
-                <DialogContent>
-                  <Typography variant="title" color="textPrimary" align="center">
-                    You're about to buy {selectedHat.name} for {selectedHat.price} HattleCoins.
-                  </Typography>
-                  <Typography className={classes.dialogText} align="center">
-                    HattleCoins are not refundable after submission!
-                  </Typography>
-                  <SubmitButton submitHandler={() => this.handleSubmit()}/>
-                </DialogContent>
-              </Dialog>
+              <Mutation mutation={BUY_HAT} variables={{id: this.state.selectedHat.id}}>
+                {(buyHat, {loading, error, called}) => (
+                  <Dialog
+                    open={this.state.dialog}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                  >
+                    {called
+                      ? loading
+                        ? <CircularProgress className={classes.progress} size={50}/>
+                        : error
+                          ? <CircularProgress className={classes.progress} size={50}/> // TODO: insert error screen here
+                          : <CircularProgress className={classes.progress} size={50}/> // TODO: insert bought screen here
+                      :
+                      <Fragment>
+                        <CancelButton closeHandler={this.handleClose}/>
+                        < DialogContent>
+
+                          < Typography variant="title" color="textPrimary" align="center">
+                            You're about to buy {selectedHat.name} for {selectedHat.price} HattleCoins.
+                          </Typography>
+                          <Typography className={classes.dialogText} align="center">
+                            HattleCoins are not refundable after submission!
+                          </Typography>
+                          <SubmitButton submitHandler={buyHat}/>
+                        </DialogContent>
+                      </Fragment>
+                    }
+                  </Dialog>
+                )}
+              </Mutation>
             </Paper>
           );
         }}
