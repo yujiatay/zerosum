@@ -115,6 +115,7 @@ class ShopList extends Component {
             </Paper>
           );
           const hats = data.storeHats;
+          console.log(hats);
           return (
             <Paper elevation={0} className={classes.body}>
               {

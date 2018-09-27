@@ -2,6 +2,23 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from "@material-ui/core/Typography/Typography";
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+import AngryHatperor from "../assets/angry-hatperor.png";
+import ButtonBase from "@material-ui/core/ButtonBase";
+import HattleCoin from "../assets/hattlecoin.png";
+
+import {Query} from "react-apollo";
+import gql from "graphql-tag";
+
+const GET_ACHIEVED_HATS = gql`
+  {
+    achievedHats {
+      id
+      name
+      img
+    }
+  }
+`;
 
 const styles = theme => ({
   body: {
@@ -23,14 +40,68 @@ const styles = theme => ({
 class ProfileAchievements extends Component {
   render() {
     const {classes} = this.props;
+
     return (
-      <Paper elevation={0} className={classes.body}>
-        <div className={classes.textContainer}>
-          <Typography variant="title" color="textPrimary" className={classes.text}>
-            Start playing now to earn achievements!
-          </Typography>
-        </div>
-      </Paper>
+      <Query query={GET_ACHIEVED_HATS} fetchPolicy="cache-and-network" errorPolicy="ignore">
+        {({loading, error, data}) => {
+          if (loading) return (
+            <Paper elevation={0} className={classes.body}>
+              <div className={classes.container}>
+                <CircularProgress color="primary"/>
+              </div>
+            </Paper>
+          );
+          if (!data) return (
+            <Paper elevation={0} className={classes.body}>
+              <div className={classes.container}>
+                <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
+                <Typography variant="display1" color="textSecondary">
+                  Connection error!
+                </Typography>
+              </div>
+            </Paper>
+          );
+          const hats = data.achievedHats;
+          console.log(hats);
+          if (hats === undefined || hats.length === 0) {
+            return (
+              <Paper elevation={0} className={classes.body}>
+                <div className={classes.textContainer}>
+                  <Typography variant="title" color="textPrimary" className={classes.text}>
+                    Start playing now to earn achievements!
+                  </Typography>
+                </div>
+              </Paper>
+            );
+          } else {
+            return (
+              // TODO: Set how hats are displayed
+              <Paper elevation={0} className={classes.body}>
+                {
+                  hats.map((hat, index) => (
+                    <Paper key={index} className={classes.card}>
+                      <ButtonBase className={classes.button}>
+                        <Paper elevation={0} className={classes.innerCard}>
+                          <Typography variant="display1" className={classes.cardTitle}>
+                            {hat.name}
+                          </Typography>
+                          <img alt="Hat" src={hat.img} className={classes.hat}/>
+                          <Paper elevation={0} className={classes.moneyInfo}>
+                            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                            <Typography variant="subheading" className={classes.moneyText}>
+                              {hat.price}
+                            </Typography>
+                          </Paper>
+                        </Paper>
+                      </ButtonBase>
+                    </Paper>
+                  ))
+                }
+              </Paper>
+            );
+          }
+        }}
+      </Query>
     );
   }
 }
