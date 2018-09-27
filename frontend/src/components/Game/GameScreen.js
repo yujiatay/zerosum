@@ -297,7 +297,7 @@ class GameScreen extends Component {
           voteInput: {
             gameId: parsedGame.id,
             optionId: this.state.choice,
-            amount: parseInt(this.state.bet)
+            amount: parsedGame.stakes === "Fixed Stakes" ? 100 : parseInt(this.state.bet)
           }
         }}>
           {(createVote, {loading, error, called}) => (
@@ -327,33 +327,40 @@ class GameScreen extends Component {
                     </DialogContent>
                   : <Fragment>
                     <Typography variant="title" className={classes.dialogTitle} align="center">
-                      How many HattleCoins to bet?
+                      {
+                        parsedGame.stakes === "Fixed Stakes"
+                        ? "You're about to bet 100 HattleCoins."
+                        : "How many HattleCoins to bet?"
+                      }
                     </Typography>
                     <DialogContent>
                       <Typography className={classes.dialogText} align="center">
                         HattleCoins are not refundable after submission!
                       </Typography>
-                      <TextField
-                        autoFocus
-                        autoComplete="off"
-                        id="amount"
-                        type="number"
-                        fullWidth
-                        className={classes.moneyInput}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                            </InputAdornment>
-                          ),
-                          disableUnderline: true
-                        }}
-                        inputProps={{
-                          min: "1"
-                        }}
-                        value={this.state.bet}
-                        onChange={this.handleChange('bet')}
-                      />
+                      {
+                        parsedGame.stakes !== "Fixed Stakes" &&
+                        <TextField
+                          autoFocus
+                          autoComplete="off"
+                          id="amount"
+                          type="number"
+                          fullWidth
+                          className={classes.moneyInput}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                              </InputAdornment>
+                            ),
+                            disableUnderline: true
+                          }}
+                          inputProps={{
+                            min: "1"
+                          }}
+                          value={this.state.bet}
+                          onChange={this.handleChange('bet')}
+                        />
+                      }
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={this.handleClose} color="primary">
