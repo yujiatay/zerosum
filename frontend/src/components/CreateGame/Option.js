@@ -64,7 +64,7 @@ class Option extends Component {
         </Paper>
         :
         <Paper elevation={0} className={classes.option} style={{backgroundColor: bgColor}}>
-          <Input placeholder="Type here" disableUnderline autoFocus
+          <Input placeholder="Type here" disableUnderline autoFocus={false}
                  classes={{input: classes.inputCenter}} fullWidth
                  onChange={this.handleInput}
           />

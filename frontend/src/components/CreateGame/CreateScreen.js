@@ -208,6 +208,7 @@ class CreateScreen extends Component {
               onChange={this.handleChange('topic')}
               margin="normal"
               fullWidth
+              autoFocus
             />
           </form>
           {
