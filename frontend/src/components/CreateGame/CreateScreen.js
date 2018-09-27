@@ -87,6 +87,11 @@ const styles = theme => ({
   dialogTitle: {
     marginTop: 10,
   },
+  errorMsg: {
+    color: '#9d0606',
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3
+  }
 });
 
 class CreateScreen extends Component {
@@ -101,6 +106,8 @@ class CreateScreen extends Component {
       time: 5, // in minutes
       submitDialog: false,
       submitted: false,
+      topicError: false,
+      optionError: false
     };
   }
 
@@ -156,11 +163,21 @@ class CreateScreen extends Component {
     });
   };
   handleSubmit = (createGame) => {
-    createGame();
-    this.setState({
-      submitDialog: true,
-      submitted: true
-    })
+    if (this.state.topic === '') {
+      this.setState({
+        topicError: true
+      })
+    } else if (this.state.options[0] === 'nil' || this.state.options[1] === 'nil') {
+      this.setState({
+        optionError: true
+      })
+    } else {
+      createGame();
+      this.setState({
+        submitDialog: true,
+        submitted: true
+      })
+    }
   };
 
   render() {
@@ -193,8 +210,20 @@ class CreateScreen extends Component {
               fullWidth
             />
           </form>
+          {
+            this.state.topicError &&
+            <Typography className={classes.errorMsg}>
+              Please provide a valid topic.
+            </Typography>
+          }
           <SectionHeader text="Options"/>
           <OptionList options={this.state.options} addHandler={this.handleOptions} editHandler={this.handleEditOption}/>
+          {
+            this.state.optionError &&
+            <Typography className={classes.errorMsg}>
+              Please provide valid options.
+            </Typography>
+          }
           <SectionHeader text="Game Mode"/>
           <GameMode modeHandler={this.handleGameMode}/>
           <SectionHeader text="Stakes"/>
