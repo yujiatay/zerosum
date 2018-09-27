@@ -113,7 +113,7 @@ class Leaderboard extends Component {
   render() {
     const {classes, list} = this.props;
     return (
-      <Query query={GET_LEADERBOARD} variables={{limit: 10}}>
+      <Query query={GET_LEADERBOARD} variables={{limit: 10}} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
           if (loading) return (
             <Paper elevation={0} className={classes.body}>
@@ -122,7 +122,7 @@ class Leaderboard extends Component {
               </div>
             </Paper>
           );
-          if (error) return (
+          if (!data) return (
             <Paper elevation={0} className={classes.body}>
               <div className={classes.container}>
                 <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>

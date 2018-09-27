@@ -150,7 +150,7 @@ class GamesList extends Component {
   render() {
     const {classes} = this.props;
     return (
-      <Query query={GET_GAMES} variables={{ filter: "" }}>
+      <Query query={GET_GAMES} variables={{ filter: "" }} fetchPolicy="no-cache">
         {({loading, error, data}) => {
           if (loading) return (
             <Paper elevation={0} className={classes.body}>

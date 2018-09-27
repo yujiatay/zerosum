@@ -138,7 +138,7 @@ class ProfileScreen extends Component {
       </AppBar>
     );
     return (
-      <Query query={GET_PROFILE}>
+      <Query query={GET_PROFILE} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
           let profile = data ? data.getProfile : null;
           return (
