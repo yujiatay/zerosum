@@ -67,7 +67,7 @@ func main() {
 
 	authRouter := mux.NewRouter()
 	authRouter.Handle("/gql", gqlHandler)
-	an := negroni.New(negroni.WrapFunc(auth.JWTMiddleware), negroni.Wrap(authRouter))
+	an := negroni.New(negroni.HandlerFunc(auth.TokenAuthNegroniMiddleware), negroni.Wrap(authRouter))
 
 	router := mux.NewRouter()
 	router.HandleFunc("/login/facebook", auth.FbLoginHandler).Methods("POST")
