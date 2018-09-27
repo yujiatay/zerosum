@@ -76,8 +76,7 @@ func main() {
 		&httpClient,
 	)
 	push.InitPushWithSettings(
-		os.Getenv("VAPID_PRIVATE_KEY"),
-		os.Getenv("VAPID_PUBLIC_KEY"),
+		os.Getenv("VAPID_PRIV_KEY"),
 		&httpClient,
 	)
 	staticFiles := packr.NewBox("./static")

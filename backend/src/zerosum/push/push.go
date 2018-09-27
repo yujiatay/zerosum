@@ -11,18 +11,16 @@ import (
 
 type pushSettings struct {
 	privateKey string
-	publicKey string
-	sub string // Contact email for subscriptions
+	sub        string // Contact email for subscriptions
 	httpClient *http.Client
 }
 
 var settings pushSettings
 
-func InitPushWithSettings(privKey, pubKey string, httpClient *http.Client) {
+func InitPushWithSettings(privKey, httpClient *http.Client) {
 	settings = pushSettings{
 		privateKey: privKey,
-		publicKey: pubKey,
-		sub: "mailto:guowei@u.nus.edu",
+		sub:        "mailto:guowei@u.nus.edu",
 		httpClient: httpClient,
 	}
 }
