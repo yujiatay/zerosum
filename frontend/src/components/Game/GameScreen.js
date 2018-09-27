@@ -302,66 +302,66 @@ class GameScreen extends Component {
               onClose={this.handleClose}
               aria-labelledby="form-dialog-title"
             >
-              {
-                loading
+              {called
+                ? loading
                   ? <CircularProgress className={classes.progress} size={50}/>
-                  : called
-                  ? (error === null)
+                  : error
                     ?
-                    <DialogContent className={classes.queryDialog}>
-                      <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
-                      <Typography variant="title" className={classes.dialogTitle} align="center">
-                        Your bet has been placed!
-                      </Typography>
-                    </DialogContent>
-                    :
                     <DialogContent className={classes.queryDialog}>
                       <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
                       <Typography variant="title" className={classes.dialogTitle} align="center">
                         Connection failed. Please try again!
                       </Typography>
                     </DialogContent>
-                  : <Fragment>
-
-                    <CancelButton closeHandler={this.handleClose}/>
-                    <DialogContent>
-                      <Typography variant="title" color="textPrimary" align="center">
-                        {
-                          parsedGame.stakes === "Fixed Stakes"
-                            ? "You're about to bet 100 HattleCoins."
-                            : "How many HattleCoins to bet?"
-                        }
+                    :
+                    <DialogContent className={classes.queryDialog}>
+                      <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
+                      <Typography variant="title" className={classes.dialogTitle} align="center">
+                        Your bet has been placed!
                       </Typography>
-                      <Typography className={classes.dialogText} align="center">
-                        HattleCoins are not refundable after submission!
-                      </Typography>
-                      {
-                        parsedGame.stakes !== "Fixed Stakes" &&
-                        <TextField
-                          autoFocus
-                          autoComplete="off"
-                          id="amount"
-                          type="number"
-                          fullWidth
-                          className={classes.moneyInput}
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                              </InputAdornment>
-                            ),
-                            disableUnderline: true
-                          }}
-                          inputProps={{
-                            min: "1"
-                          }}
-                          value={this.state.bet}
-                          onChange={this.handleChange('bet')}
-                        />
-                      }
-                      <SubmitButton submitHandler={createVote}/>
                     </DialogContent>
-                  </Fragment>
+                :
+                <Fragment>
+
+                  <CancelButton closeHandler={this.handleClose}/>
+                  <DialogContent>
+                    <Typography variant="title" color="textPrimary" align="center">
+                      {
+                        parsedGame.stakes === "Fixed Stakes"
+                          ? "You're about to bet 100 HattleCoins."
+                          : "How many HattleCoins to bet?"
+                      }
+                    </Typography>
+                    <Typography className={classes.dialogText} align="center">
+                      HattleCoins are not refundable after submission!
+                    </Typography>
+                    {
+                      parsedGame.stakes !== "Fixed Stakes" &&
+                      <TextField
+                        autoFocus
+                        autoComplete="off"
+                        id="amount"
+                        type="number"
+                        fullWidth
+                        className={classes.moneyInput}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                            </InputAdornment>
+                          ),
+                          disableUnderline: true
+                        }}
+                        inputProps={{
+                          min: "1"
+                        }}
+                        value={this.state.bet}
+                        onChange={this.handleChange('bet')}
+                      />
+                    }
+                    <SubmitButton submitHandler={createVote}/>
+                  </DialogContent>
+                </Fragment>
               }
             </Dialog>
           )}
@@ -376,7 +376,8 @@ class GameScreen extends Component {
             <Typography className={classes.header} variant="display1" noWrap align="center">
               Vote Submitted!
             </Typography>
-            <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: false}} fetchPolicy="cache-and-network" errorPolicy="ignore">
+            <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: false}}
+                   fetchPolicy="cache-and-network" errorPolicy="ignore">
               {({loading, error, data}) => {
                 if (loading) return <div>Fetching</div>;
                 if (!data) return <div>Error</div>;
@@ -386,25 +387,25 @@ class GameScreen extends Component {
 
                 return (
                   parsedGame.options.map((option, index) =>
-                  <Card key={index}
-                        className={option.id === vote.option.id ? classes.optionCard : classes.disabledOptionCard}>
-                    <CardContent className={classes.voteOption}>
-                      <Typography variant="body2" align="center"
-                                  className={option.id === vote.option.id ? classes.chosenOptionText : classes.disabledOptionText}>
-                        {option.body}
-                      </Typography>
-                      {
-                        option.id === vote.option.id &&
-                        <Paper elevation={0} className={classes.voteBet}>
-                          <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                          <Typography variant="title" className={classes.voteBetText}>
-                            Bet: {vote.money}
-                          </Typography>
-                        </Paper>
-                      }
+                    <Card key={index}
+                          className={option.id === vote.option.id ? classes.optionCard : classes.disabledOptionCard}>
+                      <CardContent className={classes.voteOption}>
+                        <Typography variant="body2" align="center"
+                                    className={option.id === vote.option.id ? classes.chosenOptionText : classes.disabledOptionText}>
+                          {option.body}
+                        </Typography>
+                        {
+                          option.id === vote.option.id &&
+                          <Paper elevation={0} className={classes.voteBet}>
+                            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                            <Typography variant="title" className={classes.voteBetText}>
+                              Bet: {vote.money}
+                            </Typography>
+                          </Paper>
+                        }
 
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
                   )
                 )
               }}
