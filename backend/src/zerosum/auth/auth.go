@@ -64,15 +64,18 @@ func (a *auth) JWTMiddleware(w http.ResponseWriter, r *http.Request) {
 	token, err := request.ParseFromRequest(r, extractor, keyFunc, request.WithClaims(&jwt.StandardClaims{}))
 	if err != nil {
 		log.Printf("error parsing token: %+v", err)
+		http.Error(w, "invalid token", http.StatusUnauthorized)
 		return
 	}
 	if a.signingMethod.Alg() != token.Header["alg"] {
 		log.Printf("expected %s signing method but token specified %s",
 			a.signingMethod.Alg(), token.Header["alg"])
+		http.Error(w, "invalid token", http.StatusUnauthorized)
 		return
 	}
 	if !token.Valid {
 		log.Print("token is invalid")
+		http.Error(w, "invalid token", http.StatusUnauthorized)
 		return
 	}
 
