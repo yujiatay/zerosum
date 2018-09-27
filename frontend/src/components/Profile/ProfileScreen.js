@@ -90,7 +90,7 @@ const GET_PROFILE = gql`
 
 let parseWinRate = (rawWinRate) => {
   let winRate = rawWinRate * 100.0;
-  return winRate.toFixed(1) + "%"
+  return winRate.toFixed(1)
 };
 
 
