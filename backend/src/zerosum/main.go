@@ -14,6 +14,7 @@ import (
 	"time"
 	"zerosum/auth"
 	"zerosum/logic"
+	"zerosum/push"
 	"zerosum/repository"
 	"zerosum/resolvers"
 )
@@ -74,10 +75,17 @@ func main() {
 		os.Getenv("FACEBOOK_ACCESS_TOKEN"),
 		&httpClient,
 	)
+	push.InitPushWithSettings(
+		os.Getenv("VAPID_PRIVATE_KEY"),
+		os.Getenv("VAPID_PUBLIC_KEY"),
+		&httpClient,
+	)
 	staticFiles := packr.NewBox("./static")
 
 	authRouter := mux.NewRouter()
 	authRouter.Handle("/gql", gqlHandler)
+	authRouter.HandleFunc("/subscribe", push.SubscriptionHandler)
+	authRouter.HandleFunc("/unsubscribe", push.UnsubscriptionHandler)
 	an := negroni.New(negroni.HandlerFunc(auth.TokenAuthNegroniMiddleware), negroni.Wrap(authRouter))
 
 	router := mux.NewRouter()

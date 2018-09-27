@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  branch = "master"
+  digest = "1:28d5304c5b7ef25bcccc55d5897488bdcfbc3d8f9a624b21db7a19d7ad7bd687"
+  name = "github.com/SherClockHolmes/webpush-go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "411cfd6dde476c883f8ae75f58375db9d2a27322"
+
+[[projects]]
   digest = "1:bb2130e54ac8ea3ff78312ca365ce3b8a23423ed362530551bdceaccfa4d8e77"
   name = "github.com/dgrijalva/jwt-go"
   packages = [
@@ -136,6 +144,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:86f286e7afe01694ffd50bf9226ce2158a75ad099c03071be32b592d68115325"
+  name = "golang.org/x/crypto"
+  packages = ["hkdf"]
+  pruneopts = "UT"
+  revision = "0e37d006457bf46f9e6692014ba72ef82c33022c"
+
+[[projects]]
+  branch = "master"
   digest = "1:76ee51c3f468493aff39dbacc401e8831fbb765104cbf613b89bef01cf4bad70"
   name = "golang.org/x/net"
   packages = ["context"]
@@ -146,6 +162,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/SherClockHolmes/webpush-go",
     "github.com/dgrijalva/jwt-go",
     "github.com/dgrijalva/jwt-go/request",
     "github.com/gobuffalo/packr",

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/SherClockHolmes/webpush-go"
 	"github.com/jinzhu/gorm"
 	"github.com/segmentio/ksuid"
 	"time"
@@ -56,6 +57,7 @@ type User struct {
 	GamesWon    int32
 	WinRate     float64
 	Experience  int
+	PushSubscription webpush.Subscription
 }
 
 type Hat struct {
