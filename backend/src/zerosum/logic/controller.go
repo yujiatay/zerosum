@@ -69,8 +69,8 @@ func (c *GameController) gameLoop() {
 	for {
 		select {
 		case game := <-c.incomingGames:
-			log.Printf("GAME_RECEIVED: %s, %s, ends at %s (created by %s)", game.Id, game.GameMode,
-				game.EndTime.Format(TIME_FORMAT), game.UserId)
+			log.Printf("GAME_RECEIVED: %s, %s, %s, ends at %s (created by %s)", game.Id, game.GameMode,
+				game.Stakes, game.EndTime.Format(TIME_FORMAT), game.UserId)
 			c.consumeIncoming(game)
 		case game := <-c.finishedGames:
 			// Schedule the next game, if it has not already been updated
