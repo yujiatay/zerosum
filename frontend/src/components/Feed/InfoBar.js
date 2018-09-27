@@ -40,10 +40,7 @@ class InfoBar extends Component {
         </Typography>
         <Query query={GET_PROFILE} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
-          let userMoney = loading ? "???"
-            : error ? "???"
-              : data.profile.money === undefined ? "???"
-                : data.profile.money;
+          let userMoney = (data && data.profile) ? data.profile.money : "???";
           return (
             <Currency money={userMoney}/>
           )
