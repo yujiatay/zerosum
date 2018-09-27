@@ -226,7 +226,7 @@ const styles = theme => ({
     marginTop: 10,
   },
   errorMsg: {
-    color: '#b90f0f'
+    color: '#9d0606'
   }
 });
 
