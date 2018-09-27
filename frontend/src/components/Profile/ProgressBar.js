@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
@@ -54,13 +54,14 @@ class ProgressBar extends Component {
     let offset = 10.5;
     return (offset + progress * (expBarMaxWidth - offset)) + 'vw'
   };
+
   render() {
-    const { classes, level, expProgress } = this.props;
+    const {classes, level, expProgress} = this.props;
 
     return (
       <Paper elevation={0} className={classes.moneyInfo}>
         <Paper elevation={0} className={classes.blueCircle}>
-          <Typography variant="subheading"  className={classes.moneyText}>
+          <Typography variant="subheading" className={classes.moneyText}>
             {level}
           </Typography>
         </Paper>

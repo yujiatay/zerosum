@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
@@ -44,31 +44,31 @@ class Option extends Component {
   };
 
   render() {
-    const { classes, left, center, right, color, bgColor, button, clickHandler } = this.props;
+    const {classes, left, center, right, color, bgColor, button, clickHandler} = this.props;
     return (
       button
-      ? <Paper elevation={0} className={classes.button} style={{ backgroundColor: bgColor }}>
+        ? <Paper elevation={0} className={classes.button} style={{backgroundColor: bgColor}}>
           <ButtonBase className={classes.buttonBase} onClick={clickHandler}>
             <Paper elevation={0} className={classes.innerButton}>
-            <Typography style={{ color: color }}>
+              <Typography style={{color: color}}>
                 {left}
               </Typography>
-              <Typography style={{ color: color }}>
+              <Typography style={{color: color}}>
                 {center}
               </Typography>
-              <Typography style={{ color: color }}>
+              <Typography style={{color: color}}>
                 {right}
               </Typography>
             </Paper>
           </ButtonBase>
         </Paper>
-      :
-      <Paper elevation={0} className={classes.option} style={{ backgroundColor: bgColor }}>
-        <Input placeholder="Type here" disableUnderline autoFocus
-               classes={{input: classes.inputCenter}} fullWidth
-               onChange={this.handleInput}
-        />
-      </Paper>
+        :
+        <Paper elevation={0} className={classes.option} style={{backgroundColor: bgColor}}>
+          <Input placeholder="Type here" disableUnderline autoFocus
+                 classes={{input: classes.inputCenter}} fullWidth
+                 onChange={this.handleInput}
+          />
+        </Paper>
     );
   }
 }

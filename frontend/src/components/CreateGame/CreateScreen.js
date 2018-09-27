@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
@@ -12,7 +12,7 @@ import GameMode from "./GameMode";
 import TimeChoice from "./TimeChoice";
 import StakesMode from "./StakesMode";
 
-import { Mutation } from 'react-apollo';
+import {Mutation} from 'react-apollo';
 import gql from "graphql-tag";
 import ReactGA from "react-ga";
 
@@ -80,9 +80,11 @@ class CreateScreen extends Component {
       time: 5 // in minutes
     };
   }
+
   componentDidMount() {
     ReactGA.pageview('Create Game');
   };
+
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value,
@@ -122,7 +124,7 @@ class CreateScreen extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const {classes} = this.props;
     return (
       <div>
         <AppBar position="fixed">
@@ -133,7 +135,7 @@ class CreateScreen extends Component {
             <Typography className={classes.header} variant="display1" noWrap>
               reate game
             </Typography>
-            <div className={classes.grow} />
+            <div className={classes.grow}/>
             <div className={classes.sectionMobile}>
             </div>
           </Toolbar>
@@ -159,19 +161,21 @@ class CreateScreen extends Component {
           <StakesMode clickHandler={this.handleStakes} inputHandler={this.handleStakesInput}/>
           <SectionHeader text="Time"/>
           <TimeChoice choiceHandler={this.handleTime}/>
-          <Mutation mutation={CREATE_GAME} variables={{ gameInput: {
-            topic: this.state.topic,
-            duration: this.state.time,
-            gameMode: this.state.gmode,
-            stakes: this.state.smode,
-            options: this.state.options
-          }}}>
+          <Mutation mutation={CREATE_GAME} variables={{
+            gameInput: {
+              topic: this.state.topic,
+              duration: this.state.time,
+              gameMode: this.state.gmode,
+              stakes: this.state.smode,
+              options: this.state.options
+            }
+          }}>
             {createGame => (
-            <Button variant="contained" color="primary" className={classes.button} onClick={createGame}>
-              <Typography variant="subheading" className={classes.white}>
-                Submit
-              </Typography>
-            </Button>
+              <Button variant="contained" color="primary" className={classes.button} onClick={createGame}>
+                <Typography variant="subheading" className={classes.white}>
+                  Submit
+                </Typography>
+              </Button>
             )}
           </Mutation>
         </div>

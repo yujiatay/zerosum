@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Currency from "../shared/Currency";
@@ -19,7 +19,7 @@ const styles = theme => ({
 
 class InfoBar extends Component {
   render() {
-    const { classes, left, right } = this.props;
+    const {classes, left, right} = this.props;
 
     return (
       <Paper elevation={0} className={classes.subheader}>

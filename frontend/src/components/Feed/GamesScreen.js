@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import BottomNavBar from "../shared/BottomNavBar";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
@@ -77,11 +77,13 @@ class GamesScreen extends Component {
       smode: 'FIXED_STAKES'
     }
   }
+
   componentDidMount() {
     ReactGA.pageview('Games Feed');
   };
+
   handleChange = (event, value) => {
-    this.setState({ value });
+    this.setState({value});
   };
   handleFilter = () => {
     this.setState({
@@ -105,8 +107,8 @@ class GamesScreen extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { value } = this.state;
+    const {classes} = this.props;
+    const {value} = this.state;
 
     return (
       <div>
@@ -118,7 +120,7 @@ class GamesScreen extends Component {
             <Typography className={classes.header} variant="display1" noWrap>
               ames
             </Typography>
-            <div className={classes.grow} />
+            <div className={classes.grow}/>
             <div className={classes.sectionMobile}>
               <IconButton aria-haspopup="true" onClick={this.handleSearch} color="inherit">
                 <FontAwesomeIcon icon="search" size="sm"/>

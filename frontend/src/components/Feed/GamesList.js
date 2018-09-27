@@ -137,7 +137,7 @@ let parseTimeLeft = (endTime) => {
   let hours = Math.floor(totalMinutes / 60);
   let minutes = totalMinutes % 60;
 
-  let retString = " " +minutes + " min";
+  let retString = " " + minutes + " min";
   if (hours != 0) {
     retString = hours + " h " + retString
   }
@@ -145,12 +145,11 @@ let parseTimeLeft = (endTime) => {
 };
 
 
-
 class GamesList extends Component {
   render() {
     const {classes} = this.props;
     return (
-      <Query query={GET_GAMES} variables={{ filter: "" }} fetchPolicy="no-cache">
+      <Query query={GET_GAMES} variables={{filter: ""}} fetchPolicy="no-cache">
         {({loading, error, data}) => {
           if (loading) return (
             <Paper elevation={0} className={classes.body}>

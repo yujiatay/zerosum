@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
@@ -31,8 +31,9 @@ class ShopScreen extends Component {
   componentDidMount() {
     ReactGA.pageview('Shop');
   };
+
   render() {
-    const { classes } = this.props;
+    const {classes} = this.props;
     return (
       <div>
         <AppBar position="static">
@@ -43,7 +44,7 @@ class ShopScreen extends Component {
             <Typography className={classes.header} variant="display1" noWrap>
               hop
             </Typography>
-            <div className={classes.grow} />
+            <div className={classes.grow}/>
           </Toolbar>
         </AppBar>
 

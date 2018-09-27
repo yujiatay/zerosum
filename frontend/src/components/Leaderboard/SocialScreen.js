@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
 import AppBar from "@material-ui/core/AppBar/AppBar";
@@ -88,16 +88,18 @@ class SocialScreen extends Component {
       userRankState: false
     }
   }
+
   componentDidMount() {
     ReactGA.pageview('Leaderboard');
   };
+
   handleChange = (event, value) => {
-    this.setState({ value });
+    this.setState({value});
   };
 
   render() {
-    const { classes } = this.props;
-    const { value, userRankState } = this.state;
+    const {classes} = this.props;
+    const {value, userRankState} = this.state;
 
     return (
       <div className={classes.body}>
@@ -109,7 +111,7 @@ class SocialScreen extends Component {
             <Typography className={classes.header} variant="display1" noWrap>
               eaderboard
             </Typography>
-            <div className={classes.grow} />
+            <div className={classes.grow}/>
           </Toolbar>
         </AppBar>
 
@@ -140,34 +142,34 @@ class SocialScreen extends Component {
         {
           userRankState
             ?
-              <div className={classes.userRank}>
-                <Paper elevation={0} className={classes.rankContainer}>
-                  <Typography variant="display2" className={classes.rank}>
-                    99
-                  </Typography>
-                </Paper>
-                <Paper elevation={0} className={classes.user}>
-                  <Avatar
+            <div className={classes.userRank}>
+              <Paper elevation={0} className={classes.rankContainer}>
+                <Typography variant="display2" className={classes.rank}>
+                  99
+                </Typography>
+              </Paper>
+              <Paper elevation={0} className={classes.user}>
+                <Avatar
                   alt="Profile Pic"
                   src="https://via.placeholder.com/128x128"
                   className={classes.avatar}
-                  />
-                  <Typography variant="title" className={classes.username}>
+                />
+                <Typography variant="title" className={classes.username}>
                   Mad Hatter
-                  </Typography>
-                  </Paper>
-                  <Paper elevation={0}>
-                  <Typography variant="subheading" className={classes.rank}>
-                  75.0%
-                  </Typography>
-                </Paper>
-              </div>
-            :
-              <div className={classes.lockedContainer}>
-                <Typography variant="title" className={classes.lockedText} align="center">
-                  Play at least 10 games to appear on the leaderboard!
                 </Typography>
-              </div>
+              </Paper>
+              <Paper elevation={0}>
+                <Typography variant="subheading" className={classes.rank}>
+                  75.0%
+                </Typography>
+              </Paper>
+            </div>
+            :
+            <div className={classes.lockedContainer}>
+              <Typography variant="title" className={classes.lockedText} align="center">
+                Play at least 10 games to appear on the leaderboard!
+              </Typography>
+            </div>
         }
         <BottomNavBar value={3}/>
       </div>

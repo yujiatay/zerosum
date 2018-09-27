@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Typography from "@material-ui/core/Typography/Typography";
 import Paper from '@material-ui/core/Paper';
 
@@ -22,7 +22,7 @@ const styles = theme => ({
 
 class ProfileHats extends Component {
   render() {
-    const { classes } = this.props;
+    const {classes} = this.props;
     return (
       <Paper elevation={0} className={classes.body}>
         <div className={classes.textContainer}>

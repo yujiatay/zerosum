@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ButtonBase from "@material-ui/core/ButtonBase/ButtonBase";
 import Paper from "@material-ui/core/Paper/Paper";
 import {withStyles} from '@material-ui/core/styles';
@@ -25,7 +25,7 @@ const styles = theme => ({
 
 class SubmitButton extends Component {
   render() {
-    const { classes, submitHandler } = this.props;
+    const {classes, submitHandler} = this.props;
     return (
       <Paper elevation={1} className={classes.submit}>
         <ButtonBase className={classes.buttonBase} onClick={submitHandler}>

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Typography from "@material-ui/core/Typography/Typography";
 import Paper from "@material-ui/core/Paper/Paper";
 
@@ -19,7 +19,7 @@ const styles = theme => ({
 
 class SectionHeader extends Component {
   render() {
-    const { classes, text } = this.props;
+    const {classes, text} = this.props;
     return (
       <Paper elevation={0} className={classes.container}>
         <Typography variant="title" className={classes.text}>

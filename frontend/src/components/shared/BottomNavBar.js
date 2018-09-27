@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
+import {withStyles} from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 const styles = theme => ({
   stickToBottom: {
@@ -18,11 +18,11 @@ const styles = theme => ({
 
 class BottomNavBar extends Component {
   handleChange = (event, value) => {
-    this.setState({ value });
+    this.setState({value});
   };
 
   render() {
-    const { classes, value } = this.props;
+    const {classes, value} = this.props;
 
     return (
       <BottomNavigation
@@ -40,4 +40,5 @@ class BottomNavBar extends Component {
     );
   }
 }
+
 export default withStyles(styles)(BottomNavBar);

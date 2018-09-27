@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
@@ -70,6 +70,7 @@ class StakesMode extends Component {
       input: ''
     }
   }
+
   handleClick = (index, row) => {
     this.setState(prevState => ({
       selected: index + row * 2
@@ -90,7 +91,7 @@ class StakesMode extends Component {
     var regex = /^[a-zA-Z]+$/;
     if (!input.match(regex)) {
       var num = parseInt(input, 10);
-      if (num > 0 ) {
+      if (num > 0) {
         this.props.inputHandler(num);
       } else {
         // Negative number
@@ -101,9 +102,10 @@ class StakesMode extends Component {
       console.log("NaN inputted")
     }
   };
+
   render() {
-    const { classes } = this.props;
-    const { selected, firstRow, secondRow } = this.state;
+    const {classes} = this.props;
+    const {selected, firstRow, secondRow} = this.state;
     return (
       <div className={classes.container}>
         <div className={classes.row}>
@@ -122,32 +124,32 @@ class StakesMode extends Component {
           }
         </div>
         {/*<div className={classes.row}>*/}
-          {/*{*/}
-            {/*secondRow.map((stake, index) => (*/}
-              {/*<Paper key={index} elevation={0} className={selected === (index + 2) ? classes.selectedButton : classes.button}>*/}
-                {/*<ButtonBase className={classes.buttonBase} onClick={() => this.handleClick(index, 1)}>*/}
-                  {/*<Paper elevation={0} className={classes.innerButton}>*/}
-                    {/*<Typography className={selected === (index + 2) ? classes.selectedText : 'none'}>*/}
-                      {/*{stake}*/}
-                    {/*</Typography>*/}
-                  {/*</Paper>*/}
-                {/*</ButtonBase>*/}
-              {/*</Paper>*/}
-            {/*))*/}
-          {/*}*/}
+        {/*{*/}
+        {/*secondRow.map((stake, index) => (*/}
+        {/*<Paper key={index} elevation={0} className={selected === (index + 2) ? classes.selectedButton : classes.button}>*/}
+        {/*<ButtonBase className={classes.buttonBase} onClick={() => this.handleClick(index, 1)}>*/}
+        {/*<Paper elevation={0} className={classes.innerButton}>*/}
+        {/*<Typography className={selected === (index + 2) ? classes.selectedText : 'none'}>*/}
+        {/*{stake}*/}
+        {/*</Typography>*/}
+        {/*</Paper>*/}
+        {/*</ButtonBase>*/}
+        {/*</Paper>*/}
+        {/*))*/}
+        {/*}*/}
         {/*</div>*/}
         {/*{*/}
-          {/*(selected === 1 || selected === 2) &&*/}
-            {/*<Paper elevation={0}>*/}
-              {/*<Typography variant="title" className={classes.title}>*/}
-                {/*Please enter the amount of hattlecoins.*/}
-              {/*</Typography>*/}
-              {/*<Paper elevation={0} className={classes.input}>*/}
-                {/*<Input placeholder="0" disableUnderline fullWidth autoFocus*/}
-                       {/*onChange={this.handleInput} type="number" inputProps={{ min: "1"}}*/}
-                {/*/>*/}
-              {/*</Paper>*/}
-            {/*</Paper>*/}
+        {/*(selected === 1 || selected === 2) &&*/}
+        {/*<Paper elevation={0}>*/}
+        {/*<Typography variant="title" className={classes.title}>*/}
+        {/*Please enter the amount of hattlecoins.*/}
+        {/*</Typography>*/}
+        {/*<Paper elevation={0} className={classes.input}>*/}
+        {/*<Input placeholder="0" disableUnderline fullWidth autoFocus*/}
+        {/*onChange={this.handleInput} type="number" inputProps={{ min: "1"}}*/}
+        {/*/>*/}
+        {/*</Paper>*/}
+        {/*</Paper>*/}
         {/*}*/}
       </div>
     );

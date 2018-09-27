@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import HattleCoin from "../assets/hattlecoin.png";
@@ -43,7 +43,7 @@ const styles = theme => ({
 
 class Currency extends Component {
   render() {
-    const { classes, money } = this.props;
+    const {classes, money} = this.props;
 
     return (
       <Paper elevation={0} className={classes.moneyInfo}>
@@ -51,7 +51,7 @@ class Currency extends Component {
           <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
         </Paper>
         <Paper elevation={0} className={classes.blueRect}>
-          <Typography variant="subheading"  className={classes.moneyText}>
+          <Typography variant="subheading" className={classes.moneyText}>
             {money}
           </Typography>
         </Paper>

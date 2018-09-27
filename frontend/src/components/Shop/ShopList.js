@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from "@material-ui/core/Typography/Typography";
 import ButtonBase from '@material-ui/core/ButtonBase';
@@ -71,12 +71,13 @@ class ShopList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [0,1,2,3,4,5,6,7,8]
+      items: [0, 1, 2, 3, 4, 5, 6, 7, 8]
     }
   }
+
   render() {
-    const { classes } = this.props;
-    const { items } = this.state;
+    const {classes} = this.props;
+    const {items} = this.state;
     return (
       <Paper elevation={0} className={classes.body}>
         {
@@ -90,7 +91,7 @@ class ShopList extends Component {
                   <img alt="Hat" src={ZeroSumCap} className={classes.hat}/>
                   <Paper elevation={0} className={classes.moneyInfo}>
                     <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                    <Typography variant="subheading"  className={classes.moneyText}>
+                    <Typography variant="subheading" className={classes.moneyText}>
                       1000
                     </Typography>
                   </Paper>
@@ -103,4 +104,5 @@ class ShopList extends Component {
     );
   }
 }
+
 export default withStyles(styles)(ShopList);

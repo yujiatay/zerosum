@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
@@ -53,6 +53,7 @@ class GameMode extends Component {
       selected: true
     }
   }
+
   handleClick = event => {
     this.setState(prevState => ({
       selected: !prevState.selected
@@ -64,9 +65,10 @@ class GameMode extends Component {
       }
     })
   };
+
   render() {
-    const { classes } = this.props;
-    const { selected } = this.state;
+    const {classes} = this.props;
+    const {selected} = this.state;
     return (
       <div className={classes.container}>
         <Paper elevation={0} className={selected ? classes.selectedButton : classes.button}>

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
 import Option from "./Option";
 
 const styles = theme => ({
@@ -16,6 +16,7 @@ class OptionList extends Component {
       counter: 0,
     }
   }
+
   handleClick = () => {
     this.setState(prevState => ({
       counter: prevState.counter + 1
@@ -25,11 +26,11 @@ class OptionList extends Component {
   };
 
   handleAddOption = () => {
-    this.props.addHandler([...this.props.options, 'nil' ])
+    this.props.addHandler([...this.props.options, 'nil'])
   };
 
   render() {
-    const { classes } = this.props;
+    const {classes} = this.props;
     return (
       <div className={classes.container}>
         {
@@ -38,8 +39,8 @@ class OptionList extends Component {
           ))
         }
 
-        { this.state.counter < 4 &&
-          <Option button clickHandler={this.handleClick}
+        {this.state.counter < 4 &&
+        <Option button clickHandler={this.handleClick}
                 color='#C1CAD6' center="NEW OPTION" left="+" bgColor='#d7f1f5'/>
         }
       </div>

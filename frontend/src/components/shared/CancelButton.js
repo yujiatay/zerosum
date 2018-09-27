@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ButtonBase from "@material-ui/core/ButtonBase/ButtonBase";
 import Paper from "@material-ui/core/Paper/Paper";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -25,7 +25,7 @@ const styles = theme => ({
 
 class CancelButton extends Component {
   render() {
-    const { classes, closeHandler } = this.props;
+    const {classes, closeHandler} = this.props;
     return (
       <Paper elevation={0} className={classes.cancel}>
         <ButtonBase className={classes.cancelButton} onClick={closeHandler}>
