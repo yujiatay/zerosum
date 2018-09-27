@@ -24,6 +24,7 @@ const styles = theme => ({
   body: {
     backgroundColor: '#068D9D',
     display: 'flex',
+    justifyContent: 'center',
     borderRadius: 0,
     overflowY: 'auto',
     height: `calc(100vh - 26.703125rem)`, // deduct height of everything else from viewport
@@ -34,6 +35,16 @@ const styles = theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     padding: theme.spacing.unit
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: `calc(100vh - 26.703125rem)`,
+  },
+  hatperor: {
+    width: 250
   }
 });
 

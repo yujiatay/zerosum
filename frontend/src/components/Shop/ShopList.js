@@ -34,6 +34,16 @@ const styles = theme => ({
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
   },
+  body2: {
+    backgroundColor: '#068D9D',
+    borderRadius: 0,
+    overflowY: 'auto',
+    height: `calc(100vh - 12.625rem)`, // deduct height of everything else from viewport
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
   card: {
     width: '45vw',
     height: '45vw',
@@ -81,6 +91,16 @@ const styles = theme => ({
   },
   hat: {
     width: '25vw'
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: `calc(100vh - 12.625rem)`,
+  },
+  hatperor: {
+    width: 250
   }
 });
 
@@ -98,14 +118,14 @@ class ShopList extends Component {
       <Query query={GET_STORE_HATS} variables={{owned: false}} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
           if (loading) return (
-            <Paper elevation={0} className={classes.body}>
+            <Paper elevation={0} className={classes.body2}>
               <div className={classes.container}>
                 <CircularProgress color="primary"/>
               </div>
             </Paper>
           );
           if (!data) return (
-            <Paper elevation={0} className={classes.body}>
+            <Paper elevation={0} className={classes.body2}>
               <div className={classes.container}>
                 <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
                 <Typography variant="display1" color="textSecondary">
