@@ -58,7 +58,7 @@ func main() {
 	if err != nil {
 		log.Printf("Failed to init graphql handler: %v", err)
 	}
-	auth.NewAuth(
+	auth.InitAuthWithSettings(
 		os.Getenv("ZEROSUM_SECRET"),
 		os.Getenv("FACEBOOK_APP_ID"),
 		os.Getenv("FACEBOOK_ACCESS_TOKEN"),
@@ -67,10 +67,10 @@ func main() {
 
 	authRouter := mux.NewRouter()
 	authRouter.Handle("/gql", gqlHandler)
-	an := negroni.New(negroni.WrapFunc(auth.Auth.JWTMiddleware), negroni.Wrap(authRouter))
+	an := negroni.New(negroni.WrapFunc(auth.JWTMiddleware), negroni.Wrap(authRouter))
 
 	router := mux.NewRouter()
-	router.HandleFunc("/login/facebook", auth.Auth.FbLoginHandler).Methods("POST")
+	router.HandleFunc("/login/facebook", auth.FbLoginHandler).Methods("POST")
 	router.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(staticFiles)))
 	if DEBUG {
 		router.Handle("/noauth/gql", gqlHandler)
