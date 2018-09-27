@@ -18,7 +18,7 @@ import AngryHatperor from "../assets/angry-hatperor.png";
 const GET_LEADERBOARD = gql`
   query GetLeaderboard($limit: Int!) {
     leaderboard(limit: $limit) {
-      id
+      name
       winRate
     }
   }
@@ -166,7 +166,7 @@ class Leaderboard extends Component {
                               className={classes.avatar}
                             />
                             <Typography variant="title" className={classes.username}>
-                              {user.id}
+                              {user.name}
                             </Typography>
                           </Paper>
                           <Paper elevation={0}>

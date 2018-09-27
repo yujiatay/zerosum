@@ -11,6 +11,20 @@ import Paper from "@material-ui/core/Paper/Paper";
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import ReactGA from "react-ga";
 
+import {Query} from 'react-apollo'
+import gql from 'graphql-tag'
+
+const GET_RANKING = gql`
+  {
+    user {
+      name
+      winRate
+      ranking
+    }
+  }
+`;
+
+
 const styles = theme => ({
   header: {
     textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
@@ -79,6 +93,12 @@ const styles = theme => ({
   }
 });
 
+let parseWinRate = (rawWinRate) => {
+  let winRate = rawWinRate * 100.0;
+  return winRate.toFixed(1) + "%"
+};
+
+
 class SocialScreen extends Component {
   constructor(props) {
     super(props);
@@ -138,39 +158,46 @@ class SocialScreen extends Component {
         </div>
         {value === 0 && <Leaderboard list={this.state.ranking}/>}
         {value === 1 && <Leaderboard/>}
+        <Query query={GET_RANKING} fetchPolicy="cache-and-network" errorPolicy="ignore">
+          {({loading, error, data}) => {
+            if (loading) { return null}
+            if (error) { return null}
+            let profile = data ? data.user : null;
+            return profile.ranking == null
+              ? (
+                <div className={classes.lockedContainer}>
+                  <Typography variant="title" className={classes.lockedText} align="center">
+                    Play at least 10 games to appear on the leaderboard!
+                  </Typography>
+                </div>
+              )
+              : (
+                <div className={classes.userRank}>
+                  <Paper elevation={0} className={classes.rankContainer}>
+                    <Typography variant="display2" className={classes.rank}>
+                      {profile.ranking}
+                    </Typography>
+                  </Paper>
+                  <Paper elevation={0} className={classes.user}>
+                    <Avatar
+                      alt="Profile Pic"
+                      src="https://via.placeholder.com/128x128"
+                      className={classes.avatar}
+                    />
+                    <Typography variant="title" className={classes.username}>
+                      {profile.name}
+                    </Typography>
+                  </Paper>
+                  <Paper elevation={0}>
+                    <Typography variant="subheading" className={classes.rank}>
+                      {parseWinRate(profile.winRate)}
+                    </Typography>
+                  </Paper>
+                </div>
+              );
 
-        {
-          userRankState
-            ?
-            <div className={classes.userRank}>
-              <Paper elevation={0} className={classes.rankContainer}>
-                <Typography variant="display2" className={classes.rank}>
-                  99
-                </Typography>
-              </Paper>
-              <Paper elevation={0} className={classes.user}>
-                <Avatar
-                  alt="Profile Pic"
-                  src="https://via.placeholder.com/128x128"
-                  className={classes.avatar}
-                />
-                <Typography variant="title" className={classes.username}>
-                  Mad Hatter
-                </Typography>
-              </Paper>
-              <Paper elevation={0}>
-                <Typography variant="subheading" className={classes.rank}>
-                  75.0%
-                </Typography>
-              </Paper>
-            </div>
-            :
-            <div className={classes.lockedContainer}>
-              <Typography variant="title" className={classes.lockedText} align="center">
-                Play at least 10 games to appear on the leaderboard!
-              </Typography>
-            </div>
-        }
+          }}
+        </Query>
         <BottomNavBar value={3}/>
       </div>
     );
