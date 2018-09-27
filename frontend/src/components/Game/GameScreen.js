@@ -25,6 +25,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {Mutation, Query} from 'react-apollo';
 import gql from "graphql-tag";
+import CancelButton from "../CancelButton";
+import SubmitButton from "../SubmitButton";
 
 
 const CREATE_VOTE = gql`
@@ -210,35 +212,6 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
-  },
-  submit: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: theme.spacing.unit * 2,
-    backgroundColor: '#014262'
-  },
-  buttonBase: {
-    flex: 1,
-    display: 'block'
-  },
-  innerSubmit: {
-    backgroundColor: 'transparent',
-    display: 'flex',
-    justifyContent: 'center',
-    padding: 5
-  },
-  cancel: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  cancelButton: {
-    display: 'block'
-  },
-  innerCancel: {
-    backgroundColor: 'transparent',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    padding: 5
   }
 });
 
@@ -350,14 +323,7 @@ class GameScreen extends Component {
                     </DialogContent>
                   : <Fragment>
 
-                    <Paper elevation={0} className={classes.cancel}>
-                      <ButtonBase className={classes.cancelButton} onClick={this.handleClose}>
-                        <Paper elevation={0} className={classes.innerCancel}>
-                          <FontAwesomeIcon icon="times-circle" size="2x" className={classes.failure}/>
-                        </Paper>
-                      </ButtonBase>
-                    </Paper>
-
+                    <CancelButton closeHandler={this.handleClose}/>
                     <DialogContent>
                       <Typography variant="title" color="textPrimary" align="center">
                         {
@@ -393,15 +359,7 @@ class GameScreen extends Component {
                           onChange={this.handleChange('bet')}
                         />
                       }
-                      <Paper elevation={1} className={classes.submit}>
-                        <ButtonBase className={classes.buttonBase} onClick={createVote}>
-                          <Paper elevation={0} className={classes.innerSubmit}>
-                            <Typography variant="subheading" color="textSecondary">
-                              Submit
-                            </Typography>
-                          </Paper>
-                        </ButtonBase>
-                      </Paper>
+                      <SubmitButton submitHandler={createVote}/>
                     </DialogContent>
                   </Fragment>
               }

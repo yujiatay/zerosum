@@ -114,6 +114,11 @@ const theme = createMuiTheme({
         },
       }
     },
+    MuiDialog: {
+      paper: {
+        margin: '10vw'
+      }
+    }
   }
 });
 
