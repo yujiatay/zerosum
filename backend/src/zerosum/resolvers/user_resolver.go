@@ -21,6 +21,10 @@ func (u *UserResolver) NAME(ctx context.Context) *string {
 	return &u.user.Name
 }
 
+func (u *UserResolver) IMG(ctx context.Context) *string {
+	return &u.user.Picture
+}
+
 func (u *UserResolver) MONEY(ctx context.Context) *int32 {
 	money := int32(u.user.MoneyTotal)
 	return &money

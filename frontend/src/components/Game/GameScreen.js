@@ -504,7 +504,7 @@ class GameScreen extends Component {
               <CardContent className={classes.poster}>
                 <Avatar
                   alt="Profile Pic"
-                  src="https://via.placeholder.com/128x128"
+                  src={parsedGame.owner.img}
                   className={classes.avatar}
                 />
                 <Typography variant="title">

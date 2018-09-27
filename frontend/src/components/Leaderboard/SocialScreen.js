@@ -18,6 +18,7 @@ const GET_RANKING = gql`
   {
     user {
       name
+      img
       winRate
       ranking
     }
@@ -181,7 +182,7 @@ class SocialScreen extends Component {
                   <Paper elevation={0} className={classes.user}>
                     <Avatar
                       alt="Profile Pic"
-                      src="https://via.placeholder.com/128x128"
+                      src={profile.img}
                       className={classes.avatar}
                     />
                     <Typography variant="title" className={classes.username}>

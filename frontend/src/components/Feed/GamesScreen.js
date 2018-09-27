@@ -33,6 +33,7 @@ const GET_GAMES = gql`
       id
       owner {
         name
+        img
       }
       topic
       endTime

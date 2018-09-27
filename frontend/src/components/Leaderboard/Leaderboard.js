@@ -19,6 +19,7 @@ const GET_LEADERBOARD = gql`
   query GetLeaderboard($limit: Int!) {
     leaderboard(limit: $limit) {
       name
+      img
       winRate
     }
   }
@@ -162,7 +163,7 @@ class Leaderboard extends Component {
                           <Paper elevation={0} className={classes.user}>
                             <Avatar
                               alt="Profile Pic"
-                              src="https://via.placeholder.com/128x128"
+                              src={user.img}
                               className={classes.avatar}
                             />
                             <Typography variant="title" className={classes.username}>

@@ -81,6 +81,7 @@ type Option {
 type User {
     id: ID!
     name: String
+    img: String
     money: Int
     winRate: Float
     level: Int

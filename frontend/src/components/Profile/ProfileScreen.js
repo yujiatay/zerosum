@@ -80,6 +80,7 @@ const GET_PROFILE = gql`
   {
     user {
       name
+      img
       winRate
       money
       level
@@ -157,7 +158,7 @@ class ProfileScreen extends Component {
                 <div className={classes.row}>
                   <Avatar
                     alt="Profile Pic"
-                    src="https://via.placeholder.com/128x128"
+                    src={profile ? profile.img : "https://via.placeholder.com/128x128"}
                     className={classes.bigAvatar}
                   />
                 </div>
