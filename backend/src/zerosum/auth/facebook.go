@@ -6,6 +6,7 @@ import (
 	"github.com/graph-gophers/graphql-go/errors"
 	"log"
 	"net/http"
+	"time"
 	"zerosum/logic"
 	"zerosum/models"
 	"zerosum/repository"
@@ -24,6 +25,11 @@ type fbVerificationResponse struct {
 type fbLoginRequest struct {
 	AccessToken string `json:"accessToken"`
 	UserID      string `json:"userID"`
+}
+
+type fbLoginResponse struct {
+	Token   string `json:"token"`
+	NewUser bool   `json:"newUser"`
 }
 
 func FbLoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -54,7 +60,16 @@ func FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
-	w.Write([]byte(signedToken))
+	res, err := json.Marshal(fbLoginResponse{
+		Token:   signedToken,
+		NewUser: time.Now().Sub(user.CreatedAt).Seconds() < 5,
+	})
+	if err != nil {
+		log.Print(err)
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	w.Write(res)
 }
 
 func getFbProfile(token string) (profile fbProfile, err error) {

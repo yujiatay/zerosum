@@ -11,9 +11,9 @@ export function loginWithFacebook(fbAccessToken, fbUserID, loginSuccessCallback)
     accessToken: fbAccessToken,
     userID: fbUserID
   }).then(r => {
-    return localForage.setItem("token", r.data).then(() => {
-      token = r.data;
-      loginSuccessCallback()
+    return localForage.setItem("token", r.data.token).then(() => {
+      token = r.data.token;
+      loginSuccessCallback(r.data.newUser)
     }).then(() => {
       // Clear any prior cache
       return client.resetStore().then(() => persistor.resume()).catch((e) => {
