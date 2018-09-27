@@ -27,6 +27,7 @@ import {Mutation, Query} from 'react-apollo';
 import gql from "graphql-tag";
 import CancelButton from "../shared/CancelButton";
 import SubmitButton from "../shared/SubmitButton";
+import InfoBar from "../Feed/InfoBar";
 
 
 const CREATE_VOTE = gql`
@@ -58,6 +59,14 @@ const GET_VOTE = gql`
   }
 `;
 
+const GET_PROFILE = gql`
+  {
+    profile {
+      money
+
+    }
+  }
+`;
 
 const styles = theme => ({
   fullHeight: {
@@ -488,10 +497,17 @@ class GameScreen extends Component {
                   className={classes.avatar}
                 />
                 <Typography variant="title">
-                  Poster
+                  {parsedGame.owner.name}
                 </Typography>
               </CardContent>
-              <Currency money="100"/>
+              <Query query={GET_PROFILE} fetchPolicy="cache-and-network" errorPolicy="ignore">
+                {({loading, error, data}) => {
+                  let userMoney = (data && data.profile) ? data.profile.money : "???";
+                  return (
+                    <Currency money={userMoney}/>
+                  )
+                }}
+              </Query>
             </CardContent>
 
             <Paper elevation={0} className={classes.pot}>

@@ -31,6 +31,9 @@ const GET_GAMES = gql`
   query GetGames($filter: String!, $limit: Int, $after: String) {
     games(filter: $filter, limit: $limit, after: $after) {
       id
+      owner {
+        name
+      }
       topic
       endTime
       totalMoney

@@ -141,7 +141,8 @@ class GamesList extends Component {
                               options: game.options,
                               resolved: game.resolved,
                               voted: game.voted,
-                              totalMoney: game.totalMoney
+                              totalMoney: game.totalMoney,
+                              owner: game.owner
                             }
                           }
                         }}>
