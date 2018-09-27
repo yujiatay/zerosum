@@ -19,14 +19,16 @@ func InitTestDB() (err error) {
 		"postgres", "password", "zerosum", "localhost", 5432))
 
 	// Set up database tables
-	db.AutoMigrate(&models.Game{}, &models.Vote{}, &models.Option{}, &models.User{})
+	db.AutoMigrate(&models.Game{}, &models.Option{}, &models.User{}, &models.Hat{}, &models.Vote{}, &models.HatOwnership{})
 
 	// Add foreign key constraints
 	db.Model(models.Game{}).AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
 	db.Model(models.Option{}).AddForeignKey("game_id", "games(id)", "CASCADE", "RESTRICT")
-	db.Model(models.Vote{}).AddForeignKey("game_id", "games(id)", "CASCADE", "RESTRICT")
 	db.Model(models.Vote{}).AddForeignKey("option_id", "options(id)", "CASCADE", "RESTRICT")
 	db.Model(models.Vote{}).AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
+	db.Model(models.Vote{}).AddForeignKey("game_id", "games(id)", "CASCADE", "RESTRICT")
+	db.Model(models.HatOwnership{}).AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
+	db.Model(models.HatOwnership{}).AddForeignKey("hat_id", "hats(id)", "CASCADE", "RESTRICT")
 	return
 }
 

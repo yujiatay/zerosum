@@ -29,7 +29,7 @@ type Game struct {
 	Stakes       Stakes
 	GameMode     GameMode
 	Options      []Option `gorm:"foreignkey:GameId"`
-	Participants []User   `gorm:"many2many:votes;foreignkey:GameId"`
+	Participants []User   `gorm:"many2many:votes;"`
 	Resolved     bool
 }
 
@@ -37,7 +37,7 @@ type Option struct {
 	Id     string `gorm:"primary_key"`
 	Body   string
 	GameId string // foreign key from game
-	Users  []User `gorm:"many2many:votes;foreignkey:OptionId"`
+	Users  []User `gorm:"many2many:votes;"`
 	// Computed values after completion, stored to reduce computation
 	Resolved   bool
 	Winner     bool
@@ -46,16 +46,31 @@ type Option struct {
 }
 
 type User struct {
-	Id                string `gorm:"primary_key"`
-	Name              string
-	MoneyTotal        int32
-	GamesCreated      []Game `gorm:"foreignkey:UserId"`
-	GamesParticipated []Game `gorm:"foreignkey:UserId"`
-	FbId              string `gorm:"unique_index"`
-	GamesPlayed       int32
-	GamesWon          int32
-	WinRate           float64
-	Experience        int
+	Id          string `gorm:"primary_key"`
+	Name        string
+	MoneyTotal  int32
+	Hats        []Hat  `gorm:"many2many:hat_ownerships;"`
+	GamesCreate []Game `gorm:"foreignkey:UserId"`
+	FbId        string `gorm:"unique_index"`
+	GamesPlayed int32
+	GamesWon    int32
+	WinRate     float64
+	Experience  int
+}
+
+type Hat struct {
+	Id        string `gorm:"primary_key"`
+	Name      string
+	Price     int32
+	StoreLink string
+	ImgLink   string
+	Achieve   bool
+}
+
+type HatOwnership struct {
+	HatId  string `gorm:"primary_key"` //foreign key from hat
+	UserId string `gorm:"primary_key"` // foreign key from user
+	Owned  bool
 }
 
 type Vote struct {
