@@ -17,7 +17,7 @@ type pushSettings struct {
 
 var settings pushSettings
 
-func InitPushWithSettings(privKey, httpClient *http.Client) {
+func InitPushWithSettings(privKey string, httpClient *http.Client) {
 	settings = pushSettings{
 		privateKey: privKey,
 		sub:        "mailto:guowei@u.nus.edu",
