@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"time"
 	"zerosum/models"
 )
 
@@ -73,7 +74,7 @@ func SearchGames(searchString string, limit *int32, after *int32) (games []model
 		interm = interm.Limit(*limit)
 	}
 
-	res := interm.Where("topic LIKE ? AND end_time < ", fmt.Sprintf("%%%s%%", searchString), time.Now()).Find(&games)
+	res := interm.Where("topic LIKE ? AND end_time < ?", fmt.Sprintf("%%%s%%", searchString), time.Now()).Find(&games)
 	if res.Error != nil {
 		err = res.Error
 	}
