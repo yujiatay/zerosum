@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import BottomNavBar from "../shared/BottomNavBar";
@@ -15,10 +15,9 @@ import Dialog from "@material-ui/core/Dialog/Dialog";
 import GameMode from "../CreateGame/GameMode";
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import StakesMode from "../CreateGame/StakesMode";
-import ButtonBase from "@material-ui/core/ButtonBase/ButtonBase";
-import Paper from "@material-ui/core/Paper/Paper";
 import CancelButton from "../shared/CancelButton";
 import SubmitButton from "../shared/SubmitButton";
+import Input from '@material-ui/core/Input';
 
 import {Query} from 'react-apollo';
 import gql from "graphql-tag";
@@ -90,6 +89,20 @@ const styles = theme => ({
     justifyContent: 'center',
     padding: 5
   },
+  inputRoot: {
+    color: 'inherit',
+    width: '100%',
+  },
+  inputInput: {
+    paddingTop: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+  },
+  backButton: {
+    justifyContent: 'flex-start'
+  },
 });
 
 class GamesScreen extends Component {
@@ -99,7 +112,8 @@ class GamesScreen extends Component {
       value: 0,
       filterDialog: false,
       gmode: 'MAJORITY',
-      smode: 'FIXED_STAKES'
+      smode: 'FIXED_STAKES',
+      searchBarState: false
     }
   }
 
@@ -130,30 +144,60 @@ class GamesScreen extends Component {
       smode: stake
     })
   };
+  handleSearch = () => {
+    this.setState({
+      searchBarState: true
+    })
+  };
+  handleBack = () => {
+    this.setState({
+      searchBarState: false
+    })
+  };
 
   render() {
     const {classes} = this.props;
-    const {value} = this.state;
+    const {value, searchBarState} = this.state;
 
     return (
       <div>
         <AppBar position="static">
           <Toolbar>
-            <Typography className={classes.header} variant="display2" noWrap>
-              G
-            </Typography>
-            <Typography className={classes.header} variant="display1" noWrap>
-              ames
-            </Typography>
-            <div className={classes.grow}/>
-            <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleSearch} color="inherit">
-                <FontAwesomeIcon icon="search" size="sm"/>
-              </IconButton>
-              <IconButton aria-haspopup="true" onClick={this.handleFilter} color="inherit">
-                <FontAwesomeIcon icon="filter" size="sm"/>
-              </IconButton>
-            </div>
+            {
+              searchBarState
+                ?
+                  <Fragment>
+                    <IconButton aria-haspopup="true" className={classes.backButton}
+                                onClick={this.handleBack} color="inherit">
+                      <FontAwesomeIcon icon="arrow-left" size="sm"/>
+                    </IconButton>
+                    <Input
+                      placeholder="Search"
+                      // disableUnderline
+                      classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput,
+                      }}
+                    />
+                  </Fragment>
+                : <Fragment>
+                  <Typography className={classes.header} variant="display2" noWrap>
+                    G
+                  </Typography>
+                  <Typography className={classes.header} variant="display1" noWrap>
+                    ames
+                  </Typography>
+                  <div className={classes.grow}/>
+                  <div className={classes.sectionMobile}>
+                    <IconButton aria-haspopup="true" onClick={this.handleSearch} color="inherit">
+                      <FontAwesomeIcon icon="search" size="sm"/>
+                    </IconButton>
+                    <IconButton aria-haspopup="true" onClick={this.handleFilter} color="inherit">
+                      <FontAwesomeIcon icon="filter" size="sm"/>
+                    </IconButton>
+                  </div>
+                </Fragment>
+            }
           </Toolbar>
         </AppBar>
         <InfoBar left="999 ongoing games!" right="100"/>
