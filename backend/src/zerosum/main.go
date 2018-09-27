@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 	"zerosum/auth"
 	"zerosum/logic"
 	"zerosum/repository"
@@ -64,10 +65,14 @@ func main() {
 	if err != nil {
 		log.Printf("Failed to init graphql handler: %v", err)
 	}
+	httpClient := http.Client{
+		Timeout: time.Second * 10,
+	}
 	auth.InitAuthWithSettings(
 		os.Getenv("ZEROSUM_SECRET"),
 		os.Getenv("FACEBOOK_APP_ID"),
 		os.Getenv("FACEBOOK_ACCESS_TOKEN"),
+		&httpClient,
 	)
 	staticFiles := packr.NewBox("./static")
 

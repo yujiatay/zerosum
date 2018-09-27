@@ -3,7 +3,6 @@ package auth
 import (
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
-	"time"
 	"zerosum/models"
 )
 
@@ -24,14 +23,12 @@ func generateSignedUserToken(user models.User) (string, error) {
 	return token.SignedString([]byte(settings.secret))
 }
 
-func InitAuthWithSettings(secret, fbAppId, fbAccessToken string) {
+func InitAuthWithSettings(secret, fbAppId, fbAccessToken string, httpClient *http.Client) {
 	settings = authSettings{
 		secret:        secret,
 		signingMethod: jwt.SigningMethodHS256,
 		fbAppId:       fbAppId,
 		fbAccessToken: fbAccessToken,
-		httpClient: &http.Client{
-			Timeout: time.Second * 10,
-		},
+		httpClient:    httpClient,
 	}
 }
