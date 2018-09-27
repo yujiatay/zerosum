@@ -11,6 +11,8 @@ import BronzeFeather from '../assets/third-place-feather.png';
 
 import {Query} from 'react-apollo';
 import gql from "graphql-tag";
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+import AngryHatperor from "../assets/angry-hatperor.png";
 
 
 const GET_LEADERBOARD = gql`
@@ -88,6 +90,16 @@ const styles = theme => ({
     position: 'absolute',
     left: -10,
     top: -5
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: `calc(100vh - 17.4375rem)`
+  },
+  hatperor: {
+    width: 250
   }
 });
 
@@ -103,8 +115,23 @@ class Leaderboard extends Component {
     return (
       <Query query={GET_LEADERBOARD} variables={{limit: 10}}>
         {({loading, error, data}) => {
-          if (loading) return <div>Fetching</div>;
-          if (error) return <div>Error</div>;
+          if (loading) return (
+            <Paper elevation={0} className={classes.body}>
+              <div className={classes.container}>
+                <CircularProgress color="primary"/>
+              </div>
+            </Paper>
+          );
+          if (error) return (
+            <Paper elevation={0} className={classes.body}>
+              <div className={classes.container}>
+                <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
+                <Typography variant="display1" color="textSecondary">
+                  Connection error!
+                </Typography>
+              </div>
+            </Paper>
+          );
 
           const leaders = data.getLeaderboard;
           console.log(leaders);

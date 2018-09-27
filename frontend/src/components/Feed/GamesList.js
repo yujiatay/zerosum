@@ -9,6 +9,8 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Dice from '../assets/dice-logo-blue.png';
 import Money from '../assets/money-bag.png';
+import AngryHatperor from '../assets/angry-hatperor.png';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {Query} from 'react-apollo';
 import gql from "graphql-tag";
@@ -92,6 +94,16 @@ const styles = theme => ({
   },
   moneyText: {
     lineHeight: 'inherit'
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: `calc(100vh - 13.375rem)`
+  },
+  hatperor: {
+    width: 250
   }
 });
 
@@ -137,8 +149,23 @@ class GamesList extends Component {
     return (
       <Query query={GET_GAMES} variables={{ filter: "" }}>
         {({loading, error, data}) => {
-          if (loading) return <div>Fetching</div>;
-          if (error) return <div>Error</div>;
+          if (loading) return (
+            <Paper elevation={0} className={classes.body}>
+              <div className={classes.container}>
+                <CircularProgress color="primary"/>
+              </div>
+            </Paper>
+          );
+          if (error) return (
+            <Paper elevation={0} className={classes.body}>
+              <div className={classes.container}>
+                <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
+                <Typography variant="display1" color="textSecondary">
+                  Connection error!
+                </Typography>
+              </div>
+            </Paper>
+          );
 
           const games = data.getGames;
           console.log(games);
