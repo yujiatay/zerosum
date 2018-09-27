@@ -48,7 +48,7 @@ class ShopScreen extends Component {
           </Toolbar>
         </AppBar>
 
-        <InfoBar left="Welcome to the shop!" right="100"/>
+        <InfoBar left="Welcome to the shop!"/>
         <Paper elevation={0} className={classes.category}>
           <Typography variant="subheading" className={classes.white}>
             Hats

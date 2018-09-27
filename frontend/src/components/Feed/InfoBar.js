@@ -4,6 +4,18 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Currency from "../shared/Currency";
 
+import {Query} from 'react-apollo'
+import gql from 'graphql-tag'
+
+const GET_PROFILE = gql`
+  {
+    getProfile {
+      money
+
+    }
+  }
+`;
+
 const styles = theme => ({
   subheader: {
     display: 'flex',
@@ -19,14 +31,23 @@ const styles = theme => ({
 
 class InfoBar extends Component {
   render() {
-    const {classes, left, right} = this.props;
+    const {classes, left} = this.props;
 
     return (
       <Paper elevation={0} className={classes.subheader}>
         <Typography variant="title" align="left">
           {left}
         </Typography>
-        <Currency money={right}/>
+        <Query query={GET_PROFILE} fetchPolicy="cache-and-network" errorPolicy="ignore">
+        {({loading, error, data}) => {
+          let userMoney = loading ? "???"
+            : error ? "???"
+              : data.getProfile.money;
+          return (
+            <Currency money={userMoney}/>
+          )
+        }}
+        </Query>
       </Paper>
     );
   }

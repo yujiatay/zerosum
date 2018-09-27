@@ -201,7 +201,7 @@ class GamesScreen extends Component {
             }
           </Toolbar>
         </AppBar>
-        <InfoBar left="999 ongoing games!" right="100"/>
+        <InfoBar left="999 ongoing games!"/>
         <AppBar position="static">
           <Tabs value={value} onChange={this.handleChange}
                 textColor="primary" fullWidth elevation={0}
