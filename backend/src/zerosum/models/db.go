@@ -58,6 +58,7 @@ type User struct {
 	GamesWon         int32
 	WinRate          float64
 	Experience       int
+	Picture string
 	PushSubscription webpush.Subscription
 }
 

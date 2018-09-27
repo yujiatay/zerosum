@@ -17,7 +17,7 @@ type fbProfile struct {
 	Id   string                 `json:"id"`
 	Err  map[string]interface{} `json:"error"`
 }
-type fbVerificationResponse struct {
+type fbResponse struct {
 	Data map[string]interface{} `json:"data"`
 	Err  map[string]interface{} `json:"error"`
 }
@@ -31,6 +31,7 @@ type loginResponse struct {
 	Token   string `json:"token"`
 	NewUser bool   `json:"newUser"`
 }
+type msi map[string]interface{}
 
 func FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 	var loginRequest fbLoginRequest
@@ -60,14 +61,23 @@ func FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
+	isNewUser := time.Now().Sub(user.CreatedAt).Seconds() < 5
 	res, err := json.Marshal(loginResponse{
 		Token:   signedToken,
-		NewUser: time.Now().Sub(user.CreatedAt).Seconds() < 5,
+		NewUser: isNewUser,
 	})
 	if err != nil {
 		log.Print(err)
 		http.Error(w, err.Error(), 500)
 		return
+	}
+	if isNewUser {
+		user.Name = profile.Name
+		user.Picture, err = GetFbPicture(profile.Id)
+		if err != nil {
+			log.Print(err)
+		}
+		repository.UpdateUser(user)
 	}
 	w.Write(res)
 }
@@ -87,6 +97,22 @@ func getFbProfile(token string) (fbProfile, error) {
 	}
 	return profile, err
 }
+
+func GetFbPicture(userId string) (string, error) {
+	var fbRes fbResponse
+	res, err := settings.httpClient.Get(fmt.Sprintf("https://graph.facebook.com/%s/picture?type=large&redirect=false", userId))
+	if err != nil {
+		return "", err
+	}
+	if err = json.NewDecoder(res.Body).Decode(&fbRes); err != nil {
+		return "", err
+	}
+	if fbRes.Err != nil {
+		return "", fmt.Errorf(fbRes.Err["message"].(string))
+	}
+	return fbRes.Data["url"].(string), nil
+}
+
 func verifyFbToken(loginRequest fbLoginRequest) (error) {
 	// Fb token verification API
 	res, err := settings.httpClient.Get(fmt.Sprintf("https://graph.facebook.com/debug_token?input_token=%s&access_token=%s",
@@ -94,7 +120,7 @@ func verifyFbToken(loginRequest fbLoginRequest) (error) {
 	if err != nil {
 		return err
 	}
-	var body fbVerificationResponse
+	var body fbResponse
 	if err = json.NewDecoder(res.Body).Decode(&body); err != nil {
 		return err
 	}
