@@ -213,28 +213,32 @@ class GamesScreen extends Component {
         {value === 0 &&
         <Query query={GET_GAMES} variables={{filter: ""}} fetchPolicy="no-cache">
           {({loading, error, data}) => {
-            if (loading) return (
+            if (loading) {
+              return (
               <Paper elevation={0} className={classes.body}>
                 <div className={classes.container}>
                   <CircularProgress color="primary"/>
                 </div>
               </Paper>
             );
-            if (error) return (
-              <Paper elevation={0} className={classes.body}>
-                <div className={classes.container}>
-                  <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
-                  <Typography variant="display1" color="textSecondary">
-                    Connection error!
-                  </Typography>
-                </div>
-              </Paper>
-            );
-            const games = data.getGames;
+            } else if (error) {
+              return (
+                <Paper elevation={0} className={classes.body}>
+                  <div className={classes.container}>
+                    <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
+                    <Typography variant="display1" color="textSecondary">
+                      Connection error!
+                    </Typography>
+                  </div>
+                </Paper>
+              );
+            } else {
+            let games = data.getGames;
+            if (games === undefined) games = [];
             console.log(games);
             return <GamesList games={games}/>
-          }
-          }
+            }
+          }}
         </Query>
         }
         {value === 1 && <GamesList games={[]}/>}
