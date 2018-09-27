@@ -4,7 +4,24 @@ import Paper from '@material-ui/core/Paper';
 import Typography from "@material-ui/core/Typography/Typography";
 import ButtonBase from '@material-ui/core/ButtonBase';
 import HattleCoin from "../assets/hattlecoin.png";
-import ZeroSumCap from '../assets/hat-zero-sum.png';
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+import AngryHatperor from "../assets/angry-hatperor.png";
+
+import {Query} from "react-apollo";
+import gql from "graphql-tag";
+
+
+const GET_STORE_HATS = gql`
+  query GetStoreHats($owned: Boolean!) {
+    storeHats(owned: $owned) {
+      id
+      name
+      price
+      img
+    }
+  }
+`;
+
 
 const styles = theme => ({
   body: {
@@ -77,30 +94,54 @@ class ShopList extends Component {
 
   render() {
     const {classes} = this.props;
-    const {items} = this.state;
     return (
-      <Paper elevation={0} className={classes.body}>
-        {
-          items.map((item, index) => (
-            <Paper key={index} className={classes.card}>
-              <ButtonBase className={classes.button}>
-                <Paper elevation={0} className={classes.innerCard}>
-                  <Typography variant="display1" className={classes.cardTitle}>
-                    Mario Cap
-                  </Typography>
-                  <img alt="Hat" src={ZeroSumCap} className={classes.hat}/>
-                  <Paper elevation={0} className={classes.moneyInfo}>
-                    <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                    <Typography variant="subheading" className={classes.moneyText}>
-                      1000
-                    </Typography>
-                  </Paper>
-                </Paper>
-              </ButtonBase>
+      <Query query={GET_STORE_HATS} variables={{owned: false}} fetchPolicy="cache-and-network" errorPolicy="ignore">
+        {({loading, error, data}) => {
+          if (loading) return (
+            <Paper elevation={0} className={classes.body}>
+              <div className={classes.container}>
+                <CircularProgress color="primary"/>
+              </div>
             </Paper>
-          ))
-        }
-      </Paper>
+          );
+          if (!data) return (
+            <Paper elevation={0} className={classes.body}>
+              <div className={classes.container}>
+                <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
+                <Typography variant="display1" color="textSecondary">
+                  Connection error!
+                </Typography>
+              </div>
+            </Paper>
+          );
+          const hats = data.storeHats;
+          return (
+            <Paper elevation={0} className={classes.body}>
+              {
+                hats.map((hat, index) => (
+                  <Paper key={index} className={classes.card}>
+                    <ButtonBase className={classes.button}>
+                      <Paper elevation={0} className={classes.innerCard}>
+                        <Typography variant="display1" className={classes.cardTitle}>
+                          {hat.name}
+                        </Typography>
+                        <img alt="Hat" src={hat.img} className={classes.hat}/>
+                        <Paper elevation={0} className={classes.moneyInfo}>
+                          <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                          <Typography variant="subheading" className={classes.moneyText}>
+                            {hat.price}
+                          </Typography>
+                        </Paper>
+                      </Paper>
+                    </ButtonBase>
+                  </Paper>
+                ))
+              }
+            </Paper>
+          );
+        }}
+      </Query>
+
     );
   }
 }
