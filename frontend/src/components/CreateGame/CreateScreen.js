@@ -149,6 +149,7 @@ class CreateScreen extends Component {
     this.setState({
       submitDialog: false,
     }, () => {
+      // TODO: Exclude cases when createGame was called but failed to create
       if (this.state.submitted) {
         this.props.history.push('/games')
       }
