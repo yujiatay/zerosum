@@ -147,90 +147,63 @@ let parseTimeLeft = (endTime) => {
 
 class GamesList extends Component {
   render() {
-    const {classes} = this.props;
+    const {classes, games} = this.props;
     return (
-      <Query query={GET_GAMES} variables={{filter: ""}} fetchPolicy="no-cache">
-        {({loading, error, data}) => {
-          if (loading) return (
-            <Paper elevation={0} className={classes.body}>
-              <div className={classes.container}>
-                <CircularProgress color="primary"/>
-              </div>
-            </Paper>
-          );
-          if (error) return (
-            <Paper elevation={0} className={classes.body}>
-              <div className={classes.container}>
-                <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
-                <Typography variant="display1" color="textSecondary">
-                  Connection error!
+      <Paper elevation={0} className={classes.body}>
+        {games.map((game, index) => (
+          <Card className={classes.card} key={index}>
+            <ButtonBase className={classes.button} component={Link}
+                        to={{
+                          pathname: "/game",
+                          state: {
+                            parsedGame: {
+                              id: game.id,
+                              topic: game.topic,
+                              gameMode: parseGameMode(game.gameMode),
+                              stakes: parseStakes(game.stakes),
+                              timeLeft: parseTimeLeft(game.endTime),
+                              options: game.options,
+                              resolved: game.resolved,
+                              voted: game.voted,
+                              totalMoney: game.totalMoney
+                            }
+                          }
+                        }}>
+              <CardContent className={classes.cardContent}>
+                <CardContent className={classes.moneyInfo}>
+                  <img alt="Pot" src={Money} className={classes.moneybag}/>
+                  <Typography variant="subheading" className={classes.moneyText}>
+                    {game.totalMoney}
+                  </Typography>
+                </CardContent>
+                <Typography className={classes.cardTitle} variant="title" component="h2">
+                  {game.topic}
                 </Typography>
-              </div>
-            </Paper>
-          );
-
-          const games = data.getGames;
-          console.log(games);
-
-          return (
-            <Paper elevation={0} className={classes.body}>
-              {games.map((game, index) => (
-                <Card className={classes.card} key={index}>
-                  <ButtonBase className={classes.button} component={Link}
-                              to={{
-                                pathname: "/game",
-                                state: {
-                                  parsedGame: {
-                                    id: game.id,
-                                    topic: game.topic,
-                                    gameMode: parseGameMode(game.gameMode),
-                                    stakes: parseStakes(game.stakes),
-                                    timeLeft: parseTimeLeft(game.endTime),
-                                    options: game.options,
-                                    resolved: game.resolved,
-                                    voted: game.voted,
-                                    totalMoney: game.totalMoney
-                                  }
-                                }
-                              }}>
-                    <CardContent className={classes.cardContent}>
-                      <CardContent className={classes.moneyInfo}>
-                        <img alt="Pot" src={Money} className={classes.moneybag}/>
-                        <Typography variant="subheading" className={classes.moneyText}>
-                          {game.totalMoney}
-                        </Typography>
-                      </CardContent>
-                      <Typography className={classes.cardTitle} variant="title" component="h2">
-                        {game.topic}
-                      </Typography>
-                    </CardContent>
-                    <CardContent className={classes.cardContentRow}>
-                      <Paper elevation={0} className={classes.cardInfo}>
-                        <img alt="Game Mode" src={Dice} className={classes.dice}/>
-                        <Typography color="textPrimary" className={classes.textInfo}>
-                          {parseGameMode(game.gameMode)}
-                        </Typography>
-                      </Paper>
-                      <Paper elevation={0} className={classes.cardInfo}>
-                        <FontAwesomeIcon icon="coins" size="1x" className={classes.icon}/>
-                        <Typography color="textPrimary" className={classes.textInfo}>
-                          {parseStakes(game.stakes)}
-                        </Typography>
-                      </Paper>
-                      <Paper elevation={0} className={classes.cardInfo}>
-                        <FontAwesomeIcon icon="hourglass-half" size="1x" className={classes.icon}/>
-                        <Typography color="textPrimary" className={classes.textInfo}>
-                          {parseTimeLeft(game.endTime)}
-                        </Typography>
-                      </Paper>
-                    </CardContent>
-                  </ButtonBase>
-                </Card>
-              ))}
-            </Paper>
-          )
-        }}
-      </Query>
+              </CardContent>
+              <CardContent className={classes.cardContentRow}>
+                <Paper elevation={0} className={classes.cardInfo}>
+                  <img alt="Game Mode" src={Dice} className={classes.dice}/>
+                  <Typography color="textPrimary" className={classes.textInfo}>
+                    {parseGameMode(game.gameMode)}
+                  </Typography>
+                </Paper>
+                <Paper elevation={0} className={classes.cardInfo}>
+                  <FontAwesomeIcon icon="coins" size="1x" className={classes.icon}/>
+                  <Typography color="textPrimary" className={classes.textInfo}>
+                    {parseStakes(game.stakes)}
+                  </Typography>
+                </Paper>
+                <Paper elevation={0} className={classes.cardInfo}>
+                  <FontAwesomeIcon icon="hourglass-half" size="1x" className={classes.icon}/>
+                  <Typography color="textPrimary" className={classes.textInfo}>
+                    {parseTimeLeft(game.endTime)}
+                  </Typography>
+                </Paper>
+              </CardContent>
+            </ButtonBase>
+          </Card>
+        ))}
+      </Paper>
     );
   }
 }

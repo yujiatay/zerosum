@@ -20,6 +20,31 @@ import Paper from "@material-ui/core/Paper/Paper";
 import CancelButton from "../shared/CancelButton";
 import SubmitButton from "../shared/SubmitButton";
 
+import {Query} from 'react-apollo';
+import gql from "graphql-tag";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import AngryHatperor from "../assets/angry-hatperor.png";
+
+
+const GET_GAMES = gql`
+  query GetGames($filter: String!, $limit: Int, $after: String) {
+    getGames(filter: $filter, limit: $limit, after: $after) {
+      id
+      topic
+      endTime
+      totalMoney
+      resolved
+      voted
+      stakes
+      gameMode
+      options {
+        id
+        body
+      }
+    }
+  }
+`;
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -140,9 +165,34 @@ class GamesScreen extends Component {
             <Tab label="Your Games" className={classes.tab}/>
           </Tabs>
         </AppBar>
-
-        {value === 0 && <GamesList/>}
-        {value === 1 && <GamesList/>}
+        {value === 0 &&
+        <Query query={GET_GAMES} variables={{filter: ""}} fetchPolicy="no-cache">
+          {({loading, error, data}) => {
+            if (loading) return (
+              <Paper elevation={0} className={classes.body}>
+                <div className={classes.container}>
+                  <CircularProgress color="primary"/>
+                </div>
+              </Paper>
+            );
+            if (error) return (
+              <Paper elevation={0} className={classes.body}>
+                <div className={classes.container}>
+                  <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
+                  <Typography variant="display1" color="textSecondary">
+                    Connection error!
+                  </Typography>
+                </div>
+              </Paper>
+            );
+            const games = data.getGames;
+            console.log(games);
+            return <GamesList games={games}/>
+          }
+          }
+        </Query>
+        }
+        {value === 1 && <GamesList games={[]}/>}
 
         <Dialog
           open={this.state.filterDialog}
