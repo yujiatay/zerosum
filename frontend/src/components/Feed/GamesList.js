@@ -9,31 +9,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Dice from '../assets/dice-logo-blue.png';
 import Money from '../assets/money-bag.png';
-import AngryHatperor from '../assets/angry-hatperor.png';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
-import {Query} from 'react-apollo';
-import gql from "graphql-tag";
-
-
-const GET_GAMES = gql`
-  query GetGames($filter: String!, $limit: Int, $after: String) {
-    getGames(filter: $filter, limit: $limit, after: $after) {
-      id
-      topic
-      endTime
-      totalMoney
-      resolved
-      voted
-      stakes
-      gameMode
-      options {
-        id
-        body
-      }
-    }
-  }
-`;
 
 const styles = theme => ({
   body: {
