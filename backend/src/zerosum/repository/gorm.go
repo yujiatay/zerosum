@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"github.com/SherClockHolmes/webpush-go"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"time"
@@ -157,6 +158,7 @@ func GetOrCreateUser(desiredUser models.User) (user models.User, err error) {
 		GamesWon: 0,
 		Experience: 0,
 		Name: "HatMatter",
+		PushSubscription: webpush.Subscription{Endpoint:"nil"},
 		}).FirstOrCreate(&user).Error
 	return
 }

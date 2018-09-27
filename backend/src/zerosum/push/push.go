@@ -60,7 +60,7 @@ func SendNotif(body string, userId string) (error) {
 	if err != nil {
 		return err
 	}
-	if s.Endpoint == "nil" {
+	if s.Endpoint == "nil" || s.Endpoint == "" {
 		return nil // Unsubscribed user
 	}
 	_, err = webpush.SendNotification([]byte(body), &s, &webpush.Options{
