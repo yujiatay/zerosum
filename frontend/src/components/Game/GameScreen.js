@@ -61,7 +61,7 @@ const GET_VOTE = gql`
 
 const GET_PROFILE = gql`
   {
-    profile {
+    user {
       money
 
     }
@@ -513,7 +513,7 @@ class GameScreen extends Component {
               </CardContent>
               <Query query={GET_PROFILE} fetchPolicy="cache-and-network" errorPolicy="ignore">
                 {({loading, error, data}) => {
-                  let userMoney = (data && data.profile) ? data.profile.money : "???";
+                  let userMoney = (data && data.user) ? data.user.money : "???";
                   return (
                     <Currency money={userMoney}/>
                   )

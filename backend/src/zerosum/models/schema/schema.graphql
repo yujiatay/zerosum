@@ -9,16 +9,16 @@ schema {
 
 # The query type, represents all of the entry points into our object graph
 type Query {
-    user(id: ID!): User
+    user(id: ID): User
     game(id: ID!): Game
     games(filter: String!, limit: Int, after: String): [Game]!
+    vote(gameId: ID!): Vote
+    votes(limit: Int, after: String): [Vote]!
     gameCount: Int!
     leaderboard(limit: Int!): [User]!
     storeHats(owned: Boolean!): [Hat]!
     achievedHats: [Hat]!
-    profile: User
-    vote(gameId: ID!): Vote
-    votes(limit: Int, after: String): [Vote]!
+
 }
 
 # The mutation type, represents all updates we can make to our data

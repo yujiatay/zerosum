@@ -52,10 +52,15 @@ func getIdFromCtx(ctx context.Context) (id string) {
 	return ctx.Value("Id").(string)
 }
 
-func (r *Resolver) USER(ctx context.Context, args *struct{ Id string }) (*UserResolver, error) {
+func (r *Resolver) USER(ctx context.Context, args *struct{ Id *string }) (*UserResolver, error) {
 	// TODO: Add field restriction when Id != Id in ctx
-	user, err := repository.QueryUser(models.User{Id: args.Id})
-	return &UserResolver{user: &user}, err
+	if args.Id == nil {
+		user, err := repository.QueryUser(models.User{Id: getIdFromCtx(ctx)})
+		return &UserResolver{user: &user}, err
+	} else {
+		user, err := repository.QueryUser(models.User{Id: *args.Id})
+		return &UserResolver{user: &user}, err
+	}
 }
 
 func (r *Resolver) PROFILE(ctx context.Context) (*UserResolver, error) {
