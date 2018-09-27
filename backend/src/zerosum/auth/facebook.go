@@ -72,19 +72,20 @@ func FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(res)
 }
 
-func getFbProfile(token string) (profile fbProfile, err error) {
+func getFbProfile(token string) (fbProfile, error) {
+	var profile fbProfile
 	res, err := settings.httpClient.Get(fmt.Sprintf("https://graph.facebook.com/me?access_token=%s", token))
 	if err != nil {
 		return profile, err
 	}
 	if err = json.NewDecoder(res.Body).Decode(&profile); err != nil {
-		return
+		return profile, err
 	}
 	//fmt.Println(profile)
 	if profile.Err != nil {
 		err = errors.Errorf(profile.Err["message"].(string))
 	}
-	return
+	return profile, err
 }
 func verifyFbToken(loginRequest fbLoginRequest) (error) {
 	// Fb token verification API
