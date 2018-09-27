@@ -78,7 +78,7 @@ const styles = theme => ({
 
 const GET_PROFILE = gql`
   {
-    getProfile {
+    profile {
       name
       winRate
       money
@@ -140,7 +140,7 @@ class ProfileScreen extends Component {
     return (
       <Query query={GET_PROFILE} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
-          let profile = data ? data.getProfile : null;
+          let profile = data ? data.profile : null;
           return (
             <div className={classes.root}>
               {topBar}

@@ -9,17 +9,17 @@ schema {
 
 # The query type, represents all of the entry points into our object graph
 type Query {
-    getUser(id: ID!): User
-    getGame(id: ID!): Game
-    getGames(filter: String!, limit: Int, after: String): [Game]!
-    getTotalGames(): Int!
+    user(id: ID!): User
+    game(id: ID!): Game
+    games(filter: String!, limit: Int, after: String): [Game]!
+    gameCount: Int!
 
-    getLeaderboard(limit: Int!): [User]!
+    leaderboard(limit: Int!): [User]!
 
-    # Private, can only get own votes and profile
-    getProfile(): User
-    getVote(gameId: ID!): Vote
-    getVotes(limit: Int, after: String): [Vote]!
+    # Private, can only get own votes, profile and hats
+    profile(): User
+    vote(gameId: ID!): Vote
+    votes(limit: Int, after: String): [Vote]!
 }
 
 # The mutation type, represents all updates we can make to our data

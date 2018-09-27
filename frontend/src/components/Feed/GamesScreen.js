@@ -29,7 +29,7 @@ import Currency from "../shared/Currency";
 
 const GET_GAMES = gql`
   query GetGames($filter: String!, $limit: Int, $after: String) {
-    getGames(filter: $filter, limit: $limit, after: $after) {
+    games(filter: $filter, limit: $limit, after: $after) {
       id
       topic
       endTime
@@ -48,7 +48,7 @@ const GET_GAMES = gql`
 
 const GET_COUNT = gql`
   {
-    getTotalGames
+    gameCount
   }
 `;
 
@@ -212,7 +212,7 @@ class GamesScreen extends Component {
           {({loading, error, data}) => {
             let gamesCount = loading ? "???"
               : error ? "???"
-                : data.getTotalGames;
+                : data.gameCount;
             return <InfoBar left={gamesCount + " ongoing games!"}/>
           }}
         </Query>
@@ -247,7 +247,7 @@ class GamesScreen extends Component {
                 </Paper>
               );
             } else {
-              let games = data.getGames;
+              let games = data.games;
               if (games === undefined) games = [];
               console.log(games);
               return <GamesList games={games}/>

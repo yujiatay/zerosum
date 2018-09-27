@@ -51,23 +51,23 @@ type voteInput struct {
 	Amount   int32
 }
 
-func (r *Resolver) GetUser(ctx context.Context, args *struct{ Id string }) (*UserResolver, error) {
+func (r *Resolver) USER(ctx context.Context, args *struct{ Id string }) (*UserResolver, error) {
 	// TODO: Add field restriction when Id != Id in ctx
 	user, err := repository.QueryUser(models.User{Id: args.Id})
 	return &UserResolver{user: &user}, err
 }
 
-func (r *Resolver) GetProfile(ctx context.Context) (*UserResolver, error) {
+func (r *Resolver) PROFILE(ctx context.Context) (*UserResolver, error) {
 	user, err := repository.QueryUser(models.User{Id: getIdFromCtx(ctx)})
 	return &UserResolver{user: &user}, err
 }
 
-func (r *Resolver) GetGame(ctx context.Context, args *struct{ Id string }) (*GameResolver, error) {
+func (r *Resolver) GAME(ctx context.Context, args *struct{ Id string }) (*GameResolver, error) {
 	game, err := repository.QueryGame(models.Game{Id: args.Id})
 	return &GameResolver{game: &game}, err
 }
 
-func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (gameResolvers []*GameResolver, err error) {
+func (r *Resolver) GAMES(ctx context.Context, args gameSearchQuery) (gameResolvers []*GameResolver, err error) {
 	games, err := repository.SearchGames(args.Filter, args.Limit, args.After)
 	var gamesList []*GameResolver
 	for index := range games {
@@ -77,11 +77,11 @@ func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (gameReso
 	return
 }
 
-func (r *Resolver) GetTotalGames(ctx context.Context) (total int32) {
+func (r *Resolver) GAMECOUNT(ctx context.Context) (total int32) {
 	return repository.CountGames()
 }
 
-func (r *Resolver) GetLeaderboard(ctx context.Context, args *struct{ Limit int32 }) (userResolvers []*UserResolver, err error) {
+func (r *Resolver) LEADERBOARD(ctx context.Context, args *struct{ Limit int32 }) (userResolvers []*UserResolver, err error) {
 	users, err := repository.QueryTopUsers(10, 9)
 	var userList []*UserResolver
 	for index := range users {
@@ -91,12 +91,12 @@ func (r *Resolver) GetLeaderboard(ctx context.Context, args *struct{ Limit int32
 	return
 }
 
-func (r *Resolver) GetVote(ctx context.Context, args voteQuery) (*VoteResolver, error) {
+func (r *Resolver) VOTE(ctx context.Context, args voteQuery) (*VoteResolver, error) {
 	vote, err := repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
 	return &VoteResolver{vote: &vote}, err
 }
 
-func (r *Resolver) GetVotes(ctx context.Context, args userVoteQuery) (voteResolvers []*VoteResolver, err error) {
+func (r *Resolver) VOTES(ctx context.Context, args userVoteQuery) (voteResolvers []*VoteResolver, err error) {
 	votes, err := repository.QueryVotes(models.Vote{UserId: getIdFromCtx(ctx)}, args.Limit, args.After)
 	var voteList []*VoteResolver
 	for _, vote := range votes {

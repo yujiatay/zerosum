@@ -17,7 +17,7 @@ import AngryHatperor from "../assets/angry-hatperor.png";
 
 const GET_LEADERBOARD = gql`
   query GetLeaderboard($limit: Int!) {
-    getLeaderboard(limit: $limit) {
+    leaderboard(limit: $limit) {
       id
       winRate
     }
@@ -133,7 +133,7 @@ class Leaderboard extends Component {
             </Paper>
           );
 
-          const leaders = data.getLeaderboard;
+          const leaders = data.leaderboard;
           console.log(leaders);
           return (
             <Paper elevation={0} className={classes.body}>

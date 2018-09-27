@@ -9,7 +9,7 @@ import gql from 'graphql-tag'
 
 const GET_PROFILE = gql`
   {
-    getProfile {
+    profile {
       money
 
     }
@@ -42,7 +42,7 @@ class InfoBar extends Component {
         {({loading, error, data}) => {
           let userMoney = loading ? "???"
             : error ? "???"
-              : data.getProfile.money;
+              : data.profile.money;
           return (
             <Currency money={userMoney}/>
           )

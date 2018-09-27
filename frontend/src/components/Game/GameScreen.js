@@ -39,7 +39,7 @@ const CREATE_VOTE = gql`
 
 const GET_VOTE = gql`
   query GetVote($gameId: ID!, $withResult: Boolean!) {
-    getVote(gameId: $gameId) {
+    vote(gameId: $gameId) {
       option {
         id
         body
