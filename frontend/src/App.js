@@ -13,7 +13,7 @@ import {
   faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
   faArrowLeft, faCoins, faHourglassHalf, faCheckCircle,
-  faExclamationCircle
+  faExclamationCircle, faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 import ReactGA from 'react-ga';
 import {getToken} from "./utils/auth";
@@ -21,7 +21,7 @@ import {getToken} from "./utils/auth";
 library.add(faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
   faArrowLeft, faCoins, faHourglassHalf, faCheckCircle,
-  faExclamationCircle);
+  faExclamationCircle, faTimesCircle);
 
 ReactGA.initialize('UA-125447140-2', {
   debug: false,

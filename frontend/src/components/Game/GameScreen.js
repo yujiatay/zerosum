@@ -161,12 +161,6 @@ const styles = theme => ({
     height: 24,
     width: 24
   },
-  dialogTitle: {
-    paddingTop: theme.spacing.unit * 3,
-    paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3,
-    color: '#014262'
-  },
   dialogText: {
     color: '#068D9D',
   },
@@ -216,6 +210,35 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
+  },
+  submit: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing.unit * 2,
+    backgroundColor: '#014262'
+  },
+  buttonBase: {
+    flex: 1,
+    display: 'block'
+  },
+  innerSubmit: {
+    backgroundColor: 'transparent',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 5
+  },
+  cancel: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  cancelButton: {
+    display: 'block'
+  },
+  innerCancel: {
+    backgroundColor: 'transparent',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    padding: 5
   }
 });
 
@@ -326,14 +349,23 @@ class GameScreen extends Component {
                       </Typography>
                     </DialogContent>
                   : <Fragment>
-                    <Typography variant="title" className={classes.dialogTitle} align="center">
-                      {
-                        parsedGame.stakes === "Fixed Stakes"
-                        ? "You're about to bet 100 HattleCoins."
-                        : "How many HattleCoins to bet?"
-                      }
-                    </Typography>
+
+                    <Paper elevation={0} className={classes.cancel}>
+                      <ButtonBase className={classes.cancelButton} onClick={this.handleClose}>
+                        <Paper elevation={0} className={classes.innerCancel}>
+                          <FontAwesomeIcon icon="times-circle" size="2x" className={classes.failure}/>
+                        </Paper>
+                      </ButtonBase>
+                    </Paper>
+
                     <DialogContent>
+                      <Typography variant="title" color="textPrimary" align="center">
+                        {
+                          parsedGame.stakes === "Fixed Stakes"
+                            ? "You're about to bet 100 HattleCoins."
+                            : "How many HattleCoins to bet?"
+                        }
+                      </Typography>
                       <Typography className={classes.dialogText} align="center">
                         HattleCoins are not refundable after submission!
                       </Typography>
@@ -361,15 +393,16 @@ class GameScreen extends Component {
                           onChange={this.handleChange('bet')}
                         />
                       }
+                      <Paper elevation={1} className={classes.submit}>
+                        <ButtonBase className={classes.buttonBase} onClick={createVote}>
+                          <Paper elevation={0} className={classes.innerSubmit}>
+                            <Typography variant="subheading" color="textSecondary">
+                              Submit
+                            </Typography>
+                          </Paper>
+                        </ButtonBase>
+                      </Paper>
                     </DialogContent>
-                    <DialogActions>
-                      <Button onClick={this.handleClose} color="primary">
-                        Cancel
-                      </Button>
-                      <Button onClick={createVote} color="primary">
-                        Submit
-                      </Button>
-                    </DialogActions>
                   </Fragment>
               }
             </Dialog>
