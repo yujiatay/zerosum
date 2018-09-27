@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"zerosum/auth"
+	"zerosum/logic"
 	"zerosum/repository"
 	"zerosum/resolvers"
 )
@@ -52,6 +53,11 @@ func main() {
 	err := repository.InitTestDB()
 	if err != nil {
 		log.Printf("Failed to init DB: %v", err)
+	}
+	// Set up Game Logic
+	err = logic.SetUpHats()
+	if err != nil {
+		log.Printf("Failed to set up hats: %v", err)
 	}
 	rootResolver := resolvers.Resolver{}
 	gqlHandler, err := NewGqlHandler(&rootResolver)

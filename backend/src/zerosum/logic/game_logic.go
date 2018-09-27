@@ -107,6 +107,19 @@ func GetLevelInfo(exp int) (level int, progressToNext int, nextMilestone int) {
 	return
 }
 
+func getLevel(exp int) (level int) {
+	level = 1
+	for _, expRequired := range EXP_REQUIRED {
+		if exp >= expRequired {
+			exp = exp - expRequired
+			level += 1
+		} else {
+			break
+		}
+	}
+	return
+}
+
 func AllocateHostExp(userId string) (err error) {
 	return allocateExp(userId, HOST_EXP)
 }
@@ -195,9 +208,12 @@ func ResolveGame(gameId string) (err error) {
 			moneyGained := vote.Money + (vote.Money/winPool)*losePool
 			// Update Vote Result
 			updateVoteResult(vote.UserId, vote.GameId, true, moneyGained)
+			// Allocate money and exp, stats
 			AllocateMoney(vote.UserId, moneyGained)
 			AllocateWinExp(vote.UserId)
 			allocateWinOrLoss(vote.UserId, true)
+			// Verify Achievements
+			verifyAchievements(vote.UserId)
 		}
 	}
 	for _, index := range losingOptions {
@@ -205,9 +221,14 @@ func ResolveGame(gameId string) (err error) {
 			_ = vote.Money
 			// Update Vote Result
 			updateVoteResult(vote.UserId, vote.GameId, false, -vote.Money)
+			// Allocate stats
 			allocateWinOrLoss(vote.UserId, false)
+			// Verify Achievements
+			verifyAchievements(vote.UserId)
 		}
 	}
+
+
 
 	return
 }

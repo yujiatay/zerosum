@@ -172,6 +172,11 @@ func QueryUser(desiredUser models.User) (user models.User, err error) {
 	return
 }
 
+func QueryAllUsers() (users []models.User) {
+	db.Find(&users)
+	return
+}
+
 func QueryTopUsers(limit int, minGames int) (users []models.User, err error) {
 	err = db.Where("games_played > ?", minGames).Order("win_rate desc").Limit(limit).Find(&users).Error
 	return
@@ -292,4 +297,74 @@ func DeleteVote(vote models.Vote) (err error) {
 func CheckVoted(userId string, gameId string) bool {
 	var vote models.Vote
 	return !db.Where("user_id = ? AND game_id = ?", userId, gameId).First(&vote).RecordNotFound()
+}
+
+/* HAT_CRUD */
+
+func TryCreateHat(hat models.Hat) (exists bool, err error) {
+	// Check if alr exists
+	var foundHat models.Hat
+	if !db.Where("id = ?", hat.Id).First(&foundHat).RecordNotFound() {
+		exists = true
+		return
+	}
+
+	res := db.Create(&hat)
+	if res.Error != nil {
+		err = res.Error
+	}
+	return
+}
+
+func QueryHat(desiredHat models.Hat) (hat models.Hat, err error) {
+	res := db.Where(desiredHat).First(&hat)
+	if res.RecordNotFound() {
+		err = errors.New("no hat found")
+	} else if res.Error != nil {
+		err = res.Error
+	}
+
+	return
+}
+
+/* HAT_OWNERSHIP CRUD */
+func TryCreateHatOwnership(hatOwnership models.HatOwnership) (exists bool, err error) {
+	// Check if alr exists
+	var foundOwnership models.HatOwnership
+	if !db.Where("hat_id = ? AND user_id = ?", hatOwnership.HatId, hatOwnership.UserId).First(&foundOwnership).RecordNotFound() {
+		exists = true
+		return
+	}
+	res := db.Create(&hatOwnership)
+	if res.Error != nil {
+		err = res.Error
+	}
+
+	return
+}
+
+func QueryHatOwnership(desiredHatOwnership models.HatOwnership) (hatOwnership models.HatOwnership, err error) {
+	res := db.Where(desiredHatOwnership).First(&hatOwnership)
+	if res.RecordNotFound() {
+		err = errors.New("no ownership found")
+	} else if res.Error != nil {
+		err = res.Error
+	}
+
+	return
+}
+
+func UpdateHatOwnership(hatOwnership models.HatOwnership) (err error) {
+	// Check if exists
+	var foundOwnership models.HatOwnership
+	if db.Where("hat_id = ? AND user_id = ?", hatOwnership.HatId, hatOwnership.UserId).First(&foundOwnership).RecordNotFound() {
+		err = errors.New("no ownership found")
+		return
+	}
+	res:= db.Model(&models.Vote{}).Updates(hatOwnership)
+	if res.Error != nil {
+		err = res.Error
+	}
+
+	return
 }

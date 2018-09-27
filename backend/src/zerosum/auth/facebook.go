@@ -6,6 +6,7 @@ import (
 	"github.com/graph-gophers/graphql-go/errors"
 	"log"
 	"net/http"
+	"zerosum/logic"
 	"zerosum/models"
 	"zerosum/repository"
 )
@@ -41,6 +42,7 @@ func FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user, err := repository.GetOrCreateUser(models.User{FbId: profile.Id})
+	logic.FormHatRelations(user.Id)
 
 	signedToken, err := generateSignedUserToken(user)
 	if err != nil {
