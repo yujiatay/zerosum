@@ -27,7 +27,7 @@ type fbLoginRequest struct {
 	UserID      string `json:"userID"`
 }
 
-type fbLoginResponse struct {
+type loginResponse struct {
 	Token   string `json:"token"`
 	NewUser bool   `json:"newUser"`
 }
@@ -60,7 +60,7 @@ func FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
-	res, err := json.Marshal(fbLoginResponse{
+	res, err := json.Marshal(loginResponse{
 		Token:   signedToken,
 		NewUser: time.Now().Sub(user.CreatedAt).Seconds() < 5,
 	})
