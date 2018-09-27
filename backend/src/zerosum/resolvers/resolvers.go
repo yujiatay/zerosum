@@ -209,3 +209,17 @@ func (r *Resolver) AddVote(ctx context.Context, args *struct{ Vote voteInput }) 
 	}
 	return
 }
+
+func (r *Resolver) BuyHat(ctx context.Context, args *struct{ Id string }) (hatResolver *HatResolver, err error) {
+
+	desiredHat, err := repository.QueryHat(models.Hat{Id: args.Id})
+	err = logic.AllocateMoney(getIdFromCtx(ctx), -desiredHat.Price)
+	if err != nil {
+		return
+	}
+	err = repository.UpdateHatOwnership(models.HatOwnership{HatId: desiredHat.Id, UserId: getIdFromCtx(ctx), Owned: true})
+	if err == nil {
+		hatResolver = &HatResolver{hat: &desiredHat, owned: true, achieved: false}
+	}
+	return
+}

@@ -26,6 +26,7 @@ type Mutation {
     deleteUser: Boolean!
     addGame(game: GameInput!): Game
     addVote(vote: VoteInput!): Vote
+    buyHat(id: ID!): Hat
 }
 enum GameMode {
     MAJORITY
