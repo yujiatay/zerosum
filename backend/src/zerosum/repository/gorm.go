@@ -83,6 +83,11 @@ func SearchGames(searchString string, limit *int32, after *int32) (games []model
 	return
 }
 
+func CountGames() (total int32) {
+	db.Model(&models.Game{}).Where("end_time > ?", time.Now()).Count(&total)
+	return
+}
+
 func UpdateGame(game models.Game) (err error) {
 	// Check if exists
 	if db.NewRecord(game) {

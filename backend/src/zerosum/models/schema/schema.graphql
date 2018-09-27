@@ -12,6 +12,7 @@ type Query {
     getUser(id: ID!): User
     getGame(id: ID!): Game
     getGames(filter: String!, limit: Int, after: String): [Game]!
+    getTotalGames(): Int!
 
     getLeaderboard(limit: Int!): [User]!
 
@@ -44,7 +45,6 @@ enum Stakes {
     NO_LIMIT
 }
 
-
 type VoteResult {
     win: Boolean
     netChange: Int
@@ -56,7 +56,6 @@ type OptionResult {
     winner: Boolean
 }
 
-# what is needed for a game
 type Game {
     id: ID!
     owner: User
@@ -78,7 +77,6 @@ type Option {
     result: OptionResult
 }
 
-# what is needed for a user
 type User {
     id: ID!
     name: String
@@ -91,7 +89,6 @@ type User {
     #other deets
 }
 
-# what is needed for a vote
 type Vote {
     game: Game
     option: Option
