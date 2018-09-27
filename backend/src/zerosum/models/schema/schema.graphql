@@ -11,14 +11,14 @@ schema {
 type Query {
     getUser(id: ID!): User
     getGame(id: ID!): Game
-    getGames(filter: String!, limit: Int, after: String): [Game]
+    getGames(filter: String!, limit: Int, after: String): [Game]!
 
-    getLeaderboard(limit: Int!): [User]
+    getLeaderboard(limit: Int!): [User]!
 
     # Private, can only get own votes and profile
     getProfile(): User
     getVote(gameId: ID!): Vote
-    getVotes(limit: Int, after: String): [Vote]
+    getVotes(limit: Int, after: String): [Vote]!
 }
 
 # The mutation type, represents all updates we can make to our data

@@ -67,23 +67,23 @@ func (r *Resolver) GetGame(ctx context.Context, args *struct{ Id string }) (*Gam
 	return &GameResolver{game: &game}, err
 }
 
-func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (gameResolvers *[]*GameResolver, err error) {
+func (r *Resolver) GetGames(ctx context.Context, args gameSearchQuery) (gameResolvers []*GameResolver, err error) {
 	games, err := repository.SearchGames(args.Filter, args.Limit, args.After)
 	var gamesList []*GameResolver
 	for index := range games {
 		gamesList = append(gamesList, &GameResolver{game: &games[index]})
 	}
-	gameResolvers = &gamesList
+	gameResolvers = gamesList
 	return
 }
 
-func (r *Resolver) GetLeaderboard(ctx context.Context, args *struct{ Limit int32 }) (userResolvers *[]*UserResolver, err error) {
+func (r *Resolver) GetLeaderboard(ctx context.Context, args *struct{ Limit int32 }) (userResolvers []*UserResolver, err error) {
 	users, err := repository.QueryTopUsers(10, 9)
 	var userList []*UserResolver
 	for index := range users {
 		userList = append(userList, &UserResolver{user: &users[index]})
 	}
-	userResolvers = &userList
+	userResolvers = userList
 	return
 }
 
@@ -92,13 +92,13 @@ func (r *Resolver) GetVote(ctx context.Context, args voteQuery) (*VoteResolver, 
 	return &VoteResolver{vote: &vote}, err
 }
 
-func (r *Resolver) GetVotes(ctx context.Context, args userVoteQuery) (voteResolvers *[]*VoteResolver, err error) {
+func (r *Resolver) GetVotes(ctx context.Context, args userVoteQuery) (voteResolvers []*VoteResolver, err error) {
 	votes, err := repository.QueryVotes(models.Vote{UserId: getIdFromCtx(ctx)}, args.Limit, args.After)
 	var voteList []*VoteResolver
 	for _, vote := range votes {
 		voteList = append(voteList, &VoteResolver{vote: &vote})
 	}
-	voteResolvers = &voteList
+	voteResolvers = voteList
 	return
 }
 
