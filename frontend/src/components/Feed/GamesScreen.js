@@ -81,7 +81,7 @@ const styles = theme => ({
   },
   dialogTitle: {
     color: '#014262',
-    marginBottom: 10,
+    marginTop: 10,
     fontSize: '1.5rem'
   },
   submit: {

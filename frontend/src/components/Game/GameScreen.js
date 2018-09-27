@@ -221,7 +221,10 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
-  }
+  },
+  dialogTitle: {
+    marginTop: 10,
+  },
 });
 
 class GameScreen extends Component {
