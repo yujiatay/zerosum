@@ -46,7 +46,8 @@ const styles = theme => ({
   },
   dialogTitle: {
     color: '#014262',
-    marginBottom: 10
+    marginBottom: 10,
+    fontSize: '1.5rem'
   },
   submit: {
     display: 'flex',
@@ -147,7 +148,7 @@ class GamesScreen extends Component {
           aria-labelledby="form-dialog-title"
         >
           <CancelButton closeHandler={this.handleClose}/>
-          <DialogContent className={classes.queryDialog}>
+          <DialogContent>
             <Typography variant="title" className={classes.dialogTitle} align="center">
               Sort by
             </Typography>
