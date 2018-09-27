@@ -212,6 +212,7 @@ class GamesScreen extends Component {
           {({loading, error, data}) => {
             let gamesCount = loading ? "???"
               : error ? "???"
+                : data.gameCount === undefined ? "???"
                 : data.gameCount;
             return <InfoBar left={gamesCount + " ongoing games!"}/>
           }}

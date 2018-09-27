@@ -42,7 +42,8 @@ class InfoBar extends Component {
         {({loading, error, data}) => {
           let userMoney = loading ? "???"
             : error ? "???"
-              : data.profile.money;
+              : data.profile.money === undefined ? "???"
+                : data.profile.money;
           return (
             <Currency money={userMoney}/>
           )
