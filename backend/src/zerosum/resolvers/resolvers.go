@@ -91,7 +91,7 @@ func (r *Resolver) LEADERBOARD(ctx context.Context, args *struct{ Limit int32 })
 	users, err := repository.QueryTopUsers(10, logic.LEADERBOARD_MIN_GAMES)
 	var userList []*UserResolver
 	for index := range users {
-		ranking := int32(index)
+		ranking := int32(index) + 1
 		userList = append(userList, &UserResolver{user: &users[index], ranking: &ranking})
 	}
 	userResolvers = userList

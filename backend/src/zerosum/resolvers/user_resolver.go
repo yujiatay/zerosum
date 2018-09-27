@@ -62,7 +62,7 @@ func (u *UserResolver) RANKING(ctx context.Context) *int32 {
 	desiredUserId := getIdFromCtx(ctx)
 	for i, user := range users {
 		if desiredUserId == user.Id {
-			ranking := int32(i)
+			ranking := int32(i) + 1
 			return &ranking
 		}
 	}
