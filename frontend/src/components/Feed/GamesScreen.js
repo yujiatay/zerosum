@@ -24,6 +24,7 @@ import {Query} from 'react-apollo';
 import gql from "graphql-tag";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import AngryHatperor from "../assets/angry-hatperor.png";
+import Currency from "../shared/Currency";
 
 
 const GET_GAMES = gql`
@@ -42,6 +43,12 @@ const GET_GAMES = gql`
         body
       }
     }
+  }
+`;
+
+const GET_COUNT = gql`
+  {
+    getTotalGames
   }
 `;
 
@@ -201,7 +208,14 @@ class GamesScreen extends Component {
             }
           </Toolbar>
         </AppBar>
-        <InfoBar left="999 ongoing games!"/>
+        <Query query={GET_COUNT} fetchPolicy={"no-cache"}>
+          {({loading, error, data}) => {
+            let gamesCount = loading ? "???"
+              : error ? "???"
+                : data.getTotalGames;
+            return <InfoBar left={gamesCount + " ongoing games!"}/>
+          }}
+        </Query>
         <AppBar position="static">
           <Tabs value={value} onChange={this.handleChange}
                 textColor="primary" fullWidth elevation={0}
