@@ -111,6 +111,23 @@ const styles = theme => ({
   backButton: {
     justifyContent: 'flex-start'
   },
+  body: {
+    backgroundColor: '#068D9D',
+    borderRadius: 0,
+    overflowY: 'auto',
+    marginBottom: 56,
+    height: `calc(100vh - 13.375rem)` // deduct height of everything else from viewport
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: `calc(100vh - 13.375rem)`
+  },
+  hatperor: {
+    width: 250
+  }
 });
 
 class GamesScreen extends Component {
