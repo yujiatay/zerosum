@@ -167,20 +167,20 @@ class GamesScreen extends Component {
             {
               searchBarState
                 ?
-                  <Fragment>
-                    <IconButton aria-haspopup="true" className={classes.backButton}
-                                onClick={this.handleBack} color="inherit">
-                      <FontAwesomeIcon icon="arrow-left" size="sm"/>
-                    </IconButton>
-                    <Input
-                      placeholder="Search"
-                      // disableUnderline
-                      classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                      }}
-                    />
-                  </Fragment>
+                <Fragment>
+                  <IconButton aria-haspopup="true" className={classes.backButton}
+                              onClick={this.handleBack} color="inherit">
+                    <FontAwesomeIcon icon="arrow-left" size="sm"/>
+                  </IconButton>
+                  <Input
+                    placeholder="Search"
+                    // disableUnderline
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                  />
+                </Fragment>
                 : <Fragment>
                   <Typography className={classes.header} variant="display2" noWrap>
                     G
@@ -215,12 +215,12 @@ class GamesScreen extends Component {
           {({loading, error, data}) => {
             if (loading) {
               return (
-              <Paper elevation={0} className={classes.body}>
-                <div className={classes.container}>
-                  <CircularProgress color="primary"/>
-                </div>
-              </Paper>
-            );
+                <Paper elevation={0} className={classes.body}>
+                  <div className={classes.container}>
+                    <CircularProgress color="primary"/>
+                  </div>
+                </Paper>
+              );
             } else if (error) {
               return (
                 <Paper elevation={0} className={classes.body}>
@@ -233,10 +233,10 @@ class GamesScreen extends Component {
                 </Paper>
               );
             } else {
-            let games = data.getGames;
-            if (games === undefined) games = [];
-            console.log(games);
-            return <GamesList games={games}/>
+              let games = data.getGames;
+              if (games === undefined) games = [];
+              console.log(games);
+              return <GamesList games={games}/>
             }
           }}
         </Query>
