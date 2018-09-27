@@ -382,7 +382,7 @@ class GameScreen extends Component {
                 if (loading) return <div>Fetching</div>;
                 if (!data) return <div>Error</div>;
 
-                const vote = data.getVote;
+                const vote = data.vote;
                 console.log(vote);
 
                 return (
