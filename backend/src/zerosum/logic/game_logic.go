@@ -88,6 +88,7 @@ func AllocateMoney(userId string, money int32) (err error) {
 		user.MoneyTotal += money
 		if user.MoneyTotal < 0 {
 			err = errors.New("not enough money")
+			return
 		}
 		err = repository.UpdateUser(user)
 	}
