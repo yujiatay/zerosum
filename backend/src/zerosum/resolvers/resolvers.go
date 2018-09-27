@@ -155,7 +155,7 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 
 	if args.Game.Topic == "" {
 		err = errors.New("empty topic")
-		return 
+		return
 	}
 
 	newGame := models.Game{
