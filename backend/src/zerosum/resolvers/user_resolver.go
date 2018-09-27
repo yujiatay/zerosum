@@ -5,9 +5,12 @@ import (
 	"github.com/graph-gophers/graphql-go"
 	"zerosum/logic"
 	"zerosum/models"
+	"zerosum/repository"
 )
+
 type UserResolver struct {
 	user *models.User
+	ranking *int32
 }
 
 func (u *UserResolver) ID(ctx context.Context) graphql.ID {
@@ -40,15 +43,28 @@ func (u *UserResolver) EXPPROGRESS(ctx context.Context) *float64 {
 	return &retProgress
 }
 
-func (u *UserResolver) GAMESCREATED(ctx context.Context) *[]*GameResolver {
-	// TODO: search games created
+func (u *UserResolver) RANKING(ctx context.Context) *int32 {
+	// If ranking already calculated (from leaderboard)
+	if u.ranking != nil {
+		return u.ranking
+	}
+
+	// If fail requirement, return nil
+	if u.user.GamesPlayed <= int32(logic.LEADERBOARD_MIN_GAMES) {
+		return nil
+	}
+
+	// Find user from rank list
+	users, err := repository.QueryRankedUsers(logic.LEADERBOARD_MIN_GAMES)
+	if err != nil {
+		return nil
+	}
+	desiredUserId := getIdFromCtx(ctx)
+	for i, user := range users {
+		if desiredUserId == user.Id {
+			ranking := int32(i)
+			return &ranking
+		}
+	}
 	return nil
 }
-
-func (u *UserResolver) GAMESPARTICIPATED(ctx context.Context) *[]*GameResolver {
-	// TODO: search games participated
-	return nil
-}
-
-// Other deets
-	

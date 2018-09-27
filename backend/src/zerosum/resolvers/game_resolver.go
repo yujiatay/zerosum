@@ -22,7 +22,7 @@ func (g *GameResolver) OWNER(ctx context.Context) (userResolver *UserResolver) {
 	})
 
 	if err == nil {
-		userResolver = &UserResolver{&user}
+		userResolver = &UserResolver{user: &user}
 	}
 	return
 }

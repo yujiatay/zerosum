@@ -82,10 +82,11 @@ func (r *Resolver) GAMECOUNT(ctx context.Context) (total int32) {
 }
 
 func (r *Resolver) LEADERBOARD(ctx context.Context, args *struct{ Limit int32 }) (userResolvers []*UserResolver, err error) {
-	users, err := repository.QueryTopUsers(10, 9)
+	users, err := repository.QueryTopUsers(10, logic.LEADERBOARD_MIN_GAMES)
 	var userList []*UserResolver
 	for index := range users {
-		userList = append(userList, &UserResolver{user: &users[index]})
+		ranking := int32(index)
+		userList = append(userList, &UserResolver{user: &users[index], ranking: &ranking})
 	}
 	userResolvers = userList
 	return

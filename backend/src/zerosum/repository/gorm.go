@@ -182,6 +182,11 @@ func QueryTopUsers(limit int, minGames int) (users []models.User, err error) {
 	return
 }
 
+func QueryRankedUsers(minGames int) (users []models.User, err error) {
+	err = db.Where("games_played > ?", minGames).Order("win_rate desc").Find(&users).Error
+	return
+}
+
 func UpdateUser(user models.User) (err error) {
 	// Check if exists
 	if db.NewRecord(user) {

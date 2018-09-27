@@ -13,26 +13,18 @@ type Query {
     game(id: ID!): Game
     games(filter: String!, limit: Int, after: String): [Game]!
     gameCount: Int!
-
     leaderboard(limit: Int!): [User]!
     storeHats(owned: Boolean!): [Hat]!
-    achievedHats(): [Hat]!
-
-    # Private, can only get own votes, profile and hats
-    profile(): User
+    achievedHats: [Hat]!
+    profile: User
     vote(gameId: ID!): Vote
     votes(limit: Int, after: String): [Vote]!
 }
 
 # The mutation type, represents all updates we can make to our data
 type Mutation {
-
-    # Private, can only mutate own stuff
-    # updateUser(user: UserInput!): User
-    deleteUser(): Boolean!
-
+    deleteUser: Boolean!
     addGame(game: GameInput!): Game
-
     addVote(vote: VoteInput!): Vote
 }
 enum GameMode {
@@ -70,7 +62,6 @@ type Game {
     voted: Boolean
     resolved: Boolean
     options: [Option]
-    #participants: [User]
 }
 
 type Hat {
@@ -90,12 +81,10 @@ type User {
     id: ID!
     name: String
     money: Int
-    gamesCreated: [Game]
-    gamesParticipated: [Game]
     winRate: Float
     level: Int
     expProgress: Float
-    #other deets
+    ranking: Int
 }
 
 type Vote {
@@ -104,10 +93,6 @@ type Vote {
     money: Int
     resolved: Boolean
     result: VoteResult
-}
-
-input UserInput {
-    #deets
 }
 
 input GameInput {

@@ -8,6 +8,7 @@ import (
 )
 
 var EXP_REQUIRED = []int{10, 15, 25, 50, 100, 200, 350, 600, 1000}
+var LEADERBOARD_MIN_GAMES = 9
 
 const (
 	HOST_EXP = 10
