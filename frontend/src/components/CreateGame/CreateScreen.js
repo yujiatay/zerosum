@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
@@ -15,6 +15,10 @@ import StakesMode from "./StakesMode";
 import {Mutation} from 'react-apollo';
 import gql from "graphql-tag";
 import ReactGA from "react-ga";
+import Dialog from "@material-ui/core/Dialog/Dialog";
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 
 const CREATE_GAME = gql`
@@ -65,7 +69,24 @@ const styles = theme => ({
   },
   white: {
     color: '#fff'
-  }
+  },
+  progress: {
+    margin: theme.spacing.unit * 3
+  },
+  success: {
+    color: '#069d54'
+  },
+  failure: {
+    color: '#9d0606'
+  },
+  submitDialog: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  dialogTitle: {
+    marginTop: 10,
+  },
 });
 
 class CreateScreen extends Component {
@@ -77,7 +98,9 @@ class CreateScreen extends Component {
       gmode: 'MAJORITY',
       smode: 'FIXED_STAKES',
       sinput: -1,
-      time: 5 // in minutes
+      time: 5, // in minutes
+      submitDialog: false,
+      submitted: false,
     };
   }
 
@@ -120,6 +143,22 @@ class CreateScreen extends Component {
   handleTime = time => {
     this.setState({
       time: time
+    })
+  };
+  handleClose = () => {
+    this.setState({
+      submitDialog: false,
+    }, () => {
+      if (this.state.submitted) {
+        this.props.history.push('/games')
+      }
+    });
+  };
+  handleSubmit = (createGame) => {
+    createGame();
+    this.setState({
+      submitDialog: true,
+      submitted: true
     })
   };
 
@@ -170,12 +209,40 @@ class CreateScreen extends Component {
               options: this.state.options
             }
           }}>
-            {createGame => (
-              <Button variant="contained" color="primary" className={classes.button} onClick={createGame}>
-                <Typography variant="subheading" className={classes.white}>
-                  Submit
-                </Typography>
-              </Button>
+            {(createGame, {loading, error, called}) => (
+              <Fragment>
+                <Button variant="contained" color="primary" className={classes.button}
+                        onClick={() => this.handleSubmit(createGame)}>
+                  <Typography variant="subheading" color="textSecondary">
+                    Submit
+                  </Typography>
+                </Button>
+                <Dialog
+                  open={this.state.submitDialog}
+                  onClose={this.handleClose}
+                  aria-labelledby="form-dialog-title"
+                >
+                  {
+                    loading
+                      ? <CircularProgress className={classes.progress} size={50}/>
+                      : error
+                      ?
+                      <DialogContent className={classes.submitDialog}>
+                        <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
+                        <Typography variant="title" className={classes.dialogTitle} align="center">
+                          Connection failed. Please try again!
+                        </Typography>
+                      </DialogContent>
+                      :
+                      <DialogContent className={classes.submitDialog}>
+                        <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
+                        <Typography variant="title" className={classes.dialogTitle} align="center">
+                          Game was successfully created!
+                        </Typography>
+                      </DialogContent>
+                  }
+                </Dialog>
+              </Fragment>
             )}
           </Mutation>
         </div>
