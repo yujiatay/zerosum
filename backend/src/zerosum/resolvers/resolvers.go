@@ -2,12 +2,12 @@ package resolvers
 
 import (
 	"context"
+	"errors"
 	"os"
 	"time"
 	"zerosum/logic"
 	"zerosum/models"
 	"zerosum/repository"
-	"errors"
 )
 
 type Resolver struct{}
@@ -190,6 +190,9 @@ func (r *Resolver) AddVote(ctx context.Context, args *struct{ Vote voteInput }) 
 
 	// TODO: Add validation for correct choice Id
 	err = logic.AllocateMoney(getIdFromCtx(ctx), -args.Vote.Amount)
+	if err != nil {
+		return
+	}
 	err = logic.AllocateVoteExp(getIdFromCtx(ctx))
 	if err == nil {
 		err = repository.CreateVote(newVote)
