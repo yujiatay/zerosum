@@ -361,7 +361,7 @@ func UpdateHatOwnership(hatOwnership models.HatOwnership) (err error) {
 		err = errors.New("no ownership found")
 		return
 	}
-	res:= db.Model(&models.Vote{}).Updates(hatOwnership)
+	res:= db.Model(&models.HatOwnership{}).Updates(hatOwnership)
 	if res.Error != nil {
 		err = res.Error
 	}
