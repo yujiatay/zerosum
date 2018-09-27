@@ -28,7 +28,11 @@ type fbLoginRequest struct {
 
 func FbLoginHandler(w http.ResponseWriter, r *http.Request) {
 	var loginRequest fbLoginRequest
-	json.NewDecoder(r.Body).Decode(&loginRequest)
+	if err := json.NewDecoder(r.Body).Decode(&loginRequest); err != nil {
+		log.Print(err)
+		http.Error(w, err.Error(), 500)
+		return
+	}
 	if err := verifyFbToken(loginRequest); err != nil {
 		log.Print(err)
 		http.Error(w, err.Error(), 500)
@@ -58,7 +62,9 @@ func getFbProfile(token string) (profile fbProfile, err error) {
 	if err != nil {
 		return
 	}
-	json.NewDecoder(res.Body).Decode(&profile)
+	if err = json.NewDecoder(res.Body).Decode(&profile); err != nil {
+		return
+	}
 	//fmt.Println(profile)
 	if profile.Err != nil {
 		err = errors.Errorf(profile.Err["message"].(string))
@@ -73,7 +79,9 @@ func verifyFbToken(loginRequest fbLoginRequest) (err error) {
 		return
 	}
 	var body fbVerificationResponse
-	json.NewDecoder(res.Body).Decode(&body)
+	if err = json.NewDecoder(res.Body).Decode(&body); err != nil {
+		return
+	}
 	//fmt.Printf("%+v\n", body)
 	if body.Err != nil {
 		err = errors.Errorf(body.Err["message"].(string))
