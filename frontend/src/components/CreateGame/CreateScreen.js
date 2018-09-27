@@ -75,7 +75,7 @@ class CreateScreen extends Component {
       topic: '',
       options: [],
       gmode: 'MAJORITY',
-      smode: 'NO_STAKES',
+      smode: 'FIXED_STAKES',
       sinput: -1,
       time: 5 // in minutes
     };

@@ -63,8 +63,9 @@ class StakesMode extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstRow: ['No Stakes', 'Fixed Stakes'],
-      secondRow: ['Limit', 'No Limit'],
+      // firstRow: ['No Stakes', 'Fixed Stakes'],
+      // secondRow: ['Limit', 'No Limit'],
+      firstRow: ['Fixed Stakes', 'No Limit'],
       selected: 0,
       input: ''
     }
@@ -74,16 +75,13 @@ class StakesMode extends Component {
       selected: index + row * 2
     }), () => {
       if (this.state.selected === 0) {
-        this.props.clickHandler('NO_STAKES');
-      } else if (this.state.selected === 1) {
         this.props.clickHandler('FIXED_STAKES');
-      } else if (this.state.selected === 2) {
-        this.props.clickHandler('FIXED_LIMIT');
-      } else if (this.state.selected === 3) {
+      } else if (this.state.selected === 1) {
         this.props.clickHandler('NO_LIMIT');
       } else {
         this.props.clickHandler('nil');
       }
+
     })
   };
   handleInput = event => {
@@ -123,34 +121,34 @@ class StakesMode extends Component {
             ))
           }
         </div>
-        <div className={classes.row}>
-          {
-            secondRow.map((stake, index) => (
-              <Paper key={index} elevation={0} className={selected === (index + 2) ? classes.selectedButton : classes.button}>
-                <ButtonBase className={classes.buttonBase} onClick={() => this.handleClick(index, 1)}>
-                  <Paper elevation={0} className={classes.innerButton}>
-                    <Typography className={selected === (index + 2) ? classes.selectedText : 'none'}>
-                      {stake}
-                    </Typography>
-                  </Paper>
-                </ButtonBase>
-              </Paper>
-            ))
-          }
-        </div>
-        {
-          (selected === 1 || selected === 2) &&
-            <Paper elevation={0}>
-              <Typography variant="title" className={classes.title}>
-                Please enter the amount of hattlecoins.
-              </Typography>
-              <Paper elevation={0} className={classes.input}>
-                <Input placeholder="0" disableUnderline fullWidth autoFocus
-                       onChange={this.handleInput} type="number" inputProps={{ min: "1"}}
-                />
-              </Paper>
-            </Paper>
-        }
+        {/*<div className={classes.row}>*/}
+          {/*{*/}
+            {/*secondRow.map((stake, index) => (*/}
+              {/*<Paper key={index} elevation={0} className={selected === (index + 2) ? classes.selectedButton : classes.button}>*/}
+                {/*<ButtonBase className={classes.buttonBase} onClick={() => this.handleClick(index, 1)}>*/}
+                  {/*<Paper elevation={0} className={classes.innerButton}>*/}
+                    {/*<Typography className={selected === (index + 2) ? classes.selectedText : 'none'}>*/}
+                      {/*{stake}*/}
+                    {/*</Typography>*/}
+                  {/*</Paper>*/}
+                {/*</ButtonBase>*/}
+              {/*</Paper>*/}
+            {/*))*/}
+          {/*}*/}
+        {/*</div>*/}
+        {/*{*/}
+          {/*(selected === 1 || selected === 2) &&*/}
+            {/*<Paper elevation={0}>*/}
+              {/*<Typography variant="title" className={classes.title}>*/}
+                {/*Please enter the amount of hattlecoins.*/}
+              {/*</Typography>*/}
+              {/*<Paper elevation={0} className={classes.input}>*/}
+                {/*<Input placeholder="0" disableUnderline fullWidth autoFocus*/}
+                       {/*onChange={this.handleInput} type="number" inputProps={{ min: "1"}}*/}
+                {/*/>*/}
+              {/*</Paper>*/}
+            {/*</Paper>*/}
+        {/*}*/}
       </div>
     );
   }
