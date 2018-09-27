@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography/Typography";
 import AppBar from "@material-ui/core/AppBar/AppBar";
 import LoginLogo from './assets/login-logo.png';
 import {loginWithFacebook} from "../utils/auth";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
   body: {
@@ -29,6 +30,9 @@ const styles = theme => ({
       marginTop: 10,
       width: 512,
     }
+  },
+  errorMsg: {
+    color: '#b90f0f'
   }
 });
 
@@ -69,7 +73,7 @@ class LoginScreen extends Component {
           disableMobileRedirect={true}
           icon="fa-facebook-square"
         />
-        {this.state.error ? "Error logging in" : null}
+        {this.state.error ? <Typography className={classes.errorMsg}>Error logging in</Typography> : null}
       </Fragment>
     );
     return (
@@ -87,7 +91,7 @@ class LoginScreen extends Component {
         </AppBar>
         <div className={classes.container}>
           <img alt="ZeroSum" src={LoginLogo} className={classes.logo}/>
-          {this.props.isLoading ? "LOADING" : loginButtonWithError}
+          {this.props.isLoading ? <CircularProgress size={24}/> : loginButtonWithError}
         </div>
       </div>
     )
