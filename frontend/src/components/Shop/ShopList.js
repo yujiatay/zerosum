@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from "@material-ui/core/Typography/Typography";
@@ -9,6 +9,12 @@ import AngryHatperor from "../assets/angry-hatperor.png";
 
 import {Query} from "react-apollo";
 import gql from "graphql-tag";
+import Dialog from "@material-ui/core/Dialog/Dialog";
+import CancelButton from "../shared/CancelButton";
+import DialogContent from "@material-ui/core/DialogContent/DialogContent";
+import TextField from "@material-ui/core/TextField/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
+import SubmitButton from "../shared/SubmitButton";
 
 
 const GET_STORE_HATS = gql`
@@ -101,19 +107,36 @@ const styles = theme => ({
   },
   hatperor: {
     width: 250
-  }
+  },
+  dialogText: {
+    color: '#068D9D',
+  },
 });
 
 class ShopList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+      items: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      dialog: false,
+      selectedHat: {}
     }
   }
+  handleClose = () => {
+    this.setState({
+      dialog: false
+    })
+  };
+  handleClick = (hat) => {
+    this.setState({
+      dialog: true,
+      selectedHat: hat
+    })
+  };
 
   render() {
     const {classes} = this.props;
+    const {selectedHat} = this.state;
     return (
       <Query query={GET_STORE_HATS} variables={{owned: false}} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
@@ -141,7 +164,7 @@ class ShopList extends Component {
               {
                 hats.map((hat, index) => (
                   <Paper key={index} className={classes.card}>
-                    <ButtonBase className={classes.button}>
+                    <ButtonBase className={classes.button} onClick={() => this.handleClick(hat)}>
                       <Paper elevation={0} className={classes.innerCard}>
                         <Typography variant="display1" className={classes.cardTitle}>
                           {hat.name}
@@ -158,6 +181,22 @@ class ShopList extends Component {
                   </Paper>
                 ))
               }
+              <Dialog
+                open={this.state.dialog}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title"
+              >
+                <CancelButton closeHandler={this.handleClose}/>
+                <DialogContent>
+                  <Typography variant="title" color="textPrimary" align="center">
+                    You're about to buy {selectedHat.name} for {selectedHat.price} HattleCoins.
+                  </Typography>
+                  <Typography className={classes.dialogText} align="center">
+                    HattleCoins are not refundable after submission!
+                  </Typography>
+                  <SubmitButton submitHandler={() => this.handleSubmit()}/>
+                </DialogContent>
+              </Dialog>
             </Paper>
           );
         }}
