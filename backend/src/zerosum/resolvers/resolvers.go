@@ -7,6 +7,7 @@ import (
 	"zerosum/logic"
 	"zerosum/models"
 	"zerosum/repository"
+	"errors"
 )
 
 type Resolver struct{}
@@ -146,6 +147,15 @@ func (r *Resolver) AddGame(ctx context.Context, args *struct{ Game gameInput }) 
 	var options []models.Option
 	for _, option := range args.Game.Options {
 		options = append(options, models.Option{Body: option})
+	}
+	if len(options) < 2 {
+		err = errors.New("too few options")
+		return
+	}
+
+	if args.Game.Topic == "" {
+		err = errors.New("empty topic")
+		return 
 	}
 
 	newGame := models.Game{
