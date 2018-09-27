@@ -25,7 +25,7 @@ func InitPushWithSettings(privKey, httpClient *http.Client) {
 	}
 }
 
-func SubscriptionHandler(w http.ResponseWriter, r *http.Request){
+func SubscriptionHandler(w http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value("Id").(string)
 	sub := webpush.Subscription{}
 	if err := json.NewDecoder(r.Body).Decode(&sub); err != nil {
@@ -42,9 +42,9 @@ func SubscriptionHandler(w http.ResponseWriter, r *http.Request){
 	}
 }
 
-func UnsubscriptionHandler(w http.ResponseWriter, r *http.Request){
+func UnsubscriptionHandler(w http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value("Id").(string)
-	if err := updateSubscriptionInDb(userId, webpush.Subscription{Endpoint:"nil"}); err != nil {
+	if err := updateSubscriptionInDb(userId, webpush.Subscription{Endpoint: "nil"}); err != nil {
 		log.Print(err)
 		http.Error(w, err.Error(), 500)
 		return
@@ -62,10 +62,10 @@ func SendNotif(body string, userId string) (error) {
 		return nil // Unsubscribed user
 	}
 	_, err = webpush.SendNotification([]byte(body), &s, &webpush.Options{
-		Subscriber: settings.sub,
+		Subscriber:      settings.sub,
 		VAPIDPrivateKey: settings.privateKey,
-		HTTPClient: settings.httpClient,
-		Urgency: webpush.UrgencyNormal,
+		HTTPClient:      settings.httpClient,
+		Urgency:         webpush.UrgencyNormal,
 	})
 	if err != nil {
 		return err
