@@ -88,6 +88,12 @@ const GET_PROFILE = gql`
   }
 `;
 
+let parseWinRate = (rawWinRate) => {
+  let winRate = rawWinRate * 100.0;
+  return winRate.toFixed(1) + "%"
+};
+
+
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
@@ -159,7 +165,7 @@ class ProfileScreen extends Component {
                   {profile ? profile.name : "???"}
                 </Typography>
                 <Typography className={classes.winrate} variant="title" align="center">
-                  Win rate: {profile ? profile.winRate : 0}%
+                  Win rate: {profile ? parseWinRate(profile.winRate) : 0}%
                 </Typography>
                 <div className={classes.progressBar}>
                   <ProgressBar level={profile ? profile.level : "?"} expProgress={profile ? profile.expProgress : 0.8}/>
