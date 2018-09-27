@@ -225,6 +225,9 @@ const styles = theme => ({
   dialogTitle: {
     marginTop: 10,
   },
+  errorMsg: {
+    color: '#b90f0f'
+  }
 });
 
 class GameScreen extends Component {
@@ -239,7 +242,8 @@ class GameScreen extends Component {
       querySuccess: false,
       selected: 1,
       hasUserVoted: false,
-      isGameOver: false
+      isGameOver: false,
+      errorMsg: false
     }
   }
 
@@ -260,17 +264,15 @@ class GameScreen extends Component {
       bet: ''
     });
   };
-  handleSubmit = () => {
-    this.setState({
-      loading: true,
-      querySent: true
-    }, () => {
-      // TODO: Make gql query to submit request
+  handleSubmit = (createVote, stakes) => {
+    // TODO: check whether exceeds user's money
+    if (stakes === 'Fixed Stakes' || this.state.bet > 0) {
+      createVote();
+    } else {
       this.setState({
-        loading: false,
-        queryStatus: true // true for successful request
+        errorMsg: true
       })
-    })
+    }
   };
 
   render() {
@@ -371,7 +373,13 @@ class GameScreen extends Component {
                         onChange={this.handleChange('bet')}
                       />
                     }
-                    <SubmitButton submitHandler={createVote}/>
+                    {
+                      this.state.errorMsg &&
+                      <Typography className={classes.errorMsg}>
+                        Please provide a valid bet amount.
+                      </Typography>
+                    }
+                    <SubmitButton submitHandler={() => this.handleSubmit(createVote, parsedGame.stakes)}/>
                   </DialogContent>
                 </Fragment>
               }
