@@ -4,8 +4,8 @@ import {withStyles} from '@material-ui/core/styles';
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
 import AppBar from "@material-ui/core/AppBar/AppBar";
-import LoginLogo from './assets/login-logo.png';
-import {loginWithFacebook} from "../utils/auth";
+import LoginLogo from '../assets/login-logo.png';
+import {loginWithFacebook} from "../../utils/auth";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({

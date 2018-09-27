@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import BottomNavBar from "../BottomNavBar";
+import BottomNavBar from "../shared/BottomNavBar";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import AppBar from "@material-ui/core/AppBar/AppBar";
@@ -17,8 +17,8 @@ import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import StakesMode from "../CreateGame/StakesMode";
 import ButtonBase from "@material-ui/core/ButtonBase/ButtonBase";
 import Paper from "@material-ui/core/Paper/Paper";
-import CancelButton from "../CancelButton";
-import SubmitButton from "../SubmitButton";
+import CancelButton from "../shared/CancelButton";
+import SubmitButton from "../shared/SubmitButton";
 
 const styles = theme => ({
   root: {

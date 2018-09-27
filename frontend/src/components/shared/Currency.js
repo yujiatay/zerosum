@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import HattleCoin from "./assets/hattlecoin.png";
+import HattleCoin from "../assets/hattlecoin.png";
 
 const styles = theme => ({
   coin: {

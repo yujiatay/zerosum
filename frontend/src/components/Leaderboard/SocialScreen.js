@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
 import AppBar from "@material-ui/core/AppBar/AppBar";
-import BottomNavBar from "../BottomNavBar";
+import BottomNavBar from "../shared/BottomNavBar";
 import Tabs from "@material-ui/core/Tabs/Tabs";
 import Tab from "@material-ui/core/Tab/Tab";
 import Leaderboard from "./Leaderboard";

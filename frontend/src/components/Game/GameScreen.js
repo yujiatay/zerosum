@@ -10,7 +10,7 @@ import CardContent from "@material-ui/core/CardContent/CardContent";
 import Card from "@material-ui/core/Card/Card";
 import Avatar from '@material-ui/core/Avatar';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Currency from "../Currency";
+import Currency from "../shared/Currency";
 import Dice from "../assets/dice-logo-blue.png";
 import Paper from '@material-ui/core/Paper';
 import Money from '../assets/money-bag.png';
@@ -25,8 +25,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {Mutation, Query} from 'react-apollo';
 import gql from "graphql-tag";
-import CancelButton from "../CancelButton";
-import SubmitButton from "../SubmitButton";
+import CancelButton from "../shared/CancelButton";
+import SubmitButton from "../shared/SubmitButton";
 
 
 const CREATE_VOTE = gql`

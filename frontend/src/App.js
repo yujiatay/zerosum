@@ -7,7 +7,7 @@ import ProfileScreen from "./components/Profile/ProfileScreen";
 import GameScreen from './components/Game/GameScreen';
 import ShopScreen from "./components/Shop/ShopScreen";
 import SocialScreen from "./components/Leaderboard/SocialScreen";
-import LoginScreen from './components/LoginScreen';
+import LoginScreen from './components/Login/LoginScreen';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {
   faHome, faShoppingCart, faPlusCircle,

@@ -4,7 +4,7 @@ import AppBar from "@material-ui/core/AppBar/AppBar";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
 import TextField from '@material-ui/core/TextField';
-import BottomNavBar from "../BottomNavBar";
+import BottomNavBar from "../shared/BottomNavBar";
 import Button from '@material-ui/core/Button';
 import SectionHeader from "./SectionHeader";
 import OptionList from "./OptionList";
