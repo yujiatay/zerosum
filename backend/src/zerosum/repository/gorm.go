@@ -354,6 +354,26 @@ func QueryHatOwnership(desiredHatOwnership models.HatOwnership) (hatOwnership mo
 	return
 }
 
+func QueryUserHats(userId string, owned bool, achievement bool) (hats []models.Hat, err error) {
+	var validHatOwnerships []models.HatOwnership
+	err = db.Where("user_id = ? AND owned = ?", userId, owned).Find(&validHatOwnerships).Error
+	if err != nil {
+		return
+	}
+
+	for _, hatOwnership := range validHatOwnerships {
+		desiredHat, internalErr := QueryHat(models.Hat{Id: hatOwnership.HatId})
+		if internalErr != nil {
+			err = internalErr
+			return
+		}
+		if desiredHat.Achieve == achievement {
+			hats = append(hats, desiredHat)
+		}
+	}
+	return
+}
+
 func UpdateHatOwnership(hatOwnership models.HatOwnership) (err error) {
 	// Check if exists
 	var foundOwnership models.HatOwnership

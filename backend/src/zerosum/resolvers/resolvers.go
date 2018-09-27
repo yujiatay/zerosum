@@ -99,10 +99,30 @@ func (r *Resolver) VOTE(ctx context.Context, args voteQuery) (*VoteResolver, err
 func (r *Resolver) VOTES(ctx context.Context, args userVoteQuery) (voteResolvers []*VoteResolver, err error) {
 	votes, err := repository.QueryVotes(models.Vote{UserId: getIdFromCtx(ctx)}, args.Limit, args.After)
 	var voteList []*VoteResolver
-	for _, vote := range votes {
-		voteList = append(voteList, &VoteResolver{vote: &vote})
+	for index := range votes {
+		voteList = append(voteList, &VoteResolver{vote: &votes[index]})
 	}
 	voteResolvers = voteList
+	return
+}
+
+func (r *Resolver) STOREHATS(ctx context.Context, args *struct { Owned bool }) (hatResolvers []*HatResolver, err error) {
+	hats, err := repository.QueryUserHats(getIdFromCtx(ctx), args.Owned, false)
+	var hatList []*HatResolver
+	for index := range hats {
+		hatList = append(hatList, &HatResolver{hat: &hats[index], owned: args.Owned, achieved: false})
+	}
+	hatResolvers = hatList
+	return
+}
+
+func (r *Resolver) ACHIEVEDHATS(ctx context.Context) (hatResolvers []*HatResolver, err error) {
+	hats, err := repository.QueryUserHats(getIdFromCtx(ctx), true, true)
+	var hatList []*HatResolver
+	for index := range hats {
+		hatList = append(hatList, &HatResolver{hat: &hats[index], owned: true, achieved: true})
+	}
+	hatResolvers = hatList
 	return
 }
 
