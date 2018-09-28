@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {getToken} from "./auth";
 
 const VAPID_PUB_KEY = "BMXz5ZEhprGoI7vsIPkU9rYYt0gTrMFm_PlaztA2s5b36yiGc-VDYEykpLngVfyUoViASc0wl7ypBKFwruZk9E8";
 const applicationServerKey = urlB64ToUint8Array(VAPID_PUB_KEY);
@@ -18,19 +19,32 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
-export let isSubscribed = undefined;
-
-export function initPushStatus(swReg) {
+function initPushStatus(swReg) {
   return swReg.pushManager.getSubscription().then(sub => {
     isSubscribed = !(sub === null);
     console.log("[Service Worker] " + (isSubscribed ? "Subscribed" : "Not subscribed") + " to push notifications")
   })
 }
+
+export let isSubscribed = undefined;
+
+export function requestForPush() {
+  navigator.serviceWorker.ready.then(swReg => {
+    console.log("[Service Worker] Ready");
+    return initPushStatus(swReg).then(() => {
+      if (!isSubscribed) {
+        // Ask for permissions and subscribe push notif
+        getToken().then(t => (t ? subscribeUser(swReg, t) : null))
+      }
+    })
+  })
+}
+
 /**
  *
  * @param swReg
  * @param authToken
- * @returns {Promise<boolean | never>} true if success, false otherwise
+ * @returns {Promise<boolean>} true if success, false otherwise
  */
 export function subscribeUser(swReg, authToken) {
   return swReg.pushManager.subscribe({
@@ -38,11 +52,11 @@ export function subscribeUser(swReg, authToken) {
     applicationServerKey: applicationServerKey
   }).then(sub => updateSubscriptionOnServer(sub, authToken))
     .then(() => {
-      console.log("User is subscribed to push notifications");
+      console.log("[Service Worker] User is subscribed to push notifications");
       isSubscribed = true;
       return true;
     }).catch(e => {
-      console.log("Failed to subscribe user: ", e);
+      console.log("[Service Worker] Failed to subscribe user: ", e);
       return false;
     })
 }

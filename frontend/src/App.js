@@ -17,6 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ReactGA from 'react-ga';
 import {getToken} from "./utils/auth";
+import {requestForPush} from "./utils/pushNotifications";
 
 library.add(faHome, faShoppingCart, faPlusCircle,
   faTrophy, faUserCircle, faSearch, faFilter,
@@ -145,7 +146,10 @@ class AppRoutes extends Component {
     this.setState({
       isLoggedIn: isLoggedIn
     });
-    this.props.history.push("/")
+    this.props.history.push("/");
+    if (isLoggedIn && this.props.pushSupported) {
+      requestForPush();
+    }
   };
 
   loadingStateHandler = (isLoading) => {
