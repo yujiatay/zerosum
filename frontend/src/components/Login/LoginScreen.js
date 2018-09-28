@@ -47,8 +47,8 @@ class LoginScreen extends Component {
   fbLoginResponse = res => {
     this.props.loadingStateHandler(true);
     if (res.userID) {
-      loginWithFacebook(res.accessToken, res.userID, () => {
-        this.props.authStateHandler(true);
+      loginWithFacebook(res.accessToken, res.userID, (firstLogin) => {
+        this.props.authStateHandler(true, firstLogin);
         this.props.loadingStateHandler(false)
       }).catch(e => {
         console.log("[Login] error: " + e);

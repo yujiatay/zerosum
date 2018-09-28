@@ -142,11 +142,14 @@ class AppRoutes extends Component {
     });
   }
 
-  authStateHandler = (isLoggedIn) => {
+  authStateHandler = (isLoggedIn, firstLogin) => {
     this.setState({
       isLoggedIn: isLoggedIn
     });
     this.props.history.push("/");
+    if (firstLogin) {
+      console.log("[First login] Welcome!");
+    }
     if (isLoggedIn && this.props.pushSupported) {
       requestForPush();
     }
