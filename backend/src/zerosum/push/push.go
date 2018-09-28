@@ -3,6 +3,7 @@ package push
 import (
 	"encoding/json"
 	"github.com/SherClockHolmes/webpush-go"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"zerosum/models"
@@ -63,7 +64,7 @@ func SendNotif(body string, userId string) (error) {
 	if s.Endpoint == "" || s.Endpoint == "nil" {
 		return nil // Unsubscribed user
 	}
-	_, err = webpush.SendNotification([]byte(body), &s, &webpush.Options{
+	resp, err := webpush.SendNotification([]byte(body), &s, &webpush.Options{
 		Subscriber:      settings.sub,
 		VAPIDPrivateKey: settings.privateKey,
 		HTTPClient:      settings.httpClient,
@@ -71,6 +72,13 @@ func SendNotif(body string, userId string) (error) {
 	})
 	if err != nil {
 		return err
+	}
+	log.Printf("%s, %d", resp.Status, resp.StatusCode)
+	bodyString, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Print(err)
+	} else {
+		log.Printf(string(bodyString))
 	}
 	log.Printf("notified %s via push", userId)
 	return nil
