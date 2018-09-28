@@ -177,7 +177,6 @@ class ShopList extends Component {
             </Paper>
           );
           const hats = data.storeHats;
-          console.log(hats);
           const buyHatsMutation = (
             <Mutation mutation={BUY_HAT} variables={{id: this.state.selectedHat.id}}>
               {(buyHat, {loading, error, called}) => (

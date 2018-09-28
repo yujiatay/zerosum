@@ -312,7 +312,6 @@ class GamesScreen extends Component {
             } else {
               let games = data.activeGames;
               if (games === undefined) games = [];
-              console.log(games);
               if (this.state.sortState) {
                 games = this.applySort(games);
               }
@@ -359,7 +358,6 @@ class GamesScreen extends Component {
                           if (joinedResolved === undefined) joinedResolved = [];
                           let games = createdActive.activeGames.concat(joinedActive.activeGames,
                             createdResolved.completedGames, joinedResolved.completedGames);
-                          console.log(games);
                           if (this.state.sortState) {
                             games = this.applySort(games);
                           }

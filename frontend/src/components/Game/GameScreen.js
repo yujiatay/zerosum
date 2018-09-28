@@ -384,8 +384,6 @@ class GameScreen extends Component {
                     if (!data) return <div>Error</div>;
 
                     const vote = data.vote;
-                    console.log(vote);
-
                     return (
                       parsedGame.options.map((option, index) =>
                         <Card key={index}

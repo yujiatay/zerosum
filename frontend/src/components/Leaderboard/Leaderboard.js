@@ -134,7 +134,6 @@ class Leaderboard extends Component {
           );
 
           const leaders = data.leaderboard;
-          console.log(leaders);
           return (
             <Paper elevation={0} className={classes.body}>
               {

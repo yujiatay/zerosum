@@ -13,7 +13,6 @@ import ProgressBar from "./ProgressBar";
 import ProfileHats from './ProfileHats';
 import ProfileAchievements from "./ProfileAchievements";
 import ReactGA from "react-ga";
-
 import {Query} from 'react-apollo'
 import gql from 'graphql-tag'
 import {logout} from "../../utils/auth";

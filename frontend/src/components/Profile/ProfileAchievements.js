@@ -86,7 +86,6 @@ class ProfileAchievements extends Component {
             </Paper>
           );
           const hats = data.achievedHats;
-          console.log(hats);
           if (hats === undefined || hats.length === 0) {
             return (
               <Paper elevation={0} className={classes.body}>

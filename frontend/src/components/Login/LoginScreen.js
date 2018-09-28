@@ -51,12 +51,11 @@ class LoginScreen extends Component {
         this.props.authStateHandler(true);
         this.props.loadingStateHandler(false)
       }).catch(e => {
-        console.log("Login error: " + e);
+        console.log("[Login] error: " + e);
         this.setState({error: true});
         this.props.loadingStateHandler(false)
       })
     } else {
-      console.log(res);
       this.setState({error: true});
       this.props.loadingStateHandler(false)
     }

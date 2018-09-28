@@ -43,7 +43,7 @@ export async function getToken() {
       token = t;
       return t;
     }).catch((e) => {
-      console.log(e);
+      console.log("[Auth] error " + e);
       return null;
     })
   }
