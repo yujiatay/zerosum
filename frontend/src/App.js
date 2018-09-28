@@ -195,7 +195,7 @@ class AppRoutes extends Component {
 class App extends Component {
 
   render() {
-    let renderAppRoutes = (props) => <AppRoutes {...props}/>;
+    let renderAppRoutes = (props) => <AppRoutes pushSupported={this.props.pushSupported} {...props}/>;
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
