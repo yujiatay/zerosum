@@ -16,7 +16,7 @@ self.addEventListener('push', e => {
   console.log("[Service Worker] Push received: " + e.data.text());
   const title = "Zerosum";
   const options = {
-    body: e.data,
+    body: e.data.text(),
     icon: 'images/icon-192.png',
     badge: 'images/icon-192.png'
   };
