@@ -15,6 +15,7 @@ import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import TextField from "@material-ui/core/TextField/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
 import SubmitButton from "../shared/SubmitButton";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 
 const GET_STORE_HATS = gql`
@@ -119,6 +120,20 @@ const styles = theme => ({
   dialogText: {
     color: '#068D9D',
   },
+  queryDialog: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  dialogTitle: {
+    marginTop: 10,
+  },
+  success: {
+    color: '#069d54'
+  },
+  failure: {
+    color: '#9d0606'
+  },
 });
 
 class ShopList extends Component {
@@ -201,14 +216,25 @@ class ShopList extends Component {
                       ? loading
                         ? <CircularProgress className={classes.progress} size={50}/>
                         : error
-                          ? <CircularProgress className={classes.progress} size={50}/> // TODO: insert error screen here
-                          : <CircularProgress className={classes.progress} size={50}/> // TODO: insert bought screen here
+                          ?
+                          <DialogContent className={classes.queryDialog}>
+                            <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
+                            <Typography variant="title" className={classes.dialogTitle} align="center">
+                              Connection failed. Please try again!
+                            </Typography>
+                          </DialogContent>
+                          :
+                          <DialogContent className={classes.queryDialog}>
+                            <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
+                            <Typography variant="title" className={classes.dialogTitle} align="center">
+                              You have purchased a new hat!
+                            </Typography>
+                          </DialogContent>
                       :
                       <Fragment>
                         <CancelButton closeHandler={this.handleClose}/>
-                        < DialogContent>
-
-                          < Typography variant="title" color="textPrimary" align="center">
+                        <DialogContent>
+                          <Typography variant="title" color="textPrimary" align="center">
                             You're about to buy {selectedHat.name} for {selectedHat.price} HattleCoins.
                           </Typography>
                           <Typography className={classes.dialogText} align="center">
