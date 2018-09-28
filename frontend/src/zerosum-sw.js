@@ -17,8 +17,8 @@ self.addEventListener('push', e => {
   const title = "Zerosum";
   const options = {
     body: e.data.text(),
-    icon: 'images/icon-192.png',
-    badge: 'images/icon-192.png'
+    icon: 'images/dice-512.png',
+    badge: 'images/dice-512.png'
   };
   e.waitUntil(self.registration.showNotification(title, options));
 });
