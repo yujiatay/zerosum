@@ -107,10 +107,12 @@ class GamesScreen extends Component {
     super(props);
     this.state = {
       value: 0,
-      filterDialog: false,
+      sortDialog: false,
       gmode: 'MAJORITY',
       smode: 'FIXED_STAKES',
-      searchBarState: false
+      searchBarState: false,
+      search: '',
+      sortState: false
     }
   }
 
@@ -121,15 +123,46 @@ class GamesScreen extends Component {
   handleChange = (event, value) => {
     this.setState({value});
   };
-  handleFilter = () => {
+  handleSortOpen = () => {
     this.setState({
-      filterDialog: true
+      sortDialog: true
     })
   };
-  handleClose = () => {
+  handleSortClose = () => {
     this.setState({
-      filterDialog: false
+      sortDialog: false
     });
+  };
+  handleSort = () => {
+    this.setState({
+      sortState: true,
+      sortDialog: false
+    })
+  };
+  applySort = (games) => {
+    // Sort by majority/minority
+    const gmComparator = (a, b) => {
+      let value = 0;
+      if (a.gameMode === this.state.gmode && b.gameMode !== this.state.gmode) {
+        value = -1;
+      } else if (b.gameMode === this.state.gmode && a.gameMode !== this.state.gmode) {
+        value = 1;
+      }
+      return value;
+    };
+    games.sort(gmComparator);
+    // Sort by fixed stakes/no limit
+    const smComparator = (a, b) => {
+      let value = 0;
+      if (a.gameMode === this.state.smode && b.gameMode !== this.state.smode) {
+        value = -1;
+      } else if (b.gameMode === this.state.smode && a.gameMode !== this.state.smode) {
+        value = 1;
+      }
+      return value;
+    };
+    games.sort(smComparator);
+    return games;
   };
   handleGameMode = mode => {
     this.setState({
@@ -141,14 +174,19 @@ class GamesScreen extends Component {
       smode: stake
     })
   };
-  handleSearch = () => {
+  handleSearchOpen = () => {
     this.setState({
       searchBarState: true
     })
   };
-  handleBack = () => {
+  handleSearchClose = () => {
     this.setState({
       searchBarState: false
+    })
+  };
+  handleSearch = (event) => {
+    this.setState({
+      search: event.target.value
     })
   };
 
@@ -165,7 +203,7 @@ class GamesScreen extends Component {
                 ?
                 <Fragment>
                   <IconButton aria-haspopup="true" className={classes.backButton}
-                              onClick={this.handleBack} color="inherit">
+                              onClick={this.handleSearchClose} color="inherit">
                     <FontAwesomeIcon icon="arrow-left" size="sm"/>
                   </IconButton>
                   <Input
@@ -175,6 +213,7 @@ class GamesScreen extends Component {
                       root: classes.inputRoot,
                       input: classes.inputInput,
                     }}
+                    onChange={this.handleSearch}
                   />
                 </Fragment>
                 : <Fragment>
@@ -186,10 +225,10 @@ class GamesScreen extends Component {
                   </Typography>
                   <div className={classes.grow}/>
                   <div className={classes.sectionMobile}>
-                    <IconButton aria-haspopup="true" onClick={this.handleSearch} color="inherit">
+                    <IconButton aria-haspopup="true" onClick={this.handleSearchOpen} color="inherit">
                       <FontAwesomeIcon icon="search" size="sm"/>
                     </IconButton>
-                    <IconButton aria-haspopup="true" onClick={this.handleFilter} color="inherit">
+                    <IconButton aria-haspopup="true" onClick={this.handleSortOpen} color="inherit">
                       <FontAwesomeIcon icon="filter" size="sm"/>
                     </IconButton>
                   </div>
@@ -215,7 +254,7 @@ class GamesScreen extends Component {
           </Tabs>
         </AppBar>
         {value === 0 &&
-        <Query query={GET_ACTIVE_GAMES} variables={{filter: "", joined: false}} fetchPolicy="no-cache">
+        <Query query={GET_ACTIVE_GAMES} variables={{filter: this.state.search, joined: false}} fetchPolicy="no-cache">
           {({loading, error, data}) => {
             if (loading) {
               return (
@@ -240,6 +279,9 @@ class GamesScreen extends Component {
               let games = data.activeGames;
               if (games === undefined) games = [];
               console.log(games);
+              if (this.state.sortState) {
+                games = this.applySort(games);
+              }
               return <GamesList games={games}/>
             }
           }}
@@ -248,11 +290,11 @@ class GamesScreen extends Component {
         {value === 1 && <GamesList games={[]}/>}
 
         <Dialog
-          open={this.state.filterDialog}
-          onClose={this.handleClose}
+          open={this.state.sortDialog}
+          onClose={this.handleSortClose}
           aria-labelledby="form-dialog-title"
         >
-          <CancelButton closeHandler={this.handleClose}/>
+          <CancelButton closeHandler={this.handleSortClose}/>
           <DialogContent>
             <Typography variant="title" className={classes.dialogTitle} align="center">
               Sort by
@@ -265,7 +307,7 @@ class GamesScreen extends Component {
               Stakes Mode
             </Typography>
             <StakesMode clickHandler={this.handleStakes}/>
-            <SubmitButton submitHandler={this.handleSubmit}/>
+            <SubmitButton submitHandler={this.handleSort}/>
           </DialogContent>
         </Dialog>
         <BottomNavBar value={0}/>
