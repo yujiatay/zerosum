@@ -4,6 +4,20 @@
 
 ZeroSum is a social experiment game that pits players against each other in a winners-take-all fashion. 
 
+## Architecture
+
+### Frontend
+
+- React
+- Material-UI
+- **_GraphQL_**
+
+### Backend
+
+- Golang
+- **_GraphQL_**
+- PostgreSQL
+
 ## Team
 
 | [Foo Guo Wei](https://github.com/tomforge) | [Phua Tai Da John](https://github.com/JayPeeTeeDee) | [Tay Yu Jia](https://github.com/yujiatay) | [Lim Hui Qi](https://github.com/LuMiN0uSaRc) |
