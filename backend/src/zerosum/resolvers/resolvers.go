@@ -12,10 +12,15 @@ import (
 
 type Resolver struct{}
 
-type gameSearchQuery struct {
-	Filter string
-	Limit  *int32
-	After  *int32
+type activeGameSearchQuery struct {
+	Filter  string
+	Joined  *bool
+	Created *bool
+	Limit   *int32
+}
+
+type completedGameSearchQuery struct {
+	Created bool
 }
 
 type voteQuery struct {
@@ -73,8 +78,18 @@ func (r *Resolver) GAME(ctx context.Context, args *struct{ Id string }) (*GameRe
 	return &GameResolver{game: &game}, err
 }
 
-func (r *Resolver) GAMES(ctx context.Context, args gameSearchQuery) (gameResolvers []*GameResolver, err error) {
-	games, err := repository.SearchGames(args.Filter, args.Limit, args.After)
+func (r *Resolver) ACTIVEGAMES(ctx context.Context, args activeGameSearchQuery) (gameResolvers []*GameResolver, err error) {
+	games, err := repository.SearchActiveGames(args.Filter, args.Joined, args.Created, getIdFromCtx(ctx), args.Limit)
+	var gamesList []*GameResolver
+	for index := range games {
+		gamesList = append(gamesList, &GameResolver{game: &games[index]})
+	}
+	gameResolvers = gamesList
+	return
+}
+
+func (r *Resolver) COMPLETEDGAMES(ctx context.Context, args completedGameSearchQuery) (gameResolvers []*GameResolver, err error) {
+	games, err := repository.GetCompletedGames(getIdFromCtx(ctx), args.Created)
 	var gamesList []*GameResolver
 	for index := range games {
 		gamesList = append(gamesList, &GameResolver{game: &games[index]})
@@ -99,7 +114,7 @@ func (r *Resolver) LEADERBOARD(ctx context.Context, args *struct{ Limit int32 })
 }
 
 func (r *Resolver) VOTE(ctx context.Context, args voteQuery) (*VoteResolver, error) {
-	vote, err := repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
+	vote, err, _ := repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
 	return &VoteResolver{vote: &vote}, err
 }
 
@@ -201,7 +216,7 @@ func (r *Resolver) AddVote(ctx context.Context, args *struct{ Vote voteInput }) 
 	err = logic.AllocateVoteExp(getIdFromCtx(ctx))
 	if err == nil {
 		err = repository.CreateVote(newVote)
-		vote, err := repository.QueryVote(newVote)
+		vote, err, _ := repository.QueryVote(newVote)
 		if err == nil {
 			voteRes := VoteResolver{vote: &vote}
 			voteResolver = &voteRes
@@ -221,5 +236,45 @@ func (r *Resolver) BuyHat(ctx context.Context, args *struct{ Id string }) (hatRe
 	if err == nil {
 		hatResolver = &HatResolver{hat: &desiredHat, owned: true, achieved: false}
 	}
+	return
+}
+
+func (r *Resolver) ValidateResult(ctx context.Context, args *struct{ GameId string }) (success bool, err error) {
+	game, err := repository.QueryGame(models.Game{Id: args.GameId})
+	if err != nil {
+		success = false
+		return
+	}
+
+	// Is creator
+	if game.UserId == getIdFromCtx(ctx) {
+		game.Validated = true
+		err = repository.UpdateGame(game)
+	}
+
+	if err != nil {
+		success = false
+		return
+	}
+
+	// Is voter
+	vote, internalErr, recordNotFound := repository.QueryVote(models.Vote{UserId: getIdFromCtx(ctx), GameId: game.Id})
+	if internalErr != nil && !recordNotFound {
+		err = internalErr
+		success = false
+		return
+	}
+
+	// Result not validated by user yet
+	if !recordNotFound {
+		vote.Validated = true
+		err = repository.UpdateVote(vote)
+	}
+
+	if err != nil {
+		success = false
+		return
+	}
+
 	return
 }

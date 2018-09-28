@@ -64,24 +64,112 @@ func QueryGame(desiredGame models.Game) (game models.Game, err error) {
 	return
 }
 
-func SearchGames(searchString string, limit *int32, after *int32) (games []models.Game, err error) {
+func SearchActiveGames(searchString string, joined *bool, created *bool, userId string, limit *int32) (games []models.Game, err error) {
 
-	offset := int32(0)
-
-	if after != nil {
-		offset = *after
+	if joined == nil && created == nil {
+		err = errors.New("created and joined are both not specified")
 	}
 
-	interm := db.Offset(offset)
+	// Get games that fit the search query
+	interm := db.Order("end_time asc").Where("topic LIKE ? AND end_time > ?", fmt.Sprintf("%%%s%%", searchString), time.Now())
+	var candidateActiveGames []models.Game
+
+	// Get games according to created flag, or all valid games if nil
+	if created != nil {
+		switch *created {
+		case true:
+			res := interm.Where("user_id = ?", userId).Find(&candidateActiveGames)
+			if res.Error != nil {
+				err = res.Error
+			}
+		case false:
+			res := interm.Where("user_id <> ?", userId).Find(&candidateActiveGames)
+			if res.Error != nil {
+				err = res.Error
+			}
+		}
+	} else {
+		res := interm.Find(&candidateActiveGames)
+		if res.Error != nil {
+			err = res.Error
+		}
+	}
+
+	if err != nil {
+		return
+	}
+
+
+	// Filter to limit and joined
+	var activeGames []models.Game
+
+	gamesLeft := int32(-1)
 	if limit != nil {
-		interm = interm.Limit(*limit)
+		gamesLeft = *limit
 	}
 
-	res := interm.Where("topic LIKE ? AND end_time > ?", fmt.Sprintf("%%%s%%", searchString), time.Now()).Find(&games)
+	for _, game := range candidateActiveGames {
+		if gamesLeft == 0 {
+			break
+		}
+		//  Filter by joined if needed, else just add till limit
+		if joined != nil {
+			_, internalErr, recordNotFound := QueryVote(models.Vote{UserId: userId, GameId: game.Id})
+			if internalErr != nil && !recordNotFound {
+				err = internalErr
+				return
+			}
+			if !recordNotFound && *joined {
+				activeGames = append(activeGames, game)
+				gamesLeft -= 1
+			} else if recordNotFound && !*joined {
+				activeGames = append(activeGames, game)
+				gamesLeft -= 1
+			}
+		} else {
+			activeGames = append(activeGames, game)
+			gamesLeft -= 1
+		}
+	}
+	games = activeGames
+	return
+}
+
+func GetCompletedGames(userId string, created bool) (games []models.Game, err error) {
+
+	interm := db.Order("end_time asc")
+	// Get games that are completed and fit the created requirement
+	if created {
+		interm = interm.Where("user_id = ? AND validated = ? AND resolved = ?", userId, false, true)
+	} else {
+		interm = interm.Where("user_id <> ? AND resolved = ?", userId, true)
+	}
+	var candidateCompletedGames []models.Game
+	res := interm.Find(&candidateCompletedGames)
 	if res.Error != nil {
 		err = res.Error
 	}
-	return
+
+	// If games were not created by user, ensure that they are joined by user and not validated
+	if created {
+		games = candidateCompletedGames
+		return
+	} else {
+		var validGames []models.Game
+		for _, game := range candidateCompletedGames {
+			vote, internalErr, recordNotFound := QueryVote(models.Vote{UserId: userId, GameId: game.Id})
+			if internalErr != nil && !recordNotFound {
+				err = internalErr
+				return
+			}
+			// Result not validated by user yet
+			if !recordNotFound && !vote.Validated {
+				validGames = append(validGames, game)
+			}
+		}
+		games = validGames
+		return
+	}
 }
 
 func CountGames() (total int32) {
@@ -95,7 +183,7 @@ func UpdateGame(game models.Game) (err error) {
 		err = errors.New("game does not exist")
 		return
 	}
-	res:= db.Model(&models.Game{}).Updates(game)
+	res := db.Model(&models.Game{}).Updates(game)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -109,7 +197,7 @@ func DeleteGame(game models.Game) (err error) {
 		err = errors.New("game does not exist")
 		return
 	}
-	res:= db.Delete(&game)
+	res := db.Delete(&game)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -139,7 +227,7 @@ func UpdateOption(option models.Option) (err error) {
 		err = errors.New("option does not exist")
 		return
 	}
-	res:= db.Model(&models.Option{}).Updates(option)
+	res := db.Model(&models.Option{}).Updates(option)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -151,15 +239,15 @@ func UpdateOption(option models.Option) (err error) {
 func GetOrCreateUser(desiredUser models.User) (user models.User, err error) {
 	// Check if alr exists
 	err = db.Where("fb_id = ?", desiredUser.FbId).Attrs(models.User{
-		FbId: desiredUser.FbId,
-		MoneyTotal: int32(2000),
-		WinRate: 0,
-		GamesPlayed: 0,
-		GamesWon: 0,
-		Experience: 0,
-		Name: "HatMatter",
-		PushSubscription: webpush.Subscription{Endpoint:"nil"},
-		}).FirstOrCreate(&user).Error
+		FbId:             desiredUser.FbId,
+		MoneyTotal:       int32(2000),
+		WinRate:          0,
+		GamesPlayed:      0,
+		GamesWon:         0,
+		Experience:       0,
+		Name:             "HatMatter",
+		PushSubscription: webpush.Subscription{Endpoint: "nil"},
+	}).FirstOrCreate(&user).Error
 	return
 }
 
@@ -195,7 +283,7 @@ func UpdateUser(user models.User) (err error) {
 		err = errors.New("user does not exist")
 		return
 	}
-	res:= db.Model(&models.User{}).Updates(user)
+	res := db.Model(&models.User{}).Updates(user)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -209,7 +297,7 @@ func DeleteUser(user models.User) (err error) {
 		err = errors.New("user does not exist")
 		return
 	}
-	res:= db.Delete(&user)
+	res := db.Delete(&user)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -233,10 +321,11 @@ func CreateVote(vote models.Vote) (err error) {
 	return
 }
 
-func QueryVote(desiredVote models.Vote) (vote models.Vote, err error) {
+func QueryVote(desiredVote models.Vote) (vote models.Vote, err error, recordNotFound bool) {
 	res := db.Where(desiredVote).First(&vote)
 	if res.RecordNotFound() {
 		err = errors.New("no vote found")
+		recordNotFound = true
 	} else if res.Error != nil {
 		err = res.Error
 	}
@@ -279,7 +368,7 @@ func UpdateVote(vote models.Vote) (err error) {
 		err = errors.New("vote does not exist")
 		return
 	}
-	res:= db.Model(&models.Vote{}).Updates(vote)
+	res := db.Model(&models.Vote{}).Updates(vote)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -293,7 +382,7 @@ func DeleteVote(vote models.Vote) (err error) {
 		err = errors.New("vote does not exist")
 		return
 	}
-	res:= db.Delete(&vote)
+	res := db.Delete(&vote)
 	if res.Error != nil {
 		err = res.Error
 	}
@@ -388,7 +477,7 @@ func UpdateHatOwnership(hatOwnership models.HatOwnership) (err error) {
 		err = errors.New("no ownership found")
 		return
 	}
-	res:= db.Model(&models.HatOwnership{}).Updates(hatOwnership)
+	res := db.Model(&models.HatOwnership{}).Updates(hatOwnership)
 	if res.Error != nil {
 		err = res.Error
 	}
