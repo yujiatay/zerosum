@@ -9,8 +9,10 @@ ZeroSum is a social experiment game that pits players against each other in a wi
 1. Log in with Facebook at https://zerosum.ml
 2. Read our Hattoria storyline and tutorial! 
 
-<img src="./docs/story-1.png">
-<img src="./docs/story-2.png">
+<p>
+<img src="./docs/story-1.png" width="45%">
+<img src="./docs/story-2.png" width="45%">
+</p>
 
 3. Enjoy the game 🎲
 
