@@ -66,6 +66,7 @@ func SendNotif(body string, userId string) (error) {
 	if s.Endpoint == "" || s.Endpoint == "nil" {
 		return nil // Unsubscribed user
 	}
+	log.Printf(settings.privateKey)
 	resp, err := webpush.SendNotification([]byte(body), &s, &webpush.Options{
 		Subscriber:      settings.sub,
 		VAPIDPrivateKey: settings.privateKey,
