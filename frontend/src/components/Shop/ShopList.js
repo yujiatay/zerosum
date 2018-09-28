@@ -227,8 +227,8 @@ class ShopList extends Component {
           return (
             <Paper elevation={0} className={classes.bodyWithHats}>
               <GridList cols={2}>
-                {hats.map(hat => (
-                  <GridListTile key={hat.img} cols={1}>
+                {hats.map((hat, index) => (
+                  <GridListTile key={index} cols={1}>
                     <Paper className={classes.card}>
                       <ButtonBase className={classes.button} onClick={() => this.handleClick(hat)}>
                         <Paper elevation={0} className={classes.innerCard}>
