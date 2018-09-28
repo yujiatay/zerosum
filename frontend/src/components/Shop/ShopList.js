@@ -180,6 +180,50 @@ class ShopList extends Component {
           );
           const hats = data.storeHats;
           console.log(hats);
+          const buyHatsMutation = (
+            <Mutation mutation={BUY_HAT} variables={{id: this.state.selectedHat.id}}>
+              {(buyHat, {loading, error, called}) => (
+                <Dialog
+                  open={true}
+                  onClose={this.handleClose}
+                  aria-labelledby="form-dialog-title"
+                >
+                  {called
+                    ? loading
+                      ? <CircularProgress className={classes.progress} size={50}/>
+                      : error
+                        ?
+                        <DialogContent className={classes.queryDialog}>
+                          <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
+                          <Typography variant="title" className={classes.dialogTitle} align="center">
+                            Connection failed. Please try again!
+                          </Typography>
+                        </DialogContent>
+                        :
+                        <DialogContent className={classes.queryDialog}>
+                          <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
+                          <Typography variant="title" className={classes.dialogTitle} align="center">
+                            You have purchased a new hat!
+                          </Typography>
+                        </DialogContent>
+                    :
+                    <Fragment>
+                      <CancelButton closeHandler={this.handleClose}/>
+                      <DialogContent>
+                        <Typography variant="title" color="textPrimary" align="center">
+                          You're about to buy {selectedHat.name} for {selectedHat.price} HattleCoins.
+                        </Typography>
+                        <Typography className={classes.dialogText} align="center">
+                          HattleCoins are not refundable after submission!
+                        </Typography>
+                        <SubmitButton submitHandler={buyHat}/>
+                      </DialogContent>
+                    </Fragment>
+                  }
+                </Dialog>
+              )}
+            </Mutation>
+          );
           return (
             <Paper elevation={0} className={classes.bodyWithHats}>
               <GridList cols={2}>
@@ -204,48 +248,7 @@ class ShopList extends Component {
                   </GridListTile>
                 ))}
               </GridList>
-              <Mutation mutation={BUY_HAT} variables={{id: this.state.selectedHat.id}}>
-                {(buyHat, {loading, error, called}) => (
-                  <Dialog
-                    open={this.state.dialog}
-                    onClose={this.handleClose}
-                    aria-labelledby="form-dialog-title"
-                  >
-                    {called
-                      ? loading
-                        ? <CircularProgress className={classes.progress} size={50}/>
-                        : error
-                          ?
-                          <DialogContent className={classes.queryDialog}>
-                            <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
-                            <Typography variant="title" className={classes.dialogTitle} align="center">
-                              Connection failed. Please try again!
-                            </Typography>
-                          </DialogContent>
-                          :
-                          <DialogContent className={classes.queryDialog}>
-                            <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
-                            <Typography variant="title" className={classes.dialogTitle} align="center">
-                              You have purchased a new hat!
-                            </Typography>
-                          </DialogContent>
-                      :
-                      <Fragment>
-                        <CancelButton closeHandler={this.handleClose}/>
-                        <DialogContent>
-                          <Typography variant="title" color="textPrimary" align="center">
-                            You're about to buy {selectedHat.name} for {selectedHat.price} HattleCoins.
-                          </Typography>
-                          <Typography className={classes.dialogText} align="center">
-                            HattleCoins are not refundable after submission!
-                          </Typography>
-                          <SubmitButton submitHandler={buyHat}/>
-                        </DialogContent>
-                      </Fragment>
-                    }
-                  </Dialog>
-                )}
-              </Mutation>
+              {this.state.dialog && buyHatsMutation}
             </Paper>
           );
         }}
