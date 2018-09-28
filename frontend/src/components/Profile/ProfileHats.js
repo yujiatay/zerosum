@@ -25,6 +25,16 @@ const styles = theme => ({
   body: {
     backgroundColor: '#068D9D',
     display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    padding: theme.spacing.unit,
+    borderRadius: 0,
+    overflowY: 'auto',
+    height: `calc(100vh - 26.703125rem)`, // deduct height of everything else from viewport
+  },
+  body2: {
+    backgroundColor: '#068D9D',
+    display: 'flex',
     justifyContent: 'center',
     borderRadius: 0,
     overflowY: 'auto',
@@ -60,14 +70,14 @@ class ProfileHats extends Component {
       <Query query={GET_OWNED_HATS} variables={{owned: true}} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
           if (loading) return (
-            <Paper elevation={0} className={classes.body}>
+            <Paper elevation={0} className={classes.body2}>
               <div className={classes.container}>
                 <CircularProgress color="primary"/>
               </div>
             </Paper>
           );
           if (!data) return (
-            <Paper elevation={0} className={classes.body}>
+            <Paper elevation={0} className={classes.body2}>
               <div className={classes.container}>
                 <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
                 <Typography variant="display1" color="textSecondary">
@@ -80,7 +90,7 @@ class ProfileHats extends Component {
           console.log(hats);
           if (hats === undefined || hats.length === 0) {
             return (
-              <Paper elevation={0} className={classes.body}>
+              <Paper elevation={0} className={classes.body2}>
                 <div className={classes.textContainer}>
                   <Typography variant="title" color="textPrimary" className={classes.text}>
                     Start playing now to earn hats!
