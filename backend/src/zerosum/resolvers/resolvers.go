@@ -209,6 +209,11 @@ func (r *Resolver) AddVote(ctx context.Context, args *struct{ Vote voteInput }) 
 	}
 
 	// TODO: Add validation for correct choice Id
+	if args.Vote.Amount <= 0 {
+		err = errors.New("invalid amount specified")
+		return
+	}
+	
 	err = logic.AllocateMoney(getIdFromCtx(ctx), -args.Vote.Amount)
 	if err != nil {
 		return
