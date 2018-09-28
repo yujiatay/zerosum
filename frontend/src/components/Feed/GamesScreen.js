@@ -241,6 +241,7 @@ class GamesScreen extends Component {
                       root: classes.inputRoot,
                       input: classes.inputInput,
                     }}
+                    autoFocus
                     onChange={this.handleSearch}
                   />
                 </Fragment>
