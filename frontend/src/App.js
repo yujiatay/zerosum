@@ -192,13 +192,14 @@ class AppRoutes extends Component {
 class App extends Component {
 
   render() {
+    let renderAppRoutes = (props) => <AppRoutes {...props}/>;
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
           <div>
             <Switch>
-              <Route path="/" exact component={AppRoutes}/>
-              <Route path="/:param" component={AppRoutes}/>
+              <Route path="/" exact render={renderAppRoutes}/>
+              <Route path="/:param" render={renderAppRoutes}/>
             </Switch>
           </div>
         </Router>
