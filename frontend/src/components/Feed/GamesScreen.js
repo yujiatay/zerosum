@@ -43,6 +43,11 @@ const GET_ACTIVE_GAMES = gql`
       options {
         id
         body
+        result {
+          voteCount
+          totalValue
+          winner
+        }
       }
     }
   }

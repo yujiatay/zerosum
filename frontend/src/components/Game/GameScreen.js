@@ -226,6 +226,19 @@ const styles = theme => ({
   }
 });
 
+let parseOptionPercentage = (optionValue, totalValue) => {
+  let winRate = optionValue / totalValue;
+  return winRate.toFixed(2) + "%"
+};
+
+let parseChange = (netChange) => {
+  if (netChange < 0) {
+    return "loss: " + netChange
+  } else {
+    return "gained: " + netChange
+  }
+};
+
 class GameScreen extends Component {
   constructor(props) {
     super(props);
@@ -438,37 +451,49 @@ class GameScreen extends Component {
             <Typography className={classes.header} variant="display1" noWrap align="center">
               Results!
             </Typography>
-            {
-              parsedGame.options.map((option, index) =>
-                <Card key={index}
-                      className={index === this.state.selected ? classes.optionCard : classes.disabledOptionCard}>
-                  <CardContent className={classes.voteOption}>
-                    <Typography variant="body2" align="center"
-                                className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
-                      {option.body}
-                    </Typography>
+            <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: false}}
+                   fetchPolicy="cache-and-network" errorPolicy="ignore">
+              {({loading, error, data}) => {
+                if (loading) return <div>Fetching</div>;
+                if (!data) return <div>Error</div>;
 
-                    <Paper elevation={0} className={classes.voteBet}>
-                      <div className={classes.headerDivider}/>
-                      <Paper elevation={0} className={classes.result}>
-                        <Typography variant="display1">
-                          33.33%
+                const vote = data.vote;
+                console.log(vote);
+                const totalAmount = parsedGame.options.reduce((totalAccum, currentOption) => totalAccum + currentOption.result.totalValue
+                  , 0);
+                return (
+                  parsedGame.options.map((option, index) =>
+                    <Card key={index}
+                          className={option.result.winner ? classes.optionCard : classes.disabledOptionCard}>
+                      <CardContent className={classes.voteOption}>
+                        <Typography variant="body2" align="center"
+                                    className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                          {option.body}
                         </Typography>
-                        {
-                          index === this.state.selected &&
-                          <Fragment>
-                            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                            <Typography variant="title" className={classes.voteBetText}>
-                              won: 999
+
+                        <Paper elevation={0} className={classes.voteBet}>
+                          <div className={classes.headerDivider}/>
+                          <Paper elevation={0} className={classes.result}>
+                            <Typography variant="display1">
+                              {parseOptionPercentage(option.result.totalValue, totalAmount)}
                             </Typography>
-                          </Fragment>
-                        }
-                      </Paper>
-                    </Paper>
-                  </CardContent>
-                </Card>
-              )
-            }
+                            {
+                              option.id === vote.option.id &&
+                              <Fragment>
+                                <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                                <Typography variant="title" className={classes.voteBetText}>
+                                  {parseChange(vote.result.netChange)}
+                                </Typography>
+                              </Fragment>
+                            }
+                          </Paper>
+                        </Paper>
+                      </CardContent>
+                    </Card>
+                  )
+                )
+              }}
+            </Query>
           </CardContent>
         </Card>
       </Fragment>
