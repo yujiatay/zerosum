@@ -181,7 +181,8 @@ class GamesScreen extends Component {
   };
   handleSearchClose = () => {
     this.setState({
-      searchBarState: false
+      searchBarState: false,
+      search: ''
     })
   };
   handleSearch = (event) => {
