@@ -12,8 +12,6 @@ import gql from "graphql-tag";
 import Dialog from "@material-ui/core/Dialog/Dialog";
 import CancelButton from "../shared/CancelButton";
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
-import TextField from "@material-ui/core/TextField/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment/InputAdornment";
 import SubmitButton from "../shared/SubmitButton";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import GridList from '@material-ui/core/GridList';

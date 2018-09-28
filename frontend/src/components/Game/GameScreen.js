@@ -287,7 +287,6 @@ class GameScreen extends Component {
   render() {
     const {classes} = this.props;
     const {parsedGame} = this.props.location.state;
-    const {loading, querySent, queryStatus} = this.state;
 
     const bystander = (
       <Fragment>
@@ -316,7 +315,7 @@ class GameScreen extends Component {
           voteInput: {
             gameId: parsedGame.id,
             optionId: this.state.choice,
-            amount: parsedGame.stakes === "Fixed Stakes" ? 100 : parseInt(this.state.bet)
+            amount: parsedGame.stakes === "Fixed Stakes" ? 100 : parseInt(this.state.bet, 10)
           }
         }}>
           {(createVote, {loading, error, called}) => (

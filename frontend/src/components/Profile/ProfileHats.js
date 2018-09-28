@@ -4,8 +4,6 @@ import Typography from "@material-ui/core/Typography/Typography";
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 import AngryHatperor from "../assets/angry-hatperor.png";
-import ButtonBase from "@material-ui/core/ButtonBase";
-import HattleCoin from "../assets/hattlecoin.png";
 
 import {Query} from "react-apollo";
 import gql from "graphql-tag";

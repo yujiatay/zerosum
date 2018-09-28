@@ -8,7 +8,6 @@ import BottomNavBar from "../shared/BottomNavBar";
 import Avatar from '@material-ui/core/Avatar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Paper from '@material-ui/core/Paper';
 import Currency from "../shared/Currency";
 import ProgressBar from "./ProgressBar";
 import ProfileHats from './ProfileHats';

@@ -106,7 +106,6 @@ class SocialScreen extends Component {
     this.state = {
       value: 0,
       ranking: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-      userRankState: false
     }
   }
 
@@ -120,7 +119,7 @@ class SocialScreen extends Component {
 
   render() {
     const {classes} = this.props;
-    const {value, userRankState} = this.state;
+    const {value} = this.state;
 
     return (
       <div className={classes.body}>

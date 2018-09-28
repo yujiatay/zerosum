@@ -114,7 +114,7 @@ let parseTimeLeft = (endTime) => {
   let minutes = totalMinutes % 60;
 
   let retString = " " + minutes + " min";
-  if (hours != 0) {
+  if (hours !== 0) {
     retString = hours + " h " + retString
   }
   return retString

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from "@material-ui/core/Typography/Typography";
-import {Link} from "react-router-dom";
 import {withStyles} from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Avatar from "@material-ui/core/Avatar/Avatar";
@@ -112,7 +111,7 @@ let parseWinRate = (rawWinRate) => {
 
 class Leaderboard extends Component {
   render() {
-    const {classes, list} = this.props;
+    const {classes} = this.props;
     return (
       <Query query={GET_LEADERBOARD} variables={{limit: 10}} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
