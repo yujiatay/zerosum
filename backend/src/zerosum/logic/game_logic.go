@@ -49,7 +49,7 @@ func allocateWinOrLoss(userId string, win bool) (err error) {
 }
 
 func updateVoteResult(userId string, gameId string, win bool, change int32) (err error) {
-	vote, err := repository.QueryVote(models.Vote{GameId: gameId, UserId: userId})
+	vote, err, _ := repository.QueryVote(models.Vote{GameId: gameId, UserId: userId})
 	if err == nil {
 		vote.Resolved = true
 		vote.Win = win

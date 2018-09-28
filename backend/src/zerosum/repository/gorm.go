@@ -64,7 +64,7 @@ func QueryGame(desiredGame models.Game) (game models.Game, err error) {
 	return
 }
 
-func SearchGames(searchString string, limit *int32, after *int32) (games []models.Game, err error) {
+func SearchActiveGames(searchString string, joined bool, userId string, limit *int32, after *int32) (games []models.Game, err error) {
 
 	offset := int32(0)
 
@@ -73,14 +73,83 @@ func SearchGames(searchString string, limit *int32, after *int32) (games []model
 	}
 
 	interm := db.Offset(offset)
-	if limit != nil {
-		interm = interm.Limit(*limit)
-	}
 
-	res := interm.Where("topic LIKE ? AND end_time > ?", fmt.Sprintf("%%%s%%", searchString), time.Now()).Find(&games)
+	// Get games that fit the search query
+	var candidateActiveGames []models.Game
+	res := interm.Where("topic LIKE ? AND end_time > ?", fmt.Sprintf("%%%s%%", searchString), time.Now()).Find(&candidateActiveGames)
 	if res.Error != nil {
 		err = res.Error
 	}
+
+	// Filter to limit and joined
+	var activeGames []models.Game
+
+	gamesLeft := int32(-1)
+	if limit != nil {
+		gamesLeft = *limit
+	}
+
+	for _, game := range candidateActiveGames {
+		if gamesLeft == 0 {
+			break
+		}
+		_, internalErr, recordNotFound := QueryVote(models.Vote{UserId: userId, GameId: game.Id})
+		if internalErr != nil && !recordNotFound {
+			err = internalErr
+			return
+		}
+		if !recordNotFound && joined {
+			activeGames = append(activeGames, game)
+			gamesLeft -= 1
+		} else if recordNotFound && !joined {
+			activeGames = append(activeGames, game)
+			gamesLeft -= 1
+		}
+	}
+	games = activeGames
+	return
+}
+
+func SearcCompletedGames(searchString string, joined bool, userId string, limit *int32, after *int32) (games []models.Game, err error) {
+
+	offset := int32(0)
+
+	if after != nil {
+		offset = *after
+	}
+
+	interm := db.Offset(offset)
+
+	// Get games that fit the search query
+	var candidateCompletedGames []models.Game
+	res := interm.Where("topic LIKE ? AND resolved = ?", fmt.Sprintf("%%%s%%", searchString), true).Find(&candidateCompletedGames)
+	if res.Error != nil {
+		err = res.Error
+	}
+
+	// Filter to limit and joined
+	var activeGames []models.Game
+	if limit != nil {
+		gamesLeft := *limit
+		for _, game := range candidateCompletedGames {
+			if gamesLeft == 0 {
+				break
+			}
+			_, internalErr, recordNotFound := QueryVote(models.Vote{UserId: userId, GameId: game.Id})
+			if internalErr != nil && !recordNotFound  {
+				err = internalErr
+				return
+			}
+			if !recordNotFound && joined {
+				activeGames = append(activeGames, game)
+				gamesLeft -= 1
+			} else if recordNotFound && !joined {
+				activeGames = append(activeGames, game)
+				gamesLeft -= 1
+			}
+		}
+	}
+	games = activeGames
 	return
 }
 
@@ -233,10 +302,11 @@ func CreateVote(vote models.Vote) (err error) {
 	return
 }
 
-func QueryVote(desiredVote models.Vote) (vote models.Vote, err error) {
+func QueryVote(desiredVote models.Vote) (vote models.Vote, err error, recordNotFound bool) {
 	res := db.Where(desiredVote).First(&vote)
 	if res.RecordNotFound() {
 		err = errors.New("no vote found")
+		recordNotFound = true
 	} else if res.Error != nil {
 		err = res.Error
 	}

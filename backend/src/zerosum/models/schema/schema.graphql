@@ -11,7 +11,8 @@ schema {
 type Query {
     user(id: ID): User
     game(id: ID!): Game
-    games(filter: String!, limit: Int, after: String): [Game]!
+    activeGames(filter: String!, joined: Boolean!, limit: Int, after: String): [Game]!
+    completedGames(filter: String!, joined: Boolean!, limit: Int, after: String): [Game]!
     vote(gameId: ID!): Vote
     votes(limit: Int, after: String): [Vote]!
     gameCount: Int!

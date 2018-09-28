@@ -14,6 +14,7 @@ type Resolver struct{}
 
 type gameSearchQuery struct {
 	Filter string
+	Joined bool
 	Limit  *int32
 	After  *int32
 }
@@ -73,8 +74,18 @@ func (r *Resolver) GAME(ctx context.Context, args *struct{ Id string }) (*GameRe
 	return &GameResolver{game: &game}, err
 }
 
-func (r *Resolver) GAMES(ctx context.Context, args gameSearchQuery) (gameResolvers []*GameResolver, err error) {
-	games, err := repository.SearchGames(args.Filter, args.Limit, args.After)
+func (r *Resolver) ACTIVEGAMES(ctx context.Context, args gameSearchQuery) (gameResolvers []*GameResolver, err error) {
+	games, err := repository.SearchActiveGames(args.Filter, args.Joined, getIdFromCtx(ctx), args.Limit, args.After)
+	var gamesList []*GameResolver
+	for index := range games {
+		gamesList = append(gamesList, &GameResolver{game: &games[index]})
+	}
+	gameResolvers = gamesList
+	return
+}
+
+func (r *Resolver) COMPLETEDGAMES(ctx context.Context, args gameSearchQuery) (gameResolvers []*GameResolver, err error) {
+	games, err := repository.SearchActiveGames(args.Filter, args.Joined, getIdFromCtx(ctx), args.Limit, args.After)
 	var gamesList []*GameResolver
 	for index := range games {
 		gamesList = append(gamesList, &GameResolver{game: &games[index]})
@@ -99,7 +110,7 @@ func (r *Resolver) LEADERBOARD(ctx context.Context, args *struct{ Limit int32 })
 }
 
 func (r *Resolver) VOTE(ctx context.Context, args voteQuery) (*VoteResolver, error) {
-	vote, err := repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
+	vote, err, _ := repository.QueryVote(models.Vote{GameId: args.GameId, UserId: getIdFromCtx(ctx)})
 	return &VoteResolver{vote: &vote}, err
 }
 
@@ -201,7 +212,7 @@ func (r *Resolver) AddVote(ctx context.Context, args *struct{ Vote voteInput }) 
 	err = logic.AllocateVoteExp(getIdFromCtx(ctx))
 	if err == nil {
 		err = repository.CreateVote(newVote)
-		vote, err := repository.QueryVote(newVote)
+		vote, err, _ := repository.QueryVote(newVote)
 		if err == nil {
 			voteRes := VoteResolver{vote: &vote}
 			voteResolver = &voteRes
