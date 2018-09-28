@@ -371,10 +371,10 @@ class GameScreen extends Component {
                               <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
                             </InputAdornment>
                           ),
-                          disableUnderline: true
-                        }}
-                        inputProps={{
-                          min: "1"
+                          disableUnderline: true,
+                          inputProps: {
+                            min: '1'
+                          }
                         }}
                         value={this.state.bet}
                         onChange={this.handleChange('bet')}
