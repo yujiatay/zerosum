@@ -17,6 +17,8 @@ type pushSettings struct {
 
 var settings pushSettings
 
+var emptySubscription = webpush.Subscription{Endpoint: "nil"}
+
 func InitPushWithSettings(privKey string, httpClient *http.Client) {
 	settings = pushSettings{
 		privateKey: privKey,
@@ -44,7 +46,7 @@ func SubscriptionHandler(w http.ResponseWriter, r *http.Request) {
 
 func UnsubscriptionHandler(w http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value("Id").(string)
-	if err := updateSubscriptionInDb(userId, webpush.Subscription{Endpoint: "nil"}); err != nil {
+	if err := updateSubscriptionInDb(userId, emptySubscription); err != nil {
 		log.Print(err)
 		http.Error(w, err.Error(), 500)
 		return
@@ -56,9 +58,9 @@ func UnsubscriptionHandler(w http.ResponseWriter, r *http.Request) {
 func SendNotif(body string, userId string) (error) {
 	s, err := getSubscriptionFromDb(userId)
 	if err != nil {
-		return err
+		return err // Likely new user/denied permissions
 	}
-	if s.Endpoint == "nil" || s.Endpoint == "" {
+	if s.Endpoint == "" || s.Endpoint == "nil" {
 		return nil // Unsubscribed user
 	}
 	_, err = webpush.SendNotification([]byte(body), &s, &webpush.Options{
@@ -75,13 +77,24 @@ func SendNotif(body string, userId string) (error) {
 }
 func getSubscriptionFromDb(userId string) (webpush.Subscription, error) {
 	user, err := repository.QueryUser(models.User{Id: userId})
-	return user.PushSubscription, err
+	if err != nil {
+		return emptySubscription, err
+	}
+	return GetSubscriptionFromJson(user.PushSubscriptionJson)
 }
 func updateSubscriptionInDb(userId string, sub webpush.Subscription) error {
 	user, err := repository.QueryUser(models.User{Id: userId})
 	if err != nil {
 		return err
 	}
-	user.PushSubscription = sub
+	user.PushSubscriptionJson, err = json.Marshal(sub)
+	if err != nil {
+		return err
+	}
 	return repository.UpdateUser(user)
+}
+
+func GetSubscriptionFromJson(subJson []byte) (sub webpush.Subscription, err error) {
+	err = json.Unmarshal(subJson, &sub)
+	return
 }

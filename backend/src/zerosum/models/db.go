@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/SherClockHolmes/webpush-go"
 	"github.com/jinzhu/gorm"
 	"github.com/segmentio/ksuid"
 	"time"
@@ -48,19 +47,19 @@ type Option struct {
 }
 
 type User struct {
-	Id               string `gorm:"primary_key"`
-	CreatedAt        time.Time
-	Name             string
-	MoneyTotal       int32
-	Hats             []Hat  `gorm:"many2many:hat_ownerships;"`
-	GamesCreate      []Game `gorm:"foreignkey:UserId"`
-	FbId             string `gorm:"unique_index"`
-	GamesPlayed      int32
-	GamesWon         int32
-	WinRate          float64
-	Experience       int
-	Picture          string
-	PushSubscription webpush.Subscription
+	Id                   string `gorm:"primary_key"`
+	CreatedAt            time.Time
+	Name                 string
+	MoneyTotal           int32
+	Hats                 []Hat  `gorm:"many2many:hat_ownerships;"`
+	GamesCreate          []Game `gorm:"foreignkey:UserId"`
+	FbId                 string `gorm:"unique_index"`
+	GamesPlayed          int32
+	GamesWon             int32
+	WinRate              float64
+	Experience           int
+	Picture              string
+	PushSubscriptionJson []byte
 }
 
 type Hat struct {

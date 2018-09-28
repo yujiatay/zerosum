@@ -3,7 +3,6 @@ package repository
 import (
 	"errors"
 	"fmt"
-	"github.com/SherClockHolmes/webpush-go"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"time"
@@ -98,7 +97,6 @@ func SearchActiveGames(searchString string, joined *bool, created *bool, userId 
 	if err != nil {
 		return
 	}
-
 
 	// Filter to limit and joined
 	var activeGames []models.Game
@@ -239,14 +237,14 @@ func UpdateOption(option models.Option) (err error) {
 func GetOrCreateUser(desiredUser models.User) (user models.User, err error) {
 	// Check if alr exists
 	err = db.Where("fb_id = ?", desiredUser.FbId).Attrs(models.User{
-		FbId:             desiredUser.FbId,
-		MoneyTotal:       int32(2000),
-		WinRate:          0,
-		GamesPlayed:      0,
-		GamesWon:         0,
-		Experience:       0,
-		Name:             "HatMatter",
-		PushSubscription: webpush.Subscription{Endpoint: "nil"},
+		FbId:                 desiredUser.FbId,
+		MoneyTotal:           int32(2000),
+		WinRate:              0,
+		GamesPlayed:          0,
+		GamesWon:             0,
+		Experience:           0,
+		Name:                 "HatMatter",
+		PushSubscriptionJson: nil,
 	}).FirstOrCreate(&user).Error
 	return
 }
