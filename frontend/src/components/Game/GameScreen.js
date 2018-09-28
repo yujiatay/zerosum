@@ -25,6 +25,7 @@ import {Mutation, Query} from 'react-apollo';
 import gql from "graphql-tag";
 import CancelButton from "../shared/CancelButton";
 import SubmitButton from "../shared/SubmitButton";
+import AngryHatperor from "../assets/angry-hatperor.png";
 
 const CREATE_VOTE = gql`
   mutation CreateVote($voteInput: VoteInput!) {
@@ -223,6 +224,18 @@ const styles = theme => ({
   },
   errorMsg: {
     color: '#9d0606'
+  },
+  container: {
+    backgroundColor: '#068D9D',
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  hatperor: {
+    width: 250
   }
 });
 
@@ -231,6 +244,7 @@ let parseOptionPercentage = (optionValue, totalValue) => {
   if (totalValue === 0) {
     winRate = 0
   }
+  winRate = winRate * 100;
   return winRate.toFixed(2) + "%"
 };
 
@@ -304,8 +318,27 @@ class GameScreen extends Component {
                   <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: true}}
                          fetchPolicy="cache-and-network" errorPolicy="ignore">
                     {({loading, error, data}) => {
-                      if (loading) return <div>Fetching</div>;
-                      if (!data) return <div>Error</div>;
+                      if (loading) {
+                        return (
+                          <Paper elevation={0} className={classes.container}>
+                            <div className={classes.content}>
+                              <CircularProgress color="primary"/>
+                            </div>
+                          </Paper>
+                        );
+                      }
+                      if (!data) {
+                        return (
+                          <Paper elevation={0} className={classes.container}>
+                            <div className={classes.content}>
+                              <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
+                              <Typography variant="display1" color="textSecondary">
+                                Connection error!
+                              </Typography>
+                            </div>
+                          </Paper>
+                        );
+                      }
 
                       const vote = data.vote;
                       console.log(vote);
@@ -315,7 +348,7 @@ class GameScreen extends Component {
                                 className={option.result.winner ? classes.optionCard : classes.disabledOptionCard}>
                             <CardContent className={classes.voteOption}>
                               <Typography variant="body2" align="center"
-                                          className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                                          className={option.result.winner ? classes.chosenOptionText : classes.disabledOptionText}>
                                 {option.body}
                               </Typography>
 
@@ -348,7 +381,7 @@ class GameScreen extends Component {
                             className={option.result.winner ? classes.optionCard : classes.disabledOptionCard}>
                         <CardContent className={classes.voteOption}>
                           <Typography variant="body2" align="center"
-                                      className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                                      className={option.result.winner ? classes.chosenOptionText : classes.disabledOptionText}>
                             {option.body}
                           </Typography>
 
@@ -380,8 +413,27 @@ class GameScreen extends Component {
                 <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: false}}
                        fetchPolicy="cache-and-network" errorPolicy="ignore">
                   {({loading, error, data}) => {
-                    if (loading) return <div>Fetching</div>;
-                    if (!data) return <div>Error</div>;
+                    if (loading) {
+                      return (
+                        <Paper elevation={0} className={classes.container}>
+                          <div className={classes.content}>
+                            <CircularProgress color="primary"/>
+                          </div>
+                        </Paper>
+                      );
+                    }
+                    if (!data) {
+                      return (
+                        <Paper elevation={0} className={classes.container}>
+                          <div className={classes.content}>
+                            <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
+                            <Typography variant="display1" color="textSecondary">
+                              Connection error!
+                            </Typography>
+                          </div>
+                        </Paper>
+                      );
+                    }
 
                     const vote = data.vote;
                     return (
