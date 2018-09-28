@@ -163,7 +163,7 @@ class Leaderboard extends Component {
                               alt="Profile Pic"
                               src={user.img}
                               className={classes.avatar}
-                            />``
+                            />
                             <Typography variant="title" className={classes.userName}>
                               {user.name}
                             </Typography>
