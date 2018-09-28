@@ -288,7 +288,7 @@ class GamesScreen extends Component {
           </Tabs>
         </AppBar>
         {value === 0 &&
-        <Query query={GET_ACTIVE_GAMES} variables={{filter: this.state.search, joined: false}} fetchPolicy="no-cache">
+        <Query query={GET_ACTIVE_GAMES} variables={{filter: this.state.search, joined: false}} fetchPolicy="network-only">
           {({loading, error, data}) => {
             if (loading) {
               return (
@@ -321,14 +321,14 @@ class GamesScreen extends Component {
         </Query>
         }
         {value === 1 &&
-        <Query query={GET_ACTIVE_GAMES} variables={{filter: this.state.search, created: true}} fetchPolicy="no-cache">
+        <Query query={GET_ACTIVE_GAMES} variables={{filter: this.state.search, created: true}} fetchPolicy="network-only">
           {({loading: loadingOne, error: errorOne, data: createdActive}) => (
             <Query query={GET_ACTIVE_GAMES} variables={{filter: this.state.search, joined: true, created: false}}
-                   fetchPolicy="no-cache">
+                   fetchPolicy="network-only">
               {({loading: loadingTwo, error: errorTwo, data: joinedActive}) => (
-                <Query query={GET_COMPLETED_GAMES} variables={{created: true}} fetchPolicy="no-cache">
+                <Query query={GET_COMPLETED_GAMES} variables={{created: true}} fetchPolicy="network-only">
                   {({loading: loadingThree, error: errorThree, data: createdResolved}) => (
-                    <Query query={GET_COMPLETED_GAMES} variables={{created: false}} fetchPolicy="no-cache">
+                    <Query query={GET_COMPLETED_GAMES} variables={{created: false}} fetchPolicy="network-only">
                       {({loading: loadingFour, error: errorFour, data: joinedResolved}) => {
                         if (loadingOne || loadingTwo || loadingThree || loadingFour) {
                           // TODO: loading
