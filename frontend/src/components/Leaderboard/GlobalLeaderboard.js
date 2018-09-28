@@ -109,7 +109,7 @@ let parseWinRate = (rawWinRate) => {
 };
 
 
-class Leaderboard extends Component {
+class GlobalLeaderboard extends Component {
   render() {
     const {classes} = this.props;
     return (
@@ -186,4 +186,4 @@ class Leaderboard extends Component {
   }
 }
 
-export default withStyles(styles)(Leaderboard);
+export default withStyles(styles)(GlobalLeaderboard);

@@ -6,13 +6,14 @@ import AppBar from "@material-ui/core/AppBar/AppBar";
 import BottomNavBar from "../shared/BottomNavBar";
 import Tabs from "@material-ui/core/Tabs/Tabs";
 import Tab from "@material-ui/core/Tab/Tab";
-import Leaderboard from "./Leaderboard";
+import Leaderboard from "./GlobalLeaderboard";
 import Paper from "@material-ui/core/Paper/Paper";
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import ReactGA from "react-ga";
 
 import {Query} from 'react-apollo'
 import gql from 'graphql-tag'
+import FriendLeaderboard from "./FriendLeaderboard";
 
 const GET_RANKING = gql`
   {
@@ -156,8 +157,8 @@ class SocialScreen extends Component {
             </Typography>
           </Paper>
         </div>
-        {value === 0 && <Leaderboard list={this.state.ranking}/>}
-        {value === 1 && <Leaderboard/>}
+        {value === 0 && <Leaderboard/>}
+        {value === 1 && <FriendLeaderboard/>}
         <Query query={GET_RANKING} fetchPolicy="cache-and-network" errorPolicy="ignore">
           {({loading, error, data}) => {
             if (loading) {
