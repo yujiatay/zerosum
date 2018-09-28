@@ -42,6 +42,8 @@ func SubscriptionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		log.Printf("user %s has subscribed to push notifications", userId)
+		log.Printf("auth key: %s", sub.Keys.Auth)
+		log.Printf("pc2dh key: %s", sub.Keys.P256dh)
 	}
 }
 
