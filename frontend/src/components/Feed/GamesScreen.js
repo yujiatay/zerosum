@@ -28,8 +28,8 @@ import Currency from "../shared/Currency";
 
 
 const GET_ACTIVE_GAMES = gql`
-  query GetActiveGames($filter: String!, $joined: Boolean!, $limit: Int, $after: String) {
-    activeGames(filter: $filter, joined: $joined, limit: $limit, after: $after) {
+  query GetActiveGames($filter: String!, $joined: Boolean, $created: Boolean, $limit: Int) {
+    activeGames(filter: $filter, joined: $joined, created: $created, limit: $limit) {
       id
       owner {
         name
