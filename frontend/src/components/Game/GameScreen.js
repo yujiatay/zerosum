@@ -451,15 +451,50 @@ class GameScreen extends Component {
             <Typography className={classes.header} variant="display1" noWrap align="center">
               Results!
             </Typography>
-            <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: true}}
-                   fetchPolicy="cache-and-network" errorPolicy="ignore">
-              {({loading, error, data}) => {
-                if (loading) return <div>Fetching</div>;
-                if (!data) return <div>Error</div>;
+            {
+              parsedGame.voted ?
+                <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: true}}
+                       fetchPolicy="cache-and-network" errorPolicy="ignore">
+                  {({loading, error, data}) => {
+                    if (loading) return <div>Fetching</div>;
+                    if (!data) return <div>Error</div>;
 
-                const vote = data.vote;
-                console.log(vote);
-                return (
+                    const vote = data.vote;
+                    console.log(vote);
+                    return (
+                      parsedGame.options.map((option, index) =>
+                        <Card key={index}
+                              className={option.result.winner ? classes.optionCard : classes.disabledOptionCard}>
+                          <CardContent className={classes.voteOption}>
+                            <Typography variant="body2" align="center"
+                                        className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                              {option.body}
+                            </Typography>
+
+                            <Paper elevation={0} className={classes.voteBet}>
+                              <div className={classes.headerDivider}/>
+                              <Paper elevation={0} className={classes.result}>
+                                <Typography variant="display1">
+                                  {parseOptionPercentage(option.result.totalValue, parsedGame.totalMoney)}
+                                </Typography>
+                                {
+                                  option.id === vote.option.id &&
+                                  <Fragment>
+                                    <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                                    <Typography variant="title" className={classes.voteBetText}>
+                                      {parseChange(vote.result.netChange)}
+                                    </Typography>
+                                  </Fragment>
+                                }
+                              </Paper>
+                            </Paper>
+                          </CardContent>
+                        </Card>
+                      )
+                    )
+                  }}
+                </Query>
+                : (
                   parsedGame.options.map((option, index) =>
                     <Card key={index}
                           className={option.result.winner ? classes.optionCard : classes.disabledOptionCard}>
@@ -475,23 +510,12 @@ class GameScreen extends Component {
                             <Typography variant="display1">
                               {parseOptionPercentage(option.result.totalValue, parsedGame.totalMoney)}
                             </Typography>
-                            {
-                              option.id === vote.option.id &&
-                              <Fragment>
-                                <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                                <Typography variant="title" className={classes.voteBetText}>
-                                  {parseChange(vote.result.netChange)}
-                                </Typography>
-                              </Fragment>
-                            }
                           </Paper>
                         </Paper>
                       </CardContent>
                     </Card>
-                  )
-                )
-              }}
-            </Query>
+                  ))
+            }
           </CardContent>
         </Card>
       </Fragment>
