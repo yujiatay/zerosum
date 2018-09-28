@@ -258,7 +258,15 @@ func resolveMajority(values []int32) (winners []int, losers []int) {
 }
 
 func resolveMinority(values []int32) (winners []int, losers []int) {
+	// Get max of options as starter so that 0 does not end up as initial min for valid games
+	// (0 if all zero, or some non-zero value as start)
 	min := values[0]
+	for _, value := range values {
+		if value > min {
+			min = value
+		}
+	}
+
 	for i, value := range values {
 		// No one voted for option
 		if value == 0 {
