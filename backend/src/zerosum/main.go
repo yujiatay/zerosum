@@ -83,8 +83,8 @@ func main() {
 
 	authRouter := mux.NewRouter()
 	authRouter.Handle("/gql", gqlHandler)
-	authRouter.HandleFunc("/subscribe", push.SubscriptionHandler)
-	authRouter.HandleFunc("/unsubscribe", push.UnsubscriptionHandler)
+	authRouter.HandleFunc("/subscribe", push.SubscriptionHandler).Methods("POST")
+	authRouter.HandleFunc("/unsubscribe", push.UnsubscriptionHandler).Methods("POST")
 	an := negroni.New(negroni.HandlerFunc(auth.TokenAuthNegroniMiddleware), negroni.Wrap(authRouter))
 
 	router := mux.NewRouter()
