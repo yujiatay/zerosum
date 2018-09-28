@@ -7,7 +7,7 @@ import (
 	"zerosum/repository"
 )
 
-var EXP_REQUIRED = []int{10, 15, 25, 50, 100, 200, 350, 600, 1000}
+var EXP_REQUIRED = []int{10, 20, 50, 100, 250, 500, 800, 1250, 2000}
 var LEADERBOARD_MIN_GAMES = 9
 
 const (
