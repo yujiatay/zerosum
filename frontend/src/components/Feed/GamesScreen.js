@@ -27,9 +27,9 @@ import AngryHatperor from "../assets/angry-hatperor.png";
 import Currency from "../shared/Currency";
 
 
-const GET_GAMES = gql`
-  query GetGames($filter: String!, $limit: Int, $after: String) {
-    games(filter: $filter, limit: $limit, after: $after) {
+const GET_ACTIVE_GAMES = gql`
+  query GetActiveGames($filter: String!, $joined: Boolean!, $limit: Int, $after: String) {
+    activeGames(filter: $filter, joined: $joined, limit: $limit, after: $after) {
       id
       owner {
         name
@@ -247,7 +247,7 @@ class GamesScreen extends Component {
           </Tabs>
         </AppBar>
         {value === 0 &&
-        <Query query={GET_GAMES} variables={{filter: ""}} fetchPolicy="no-cache">
+        <Query query={GET_ACTIVE_GAMES} variables={{filter: "", joined: false}} fetchPolicy="no-cache">
           {({loading, error, data}) => {
             if (loading) {
               return (
@@ -269,7 +269,7 @@ class GamesScreen extends Component {
                 </Paper>
               );
             } else {
-              let games = data.games;
+              let games = data.activeGames;
               if (games === undefined) games = [];
               console.log(games);
               return <GamesList games={games}/>
