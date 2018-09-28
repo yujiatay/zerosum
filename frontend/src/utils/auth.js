@@ -13,6 +13,7 @@ export function loginWithFacebook(fbAccessToken, fbUserID, loginSuccessCallback)
   }).then(r => {
     return localForage.setItem("token", r.data.token).then(() => {
       token = r.data.token;
+      console.log(r.data.newUser);
       loginSuccessCallback(r.data.newUser)
     }).then(() => {
       // Clear any prior cache
