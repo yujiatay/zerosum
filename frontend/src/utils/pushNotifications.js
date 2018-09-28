@@ -24,7 +24,7 @@ export function initPushStatus(swReg) {
   return swReg.pushManager.getSubscription().then(sub => {
     console.log(sub);
     isSubscribed = !(sub === null);
-    console.log("[Service Worker] (isSubscribed ? "Not subscribed" : "Subscribed") + " to push notifications")
+    console.log("[Service Worker]" + (isSubscribed ? "Not subscribed" : "Subscribed") + " to push notifications")
   })
 }
 /**
