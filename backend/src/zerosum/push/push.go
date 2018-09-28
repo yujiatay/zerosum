@@ -42,8 +42,6 @@ func SubscriptionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		log.Printf("user %s has subscribed to push notifications", userId)
-		log.Printf("auth key: %s", sub.Keys.Auth)
-		log.Printf("pc2dh key: %s", sub.Keys.P256dh)
 	}
 }
 
@@ -66,7 +64,11 @@ func SendNotif(body string, userId string) (error) {
 	if s.Endpoint == "" || s.Endpoint == "nil" {
 		return nil // Unsubscribed user
 	}
-	log.Printf(settings.privateKey)
+	log.Printf("Endpoint: %s", s.Endpoint)
+	log.Printf("auth key: %s", s.Keys.Auth)
+	log.Printf("pc2dh key: %s", s.Keys.P256dh)
+	log.Printf("Priv key: %s", settings.privateKey)
+	log.Printf("Sub: %s", settings.sub)
 	resp, err := webpush.SendNotification([]byte(body), &s, &webpush.Options{
 		Subscriber:      settings.sub,
 		VAPIDPrivateKey: settings.privateKey,
