@@ -173,28 +173,22 @@ class GamesScreen extends Component {
     })
   };
   applySort = (games) => {
-    // Sort by majority/minority
-    const gmComparator = (a, b) => {
+    const comparator = (a, b) => {
       let value = 0;
       if (a.gameMode === this.state.gmode && b.gameMode !== this.state.gmode) {
         value = -1;
       } else if (b.gameMode === this.state.gmode && a.gameMode !== this.state.gmode) {
         value = 1;
+      } else {
+        if (a.stakes === this.state.smode && b.stakes !== this.state.smode) {
+          value = -1;
+        } else if (b.stakes === this.state.smode && a.stakes !== this.state.smode) {
+          value = 1;
+        }
       }
       return value;
     };
-    games.sort(gmComparator);
-    // Sort by fixed stakes/no limit
-    const smComparator = (a, b) => {
-      let value = 0;
-      if (a.gameMode === this.state.smode && b.gameMode !== this.state.smode) {
-        value = -1;
-      } else if (b.gameMode === this.state.smode && a.gameMode !== this.state.smode) {
-        value = 1;
-      }
-      return value;
-    };
-    games.sort(smComparator);
+    games.sort(comparator);
     return games;
   };
   handleGameMode = mode => {
@@ -331,7 +325,6 @@ class GamesScreen extends Component {
                     <Query query={GET_COMPLETED_GAMES} variables={{created: false}} fetchPolicy="network-only">
                       {({loading: loadingFour, error: errorFour, data: joinedResolved}) => {
                         if (loadingOne || loadingTwo || loadingThree || loadingFour) {
-                          // TODO: loading
                           return (
                             <Paper elevation={0} className={classes.container}>
                               <div className={classes.content}>
@@ -340,7 +333,6 @@ class GamesScreen extends Component {
                             </Paper>
                           );
                         } else if (errorOne || errorTwo || errorThree || errorFour) {
-                          // TODO: error
                           return (
                             <Paper elevation={0} className={classes.container}>
                               <div className={classes.content}>
