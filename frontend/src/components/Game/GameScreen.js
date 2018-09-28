@@ -228,6 +228,9 @@ const styles = theme => ({
 
 let parseOptionPercentage = (optionValue, totalValue) => {
   let winRate = optionValue / totalValue;
+  if (totalValue === 0) {
+    winRate = 0
+  }
   return winRate.toFixed(2) + "%"
 };
 
