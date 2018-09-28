@@ -161,10 +161,22 @@ class SocialScreen extends Component {
         <Query query={GET_RANKING} fetchPolicy="cache-and-network" errorPolicy="ignore">
           {({loading, error, data}) => {
             if (loading) {
-              return null
+              return (
+                <div className={classes.lockedContainer}>
+                  <Typography variant="title" className={classes.lockedText} align="center">
+                    Play at least 10 games to appear on the leaderboard!
+                  </Typography>
+                </div>
+              );
             }
-            if (error) {
-              return null
+            if (!data) {
+              return (
+                <div className={classes.lockedContainer}>
+                  <Typography variant="title" className={classes.lockedText} align="center">
+                    Play at least 10 games to appear on the leaderboard!
+                  </Typography>
+                </div>
+              );
             }
             let profile = data ? data.user : null;
             return profile.ranking == null
