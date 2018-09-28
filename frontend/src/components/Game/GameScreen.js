@@ -451,7 +451,7 @@ class GameScreen extends Component {
             <Typography className={classes.header} variant="display1" noWrap align="center">
               Results!
             </Typography>
-            <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: false}}
+            <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: true}}
                    fetchPolicy="cache-and-network" errorPolicy="ignore">
               {({loading, error, data}) => {
                 if (loading) return <div>Fetching</div>;
