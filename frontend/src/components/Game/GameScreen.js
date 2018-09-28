@@ -236,7 +236,7 @@ let parseOptionPercentage = (optionValue, totalValue) => {
 
 let parseChange = (netChange) => {
   if (netChange < 0) {
-    return "loss: " + netChange
+    return "loss: " + -netChange
   } else {
     return "gained: " + netChange
   }
