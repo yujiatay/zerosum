@@ -14,8 +14,6 @@ import CancelButton from "../shared/CancelButton";
 import DialogContent from "@material-ui/core/DialogContent/DialogContent";
 import SubmitButton from "../shared/SubmitButton";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
 
 const GET_STORE_HATS = gql`
   query GetStoreHats($owned: Boolean!) {
@@ -40,6 +38,9 @@ const BUY_HAT = gql`
 const styles = theme => ({
   bodyWithHats: {
     backgroundColor: '#068D9D',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
     borderRadius: 0,
     overflowY: 'auto',
     height: `calc(100vh - 12.625rem)`, // deduct height of everything else from viewport
@@ -77,7 +78,6 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10
   },
   cardTitle: {
     color: '#08ABBE',
@@ -223,28 +223,24 @@ class ShopList extends Component {
           );
           return (
             <Paper elevation={0} className={classes.bodyWithHats}>
-              <GridList cellHeight={188} cols={2}>
                 {hats.map((hat, index) => (
-                  <GridListTile key={index} cols={1}>
-                    <Paper className={classes.card}>
-                      <ButtonBase className={classes.button} onClick={() => this.handleClick(hat)}>
-                        <Paper elevation={0} className={classes.innerCard}>
-                          <Typography variant="display1" className={classes.cardTitle}>
-                            {hat.name}
+                  <Paper key={index} className={classes.card}>
+                    <ButtonBase className={classes.button} onClick={() => this.handleClick(hat)}>
+                      <Paper elevation={0} className={classes.innerCard}>
+                        <Typography variant="display1" className={classes.cardTitle}>
+                          {hat.name}
+                        </Typography>
+                        <img alt="Hat" src={hat.img} className={classes.hat}/>
+                        <Paper elevation={0} className={classes.moneyInfo}>
+                          <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                          <Typography variant="subheading" className={classes.moneyText}>
+                            {hat.price}
                           </Typography>
-                          <img alt="Hat" src={hat.img} className={classes.hat}/>
-                          <Paper elevation={0} className={classes.moneyInfo}>
-                            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                            <Typography variant="subheading" className={classes.moneyText}>
-                              {hat.price}
-                            </Typography>
-                          </Paper>
                         </Paper>
-                      </ButtonBase>
-                    </Paper>
-                  </GridListTile>
+                      </Paper>
+                    </ButtonBase>
+                  </Paper>
                 ))}
-              </GridList>
               {this.state.dialog && buyHatsMutation}
             </Paper>
           );
