@@ -290,172 +290,94 @@ class GameScreen extends Component {
   render() {
     const {classes} = this.props;
     const {parsedGame} = this.props.location.state;
+    const gameView = parsedGame.resolved
+      ?
+      (
+        <Fragment>
+          <Card elevation={0} className={classes.optionSection}>
+            <CardContent>
+              <Typography className={classes.header} variant="display1" noWrap align="center">
+                Results!
+              </Typography>
+              {
+                parsedGame.voted ?
+                  <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: true}}
+                         fetchPolicy="cache-and-network" errorPolicy="ignore">
+                    {({loading, error, data}) => {
+                      if (loading) return <div>Fetching</div>;
+                      if (!data) return <div>Error</div>;
 
-    const bystander = (
-      <Fragment>
-        <Card elevation={0} className={classes.optionSection}>
-          <CardContent>
-            <Typography className={classes.header} variant="display1" noWrap align="center">
-              Choose One Option
-            </Typography>
-            {
-              parsedGame.options.map((option, index) =>
-                <Card key={index} className={classes.optionCard}>
-                  <ButtonBase className={classes.button} onClick={() => this.handleChoice(option.id)}>
-                    <CardContent>
-                      <Typography variant="body2" align="center" className={classes.chosenOptionText}>
-                        {option.body}
-                      </Typography>
-                    </CardContent>
-                  </ButtonBase>
-                </Card>
-              )
-            }
-          </CardContent>
-        </Card>
-        {/* Dialog appears after option is chosen. */}
-        <Mutation mutation={CREATE_VOTE} variables={{
-          voteInput: {
-            gameId: parsedGame.id,
-            optionId: this.state.choice,
-            amount: parsedGame.stakes === "Fixed Stakes" ? 100 : parseInt(this.state.bet, 10)
-          }
-        }}>
-          {(createVote, {loading, error, called}) => (
-            <Dialog
-              open={this.state.playDialog}
-              onClose={this.handleClose}
-              aria-labelledby="form-dialog-title"
-            >
-              {called
-                ? loading
-                  ? <CircularProgress className={classes.progress} size={50}/>
-                  : error
-                    ?
-                    <DialogContent className={classes.queryDialog}>
-                      <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
-                      <Typography variant="title" className={classes.dialogTitle} align="center">
-                        Connection failed. Please try again!
-                      </Typography>
-                    </DialogContent>
-                    :
-                    <DialogContent className={classes.queryDialog}>
-                      <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
-                      <Typography variant="title" className={classes.dialogTitle} align="center">
-                        Your bet has been placed!
-                      </Typography>
-                    </DialogContent>
-                :
-                <Fragment>
-                  <CancelButton closeHandler={this.handleClose}/>
-                  <DialogContent>
-                    <Typography variant="title" color="textPrimary" align="center">
-                      {
-                        parsedGame.stakes === "Fixed Stakes"
-                          ? "You're about to bet 100 HattleCoins."
-                          : "How many HattleCoins to bet?"
-                      }
-                    </Typography>
-                    <Typography className={classes.dialogText} align="center">
-                      HattleCoins are not refundable after submission!
-                    </Typography>
-                    {
-                      parsedGame.stakes !== "Fixed Stakes" &&
-                      <TextField
-                        autoFocus
-                        autoComplete="off"
-                        id="amount"
-                        type="number"
-                        fullWidth
-                        className={classes.moneyInput}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                            </InputAdornment>
-                          ),
-                          disableUnderline: true,
-                          inputProps: {
-                            min: '1'
-                          }
-                        }}
-                        value={this.state.bet}
-                        onChange={this.handleChange('bet')}
-                      />
-                    }
-                    {
-                      this.state.errorMsg &&
-                      <Typography className={classes.errorMsg}>
-                        Please provide a valid bet amount.
-                      </Typography>
-                    }
-                    <SubmitButton submitHandler={() => this.handleSubmit(createVote, parsedGame.stakes)}/>
-                  </DialogContent>
-                </Fragment>
-              }
-            </Dialog>
-          )}
-        </Mutation>
-      </Fragment>
-    );
+                      const vote = data.vote;
+                      console.log(vote);
+                      return (
+                        parsedGame.options.map((option, index) =>
+                          <Card key={index}
+                                className={option.result.winner ? classes.optionCard : classes.disabledOptionCard}>
+                            <CardContent className={classes.voteOption}>
+                              <Typography variant="body2" align="center"
+                                          className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                                {option.body}
+                              </Typography>
 
-    const voter = (
-      <Fragment>
-        <Card elevation={0} className={classes.optionSection}>
-          <CardContent>
-            <Typography className={classes.header} variant="display1" noWrap align="center">
-              Vote Submitted!
-            </Typography>
-            <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: false}}
-                   fetchPolicy="cache-and-network" errorPolicy="ignore">
-              {({loading, error, data}) => {
-                if (loading) return <div>Fetching</div>;
-                if (!data) return <div>Error</div>;
+                              <Paper elevation={0} className={classes.voteBet}>
+                                <div className={classes.headerDivider}/>
+                                <Paper elevation={0} className={classes.result}>
+                                  <Typography variant="display1">
+                                    {parseOptionPercentage(option.result.totalValue, parsedGame.totalMoney)}
+                                  </Typography>
+                                  {
+                                    option.id === vote.option.id &&
+                                    <Fragment>
+                                      <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                                      <Typography variant="title" className={classes.voteBetText}>
+                                        {parseChange(vote.result.netChange)}
+                                      </Typography>
+                                    </Fragment>
+                                  }
+                                </Paper>
+                              </Paper>
+                            </CardContent>
+                          </Card>
+                        )
+                      )
+                    }}
+                  </Query>
+                  : (
+                    parsedGame.options.map((option, index) =>
+                      <Card key={index}
+                            className={option.result.winner ? classes.optionCard : classes.disabledOptionCard}>
+                        <CardContent className={classes.voteOption}>
+                          <Typography variant="body2" align="center"
+                                      className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                            {option.body}
+                          </Typography>
 
-                const vote = data.vote;
-                console.log(vote);
-
-                return (
-                  parsedGame.options.map((option, index) =>
-                    <Card key={index}
-                          className={option.id === vote.option.id ? classes.optionCard : classes.disabledOptionCard}>
-                      <CardContent className={classes.voteOption}>
-                        <Typography variant="body2" align="center"
-                                    className={option.id === vote.option.id ? classes.chosenOptionText : classes.disabledOptionText}>
-                          {option.body}
-                        </Typography>
-                        {
-                          option.id === vote.option.id &&
                           <Paper elevation={0} className={classes.voteBet}>
-                            <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                            <Typography variant="title" className={classes.voteBetText}>
-                              Bet: {vote.money}
-                            </Typography>
+                            <div className={classes.headerDivider}/>
+                            <Paper elevation={0} className={classes.result}>
+                              <Typography variant="display1">
+                                {parseOptionPercentage(option.result.totalValue, parsedGame.totalMoney)}
+                              </Typography>
+                            </Paper>
                           </Paper>
-                        }
-
-                      </CardContent>
-                    </Card>
-                  )
-                )
-              }}
-            </Query>
-          </CardContent>
-        </Card>
-      </Fragment>
-    );
-
-    // TODO: Implement query for results
-    const results = (
-      <Fragment>
-        <Card elevation={0} className={classes.optionSection}>
-          <CardContent>
-            <Typography className={classes.header} variant="display1" noWrap align="center">
-              Results!
-            </Typography>
-            {
-              parsedGame.voted ?
-                <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: true}}
+                        </CardContent>
+                      </Card>
+                    ))
+              }
+            </CardContent>
+          </Card>
+        </Fragment>
+      )
+      : parsedGame.voted
+        ?
+        (
+          <Fragment>
+            <Card elevation={0} className={classes.optionSection}>
+              <CardContent>
+                <Typography className={classes.header} variant="display1" noWrap align="center">
+                  Vote Submitted!
+                </Typography>
+                <Query query={GET_VOTE} variables={{gameId: parsedGame.id, withResult: false}}
                        fetchPolicy="cache-and-network" errorPolicy="ignore">
                   {({loading, error, data}) => {
                     if (loading) return <div>Fetching</div>;
@@ -463,65 +385,144 @@ class GameScreen extends Component {
 
                     const vote = data.vote;
                     console.log(vote);
+
                     return (
                       parsedGame.options.map((option, index) =>
                         <Card key={index}
-                              className={option.result.winner ? classes.optionCard : classes.disabledOptionCard}>
+                              className={option.id === vote.option.id ? classes.optionCard : classes.disabledOptionCard}>
                           <CardContent className={classes.voteOption}>
                             <Typography variant="body2" align="center"
-                                        className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
+                                        className={option.id === vote.option.id ? classes.chosenOptionText : classes.disabledOptionText}>
                               {option.body}
                             </Typography>
-
-                            <Paper elevation={0} className={classes.voteBet}>
-                              <div className={classes.headerDivider}/>
-                              <Paper elevation={0} className={classes.result}>
-                                <Typography variant="display1">
-                                  {parseOptionPercentage(option.result.totalValue, parsedGame.totalMoney)}
+                            {
+                              option.id === vote.option.id &&
+                              <Paper elevation={0} className={classes.voteBet}>
+                                <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                                <Typography variant="title" className={classes.voteBetText}>
+                                  Bet: {vote.money}
                                 </Typography>
-                                {
-                                  option.id === vote.option.id &&
-                                  <Fragment>
-                                    <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
-                                    <Typography variant="title" className={classes.voteBetText}>
-                                      {parseChange(vote.result.netChange)}
-                                    </Typography>
-                                  </Fragment>
-                                }
                               </Paper>
-                            </Paper>
+                            }
+
                           </CardContent>
                         </Card>
                       )
                     )
                   }}
                 </Query>
-                : (
+              </CardContent>
+            </Card>
+          </Fragment>
+        )
+        :
+        (
+          <Fragment>
+            <Card elevation={0} className={classes.optionSection}>
+              <CardContent>
+                <Typography className={classes.header} variant="display1" noWrap align="center">
+                  Choose One Option
+                </Typography>
+                {
                   parsedGame.options.map((option, index) =>
-                    <Card key={index}
-                          className={option.result.winner ? classes.optionCard : classes.disabledOptionCard}>
-                      <CardContent className={classes.voteOption}>
-                        <Typography variant="body2" align="center"
-                                    className={index === this.state.selected ? classes.chosenOptionText : classes.disabledOptionText}>
-                          {option.body}
-                        </Typography>
-
-                        <Paper elevation={0} className={classes.voteBet}>
-                          <div className={classes.headerDivider}/>
-                          <Paper elevation={0} className={classes.result}>
-                            <Typography variant="display1">
-                              {parseOptionPercentage(option.result.totalValue, parsedGame.totalMoney)}
-                            </Typography>
-                          </Paper>
-                        </Paper>
-                      </CardContent>
+                    <Card key={index} className={classes.optionCard}>
+                      <ButtonBase className={classes.button} onClick={() => this.handleChoice(option.id)}>
+                        <CardContent>
+                          <Typography variant="body2" align="center" className={classes.chosenOptionText}>
+                            {option.body}
+                          </Typography>
+                        </CardContent>
+                      </ButtonBase>
                     </Card>
-                  ))
-            }
-          </CardContent>
-        </Card>
-      </Fragment>
-    );
+                  )
+                }
+              </CardContent>
+            </Card>
+            {/* Dialog appears after option is chosen. */}
+            <Mutation mutation={CREATE_VOTE} variables={{
+              voteInput: {
+                gameId: parsedGame.id,
+                optionId: this.state.choice,
+                amount: parsedGame.stakes === "Fixed Stakes" ? 100 : parseInt(this.state.bet, 10)
+              }
+            }}>
+              {(createVote, {loading, error, called}) => (
+                <Dialog
+                  open={this.state.playDialog}
+                  onClose={this.handleClose}
+                  aria-labelledby="form-dialog-title"
+                >
+                  {called
+                    ? loading
+                      ? <CircularProgress className={classes.progress} size={50}/>
+                      : error
+                        ?
+                        <DialogContent className={classes.queryDialog}>
+                          <FontAwesomeIcon icon="exclamation-circle" size="5x" className={classes.failure}/>
+                          <Typography variant="title" className={classes.dialogTitle} align="center">
+                            Connection failed. Please try again!
+                          </Typography>
+                        </DialogContent>
+                        :
+                        <DialogContent className={classes.queryDialog}>
+                          <FontAwesomeIcon icon="check-circle" size="5x" className={classes.success}/>
+                          <Typography variant="title" className={classes.dialogTitle} align="center">
+                            Your bet has been placed!
+                          </Typography>
+                        </DialogContent>
+                    :
+                    <Fragment>
+                      <CancelButton closeHandler={this.handleClose}/>
+                      <DialogContent>
+                        <Typography variant="title" color="textPrimary" align="center">
+                          {
+                            parsedGame.stakes === "Fixed Stakes"
+                              ? "You're about to bet 100 HattleCoins."
+                              : "How many HattleCoins to bet?"
+                          }
+                        </Typography>
+                        <Typography className={classes.dialogText} align="center">
+                          HattleCoins are not refundable after submission!
+                        </Typography>
+                        {
+                          parsedGame.stakes !== "Fixed Stakes" &&
+                          <TextField
+                            autoFocus
+                            autoComplete="off"
+                            id="amount"
+                            type="number"
+                            fullWidth
+                            className={classes.moneyInput}
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <img alt="HattleCoin" src={HattleCoin} className={classes.coin}/>
+                                </InputAdornment>
+                              ),
+                              disableUnderline: true,
+                              inputProps: {
+                                min: '1'
+                              }
+                            }}
+                            value={this.state.bet}
+                            onChange={this.handleChange('bet')}
+                          />
+                        }
+                        {
+                          this.state.errorMsg &&
+                          <Typography className={classes.errorMsg}>
+                            Please provide a valid bet amount.
+                          </Typography>
+                        }
+                        <SubmitButton submitHandler={() => this.handleSubmit(createVote, parsedGame.stakes)}/>
+                      </DialogContent>
+                    </Fragment>
+                  }
+                </Dialog>
+              )}
+            </Mutation>
+          </Fragment>
+        );
     return (
       <div className={classes.fullHeight}>
         <AppBar position="static">
@@ -600,11 +601,7 @@ class GameScreen extends Component {
             </CardContent>
           </Card>
           {
-            parsedGame.resolved
-              ? results
-              : parsedGame.voted
-              ? voter
-              : bystander
+            gameView
           }
         </div>
       </div>
