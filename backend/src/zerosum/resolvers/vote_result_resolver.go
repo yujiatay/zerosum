@@ -10,9 +10,9 @@ type VoteResultResolver struct {
 }
 
 func (v *VoteResultResolver) WIN(ctx context.Context) *bool {
-	return nil
+	return &v.win
 }
 
 func (v *VoteResultResolver) NETCHANGE(ctx context.Context) *int32 {
-	return nil
+	return &v.change
 }
