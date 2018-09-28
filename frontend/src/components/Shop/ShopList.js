@@ -39,7 +39,7 @@ const BUY_HAT = gql`
 `;
 
 const styles = theme => ({
-  body: {
+  bodyWithHats: {
     backgroundColor: '#068D9D',
     borderRadius: 0,
     overflowY: 'auto',
@@ -49,7 +49,7 @@ const styles = theme => ({
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
   },
-  body2: {
+  body: {
     backgroundColor: '#068D9D',
     borderRadius: 0,
     overflowY: 'auto',
@@ -165,14 +165,14 @@ class ShopList extends Component {
       <Query query={GET_STORE_HATS} variables={{owned: false}} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
           if (loading) return (
-            <Paper elevation={0} className={classes.body2}>
+            <Paper elevation={0} className={classes.body}>
               <div className={classes.container}>
                 <CircularProgress color="primary"/>
               </div>
             </Paper>
           );
           if (!data) return (
-            <Paper elevation={0} className={classes.body2}>
+            <Paper elevation={0} className={classes.body}>
               <div className={classes.container}>
                 <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
                 <Typography variant="display1" color="textSecondary">
@@ -184,7 +184,7 @@ class ShopList extends Component {
           const hats = data.storeHats;
           console.log(hats);
           return (
-            <Paper elevation={0} className={classes.body}>
+            <Paper elevation={0} className={classes.bodyWithHats}>
               {
                 hats.map((hat, index) => (
                   <Paper key={index} className={classes.card}>

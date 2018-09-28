@@ -65,7 +65,7 @@ const styles = theme => ({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  username: {
+  userName: {
     fontSize: '1rem',
     color: '#014262'
   },
@@ -161,8 +161,12 @@ class SocialScreen extends Component {
         {value === 1 && <Leaderboard/>}
         <Query query={GET_RANKING} fetchPolicy="cache-and-network" errorPolicy="ignore">
           {({loading, error, data}) => {
-            if (loading) { return null}
-            if (error) { return null}
+            if (loading) {
+              return null
+            }
+            if (error) {
+              return null
+            }
             let profile = data ? data.user : null;
             return profile.ranking == null
               ? (
@@ -185,7 +189,7 @@ class SocialScreen extends Component {
                       src={profile.img}
                       className={classes.avatar}
                     />
-                    <Typography variant="title" className={classes.username}>
+                    <Typography variant="title" className={classes.userName}>
                       {profile.name}
                     </Typography>
                   </Paper>

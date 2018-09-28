@@ -24,8 +24,6 @@ import {Query} from 'react-apollo';
 import gql from "graphql-tag";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import AngryHatperor from "../assets/angry-hatperor.png";
-import Currency from "../shared/Currency";
-
 
 const GET_ACTIVE_GAMES = gql`
   query GetActiveGames($filter: String!, $joined: Boolean, $created: Boolean, $limit: Int) {
@@ -57,20 +55,6 @@ const GET_COUNT = gql`
 `;
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  card: {
-    minWidth: 275,
-    margin: 10,
-    borderRadius: 10
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
   grow: {
     flexGrow: 1,
   },
@@ -84,22 +68,6 @@ const styles = theme => ({
     color: '#014262',
     marginTop: 10,
     fontSize: '1.5rem'
-  },
-  submit: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: theme.spacing.unit * 2,
-    backgroundColor: '#014262'
-  },
-  buttonBase: {
-    flex: 1,
-    display: 'block'
-  },
-  innerSubmit: {
-    backgroundColor: 'transparent',
-    display: 'flex',
-    justifyContent: 'center',
-    padding: 5
   },
   inputRoot: {
     color: 'inherit',
@@ -115,14 +83,14 @@ const styles = theme => ({
   backButton: {
     justifyContent: 'flex-start'
   },
-  body: {
+  container: {
     backgroundColor: '#068D9D',
     borderRadius: 0,
     overflowY: 'auto',
     marginBottom: 56,
     height: `calc(100vh - 13.375rem)` // deduct height of everything else from viewport
   },
-  container: {
+  content: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -234,7 +202,7 @@ class GamesScreen extends Component {
             let gamesCount = loading ? "???"
               : error ? "???"
                 : data.gameCount === undefined ? "???"
-                : data.gameCount;
+                  : data.gameCount;
             return <InfoBar left={gamesCount + " ongoing games!"}/>
           }}
         </Query>
@@ -251,16 +219,16 @@ class GamesScreen extends Component {
           {({loading, error, data}) => {
             if (loading) {
               return (
-                <Paper elevation={0} className={classes.body}>
-                  <div className={classes.container}>
+                <Paper elevation={0} className={classes.container}>
+                  <div className={classes.content}>
                     <CircularProgress color="primary"/>
                   </div>
                 </Paper>
               );
             } else if (error) {
               return (
-                <Paper elevation={0} className={classes.body}>
-                  <div className={classes.container}>
+                <Paper elevation={0} className={classes.container}>
+                  <div className={classes.content}>
                     <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
                     <Typography variant="display1" color="textSecondary">
                       Connection error!

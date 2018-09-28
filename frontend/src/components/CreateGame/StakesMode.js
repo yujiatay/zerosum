@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Input from "@material-ui/core/Input/Input";
+import classNames from 'classnames';
 
 const styles = theme => ({
   container: {
@@ -23,11 +24,6 @@ const styles = theme => ({
     marginBottom: 5,
   },
   selectedButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 5,
-    marginBottom: 5,
     backgroundColor: '#08ABBE'
   },
   buttonBase: {
@@ -111,7 +107,8 @@ class StakesMode extends Component {
         <div className={classes.row}>
           {
             firstRow.map((stake, index) => (
-              <Paper key={index} elevation={0} className={selected === index ? classes.selectedButton : classes.button}>
+              <Paper key={index} elevation={0}
+                     className={selected === index ? classNames(classes.selectedButton, classes.button) : classes.button}>
                 <ButtonBase className={classes.buttonBase} onClick={() => this.handleClick(index, 0)}>
                   <Paper elevation={0} className={classes.innerButton}>
                     <Typography className={selected === index ? classes.selectedText : 'none'}>

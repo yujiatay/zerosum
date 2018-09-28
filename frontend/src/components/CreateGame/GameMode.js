@@ -3,6 +3,7 @@ import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import classNames from 'classnames';
 
 const styles = theme => ({
   container: {
@@ -20,11 +21,6 @@ const styles = theme => ({
     marginBottom: 5,
   },
   selectedButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 5,
-    marginBottom: 5,
     backgroundColor: '#08ABBE'
   },
   buttonBase: {
@@ -54,7 +50,7 @@ class GameMode extends Component {
     }
   }
 
-  handleClick = event => {
+  handleClick = () => {
     this.setState(prevState => ({
       selected: !prevState.selected
     }), () => {
@@ -71,7 +67,7 @@ class GameMode extends Component {
     const {selected} = this.state;
     return (
       <div className={classes.container}>
-        <Paper elevation={0} className={selected ? classes.selectedButton : classes.button}>
+        <Paper elevation={0} className={selected ? classNames(classes.button, classes.selectedButton) : classes.button}>
           <ButtonBase className={classes.buttonBase} onClick={this.handleClick}>
             <Paper elevation={0} className={classes.innerButton}>
               <Typography className={selected ? classes.selectedText : 'none'}>
@@ -80,7 +76,7 @@ class GameMode extends Component {
             </Paper>
           </ButtonBase>
         </Paper>
-        <Paper elevation={0} className={selected ? classes.button : classes.selectedButton}>
+        <Paper elevation={0} className={selected ? classes.button : classNames(classes.button, classes.selectedButton)}>
           <ButtonBase className={classes.buttonBase} onClick={this.handleClick}>
             <Paper elevation={0} className={classes.innerButton}>
               <Typography className={selected ? 'none' : classes.selectedText}>

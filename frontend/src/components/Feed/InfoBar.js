@@ -17,7 +17,7 @@ const GET_PROFILE = gql`
 `;
 
 const styles = theme => ({
-  subheader: {
+  body: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -34,17 +34,17 @@ class InfoBar extends Component {
     const {classes, left} = this.props;
 
     return (
-      <Paper elevation={0} className={classes.subheader}>
+      <Paper elevation={0} className={classes.body}>
         <Typography variant="title" align="left">
           {left}
         </Typography>
         <Query query={GET_PROFILE} fetchPolicy="cache-and-network" errorPolicy="ignore">
-        {({loading, error, data}) => {
-          let userMoney = (data && data.user) ? data.user.money : "???";
-          return (
-            <Currency money={userMoney}/>
-          )
-        }}
+          {({loading, error, data}) => {
+            let userMoney = (data && data.user) ? data.user.money : "???";
+            return (
+              <Currency money={userMoney}/>
+            )
+          }}
         </Query>
       </Paper>
     );

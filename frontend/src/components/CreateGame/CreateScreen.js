@@ -31,19 +31,35 @@ const CREATE_GAME = gql`
 `;
 
 const styles = theme => ({
+  header: {
+    textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
+  },
+  grow: {
+    flexGrow: 1,
+  },
   body: {
     display: 'flex',
     flexDirection: 'column',
     marginTop: 56,
     marginBottom: 56,
-
   },
   form: {
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
   },
-  grow: {
-    flexGrow: 1,
+  errorMsg: {
+    color: '#9d0606',
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3
+  },
+  button: {
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+  },
+  progress: {
+    margin: theme.spacing.unit * 3
   },
   title: {
     display: 'block',
@@ -58,27 +74,6 @@ const styles = theme => ({
   group: {
     margin: `${theme.spacing.unit}px 0`,
   },
-  button: {
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-  },
-  header: {
-    textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
-  },
-  white: {
-    color: '#fff'
-  },
-  progress: {
-    margin: theme.spacing.unit * 3
-  },
-  success: {
-    color: '#069d54'
-  },
-  failure: {
-    color: '#9d0606'
-  },
   submitDialog: {
     display: 'flex',
     flexDirection: 'column',
@@ -87,11 +82,12 @@ const styles = theme => ({
   dialogTitle: {
     marginTop: 10,
   },
-  errorMsg: {
-    color: '#9d0606',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3
-  }
+  success: {
+    color: '#069d54'
+  },
+  failure: {
+    color: '#9d0606'
+  },
 });
 
 class CreateScreen extends Component {
@@ -193,8 +189,6 @@ class CreateScreen extends Component {
               reate game
             </Typography>
             <div className={classes.grow}/>
-            <div className={classes.sectionMobile}>
-            </div>
           </Toolbar>
         </AppBar>
 

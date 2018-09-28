@@ -15,9 +15,7 @@ import Dice from "../assets/dice-logo-blue.png";
 import Paper from '@material-ui/core/Paper';
 import Money from '../assets/money-bag.png';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import HattleCoin from "../assets/hattlecoin.png";
@@ -27,8 +25,6 @@ import {Mutation, Query} from 'react-apollo';
 import gql from "graphql-tag";
 import CancelButton from "../shared/CancelButton";
 import SubmitButton from "../shared/SubmitButton";
-import InfoBar from "../Feed/InfoBar";
-
 
 const CREATE_VOTE = gql`
   mutation CreateVote($voteInput: VoteInput!) {
@@ -73,14 +69,14 @@ const styles = theme => ({
     height: '100vh',
     backgroundColor: '#068D9D'
   },
-  grow: {
-    flexGrow: 1,
+  header: {
+    textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
   },
   backButton: {
     justifyContent: 'flex-start'
   },
-  header: {
-    textShadow: `-1px 0 #BCF4F5, 0 1px  #BCF4F5, 1px 0  #BCF4F5, 0 -1px  #BCF4F5`,
+  grow: {
+    flexGrow: 1,
   },
   questionCard: {
     borderRadius: 0,
@@ -336,7 +332,6 @@ class GameScreen extends Component {
                     </DialogContent>
                 :
                 <Fragment>
-
                   <CancelButton closeHandler={this.handleClose}/>
                   <DialogContent>
                     <Typography variant="title" color="textPrimary" align="center">

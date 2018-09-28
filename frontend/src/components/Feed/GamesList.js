@@ -44,7 +44,7 @@ const styles = theme => ({
   cardTitle: {
     color: '#014262'
   },
-  button: {
+  buttonBase: {
     display: 'block'
   },
   textInfo: {
@@ -128,7 +128,7 @@ class GamesList extends Component {
       <Paper elevation={0} className={classes.body}>
         {games.map((game, index) => (
           <Card className={classes.card} key={index}>
-            <ButtonBase className={classes.button} component={Link}
+            <ButtonBase className={classes.buttonBase} component={Link}
                         to={{
                           pathname: "/game",
                           state: {

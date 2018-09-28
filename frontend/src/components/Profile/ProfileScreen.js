@@ -23,9 +23,6 @@ const styles = theme => ({
   root: {
     height: '100vh',
   },
-  body: {
-    backgroundColor: theme.palette.background.paper,
-  },
   grow: {
     flexGrow: 1,
   },
@@ -57,22 +54,15 @@ const styles = theme => ({
     height: 120,
     backgroundColor: 'grey'
   },
-  logout: {
+  logOut: {
     color: '#C1CAD6',
     fontFamily: '"SuperMario256"'
   },
-  winrate: {
+  winRate: {
     fontSize: '1rem'
   },
   tab: {
     width: '50%'
-  },
-  tabcontainer: {
-    backgroundColor: '#068D9D',
-    borderRadius: 0,
-    overflowY: 'auto',
-    display: 'flex',
-    flexDirection: 'column',
   }
 });
 
@@ -125,7 +115,7 @@ class ProfileScreen extends Component {
           </Typography>
           <div className={classes.grow}/>
           <div className={classes.sectionMobile}>
-            <Button className={classes.logout} onClick={() => {
+            <Button className={classes.logOut} onClick={() => {
               logout(() => this.props.authStateHandler(false))
             }}>
               LOGOUT
@@ -151,7 +141,7 @@ class ProfileScreen extends Component {
           return (
             <div className={classes.root}>
               {topBar}
-              <div className={classes.body}>
+              <div>
                 <div className={classes.moneyRow}>
                   <Currency money={profile ? profile.money : "???"}/>
                 </div>
@@ -165,7 +155,7 @@ class ProfileScreen extends Component {
                 <Typography variant="headline" align="center">
                   {profile ? profile.name : "???"}
                 </Typography>
-                <Typography className={classes.winrate} variant="title" align="center">
+                <Typography className={classes.winRate} variant="title" align="center">
                   Win rate: {profile ? parseWinRate(profile.winRate) : 0}%
                 </Typography>
                 <div className={classes.progressBar}>

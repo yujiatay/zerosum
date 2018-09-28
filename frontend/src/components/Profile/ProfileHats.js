@@ -22,7 +22,7 @@ const GET_OWNED_HATS = gql`
 `;
 
 const styles = theme => ({
-  body: {
+  bodyWithHats: {
     backgroundColor: '#068D9D',
     display: 'flex',
     justifyContent: 'flex-start',
@@ -32,7 +32,7 @@ const styles = theme => ({
     overflowY: 'auto',
     height: `calc(100vh - 26.703125rem)`, // deduct height of everything else from viewport
   },
-  body2: {
+  body: {
     backgroundColor: '#068D9D',
     display: 'flex',
     justifyContent: 'center',
@@ -70,14 +70,14 @@ class ProfileHats extends Component {
       <Query query={GET_OWNED_HATS} variables={{owned: true}} fetchPolicy="cache-and-network" errorPolicy="ignore">
         {({loading, error, data}) => {
           if (loading) return (
-            <Paper elevation={0} className={classes.body2}>
+            <Paper elevation={0} className={classes.body}>
               <div className={classes.container}>
                 <CircularProgress color="primary"/>
               </div>
             </Paper>
           );
           if (!data) return (
-            <Paper elevation={0} className={classes.body2}>
+            <Paper elevation={0} className={classes.body}>
               <div className={classes.container}>
                 <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
                 <Typography variant="display1" color="textSecondary">
@@ -90,7 +90,7 @@ class ProfileHats extends Component {
           console.log(hats);
           if (hats === undefined || hats.length === 0) {
             return (
-              <Paper elevation={0} className={classes.body2}>
+              <Paper elevation={0} className={classes.body}>
                 <div className={classes.textContainer}>
                   <Typography variant="title" color="textPrimary" className={classes.text}>
                     Start playing now to earn hats!
@@ -101,7 +101,7 @@ class ProfileHats extends Component {
           } else {
             return (
               // TODO: Set how hats are displayed
-              <Paper elevation={0} className={classes.body}>
+              <Paper elevation={0} className={classes.bodyWithHats}>
                 {
                   hats.map((hat, index) => (
                     <img key={index} alt="Hat" src={hat.img} className={classes.hat}/>

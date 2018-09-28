@@ -4,14 +4,10 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Input from '@material-ui/core/Input';
+import classNames from 'classnames';
 
 const styles = theme => ({
   option: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 5,
-    marginBottom: 5,
     padding: 5
   },
   button: {
@@ -63,7 +59,7 @@ class Option extends Component {
           </ButtonBase>
         </Paper>
         :
-        <Paper elevation={0} className={classes.option} style={{backgroundColor: bgColor}}>
+        <Paper elevation={0} className={classNames(classes.option, classes.button)} style={{backgroundColor: bgColor}}>
           <Input placeholder="Type here" disableUnderline autoFocus={false}
                  classes={{input: classes.inputCenter}} fullWidth
                  onChange={this.handleInput}

@@ -11,9 +11,6 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 3,
     paddingRight: theme.spacing.unit * 3,
-  },
-  text: {
-    color: '#fff'
   }
 });
 
@@ -22,7 +19,7 @@ class SectionHeader extends Component {
     const {classes, text} = this.props;
     return (
       <Paper elevation={0} className={classes.container}>
-        <Typography variant="title" className={classes.text}>
+        <Typography variant="title" color="textSecondary">
           {text}
         </Typography>
       </Paper>

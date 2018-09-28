@@ -3,6 +3,7 @@ import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import classNames from 'classnames';
 
 const styles = theme => ({
   container: {
@@ -22,12 +23,7 @@ const styles = theme => ({
     width: '4rem'
   },
   selectedButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    margin: 5,
     backgroundColor: '#08ABBE',
-    width: '4rem'
   },
   buttonBase: {
     flex: 1,
@@ -100,7 +96,8 @@ class TimeChoice extends Component {
         <div className={classes.row}>
           {
             firstRow.map((choice, index) => (
-              <Paper key={index} elevation={0} className={selected === index ? classes.selectedButton : classes.button}>
+              <Paper key={index} elevation={0}
+                     className={selected === index ? classNames(classes.selectedButton, classes.button) : classes.button}>
                 <ButtonBase className={classes.buttonBase} onClick={() => this.handleClick(index, 0)}>
                   <Paper elevation={0} className={classes.innerButton}>
                     <Typography className={selected === index ? classes.selectedText : 'none'}>
@@ -116,7 +113,7 @@ class TimeChoice extends Component {
           {
             secondRow.map((choice, index) => (
               <Paper key={index} elevation={0}
-                     className={selected === (index + 4) ? classes.selectedButton : classes.button}>
+                     className={selected === (index + 4) ? classNames(classes.selectedButton, classes.button) : classes.button}>
                 <ButtonBase className={classes.buttonBase} onClick={() => this.handleClick(index, 1)}>
                   <Paper elevation={0} className={classes.innerButton}>
                     <Typography className={selected === (index + 4) ? classes.selectedText : 'none'}>
@@ -128,26 +125,6 @@ class TimeChoice extends Component {
             ))
           }
         </div>
-
-        {/*<Paper elevation={0} className={selected ? classes.selectedButton : classes.button}>*/}
-        {/*<ButtonBase className={classes.buttonBase} onClick={this.handleClick}>*/}
-        {/*<Paper elevation={0} className={classes.innerButton}>*/}
-        {/*<Typography className={selected ? classes.selectedText : 'none'}>*/}
-        {/*5m*/}
-        {/*</Typography>*/}
-        {/*</Paper>*/}
-        {/*</ButtonBase>*/}
-        {/*</Paper>*/}
-        {/*<Paper elevation={0} className={selected ? classes.button : classes.selectedButton}>*/}
-        {/*<ButtonBase className={classes.buttonBase} onClick={this.handleClick}>*/}
-        {/*<Paper elevation={0} className={classes.innerButton}>*/}
-        {/*<Typography className={selected ? 'none' : classes.selectedText}>*/}
-        {/*30m*/}
-        {/*</Typography>*/}
-        {/*</Paper>*/}
-        {/*</ButtonBase>*/}
-        {/*</Paper>*/}
-
       </div>
     );
   }

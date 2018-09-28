@@ -59,7 +59,7 @@ const styles = theme => ({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  username: {
+  userName: {
     fontSize: '1rem'
   },
   gold: {
@@ -165,8 +165,8 @@ class Leaderboard extends Component {
                               alt="Profile Pic"
                               src={user.img}
                               className={classes.avatar}
-                            />
-                            <Typography variant="title" className={classes.username}>
+                            />``
+                            <Typography variant="title" className={classes.userName}>
                               {user.name}
                             </Typography>
                           </Paper>
