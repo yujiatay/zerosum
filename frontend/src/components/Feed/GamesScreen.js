@@ -53,6 +53,34 @@ const GET_ACTIVE_GAMES = gql`
   }
 `;
 
+const GET_COMPLETED_GAMES = gql`
+  query GetCompletedGames($created: Boolean!) {
+    completedGames(created: $created) {
+      id
+      owner {
+        name
+        img
+      }
+      topic
+      endTime
+      totalMoney
+      resolved
+      voted
+      stakes
+      gameMode
+      options {
+        id
+        body
+        result {
+          voteCount
+          totalValue
+          winner
+        }
+      }
+    }
+  }
+`;
+
 const GET_COUNT = gql`
   {
     gameCount
@@ -256,7 +284,7 @@ class GamesScreen extends Component {
                 textColor="primary" fullWidth elevation={0}
           >
             <Tab label="All Games" className={classes.tab}/>
-            <Tab label="Your Games" className={classes.tab}/>
+            <Tab label="My Games" className={classes.tab}/>
           </Tabs>
         </AppBar>
         {value === 0 &&
@@ -293,9 +321,60 @@ class GamesScreen extends Component {
           }}
         </Query>
         }
-        {value === 1 && <GamesList games={[]}/>}
+        {value === 1 &&
+        <Query query={GET_ACTIVE_GAMES} variables={{filter: this.state.search, created: true}} fetchPolicy="no-cache">
+          {({loading: loadingOne, error: errorOne, data: createdActive}) => (
+            <Query query={GET_ACTIVE_GAMES} variables={{filter: this.state.search, joined: true, created: false}}
+                   fetchPolicy="no-cache">
+              {({loading: loadingTwo, error: errorTwo, data: joinedActive}) => (
+                <Query query={GET_COMPLETED_GAMES} variables={{created: true}} fetchPolicy="no-cache">
+                  {({loading: loadingThree, error: errorThree, data: createdResolved}) => (
+                    <Query query={GET_COMPLETED_GAMES} variables={{created: false}} fetchPolicy="no-cache">
+                      {({loading: loadingFour, error: errorFour, data: joinedResolved}) => {
+                        if (loadingOne || loadingTwo || loadingThree || loadingFour) {
+                          // TODO: loading
+                          return (
+                            <Paper elevation={0} className={classes.container}>
+                              <div className={classes.content}>
+                                <CircularProgress color="primary"/>
+                              </div>
+                            </Paper>
+                          );
+                        } else if (errorOne || errorTwo || errorThree || errorFour) {
+                          // TODO: error
+                          return (
+                            <Paper elevation={0} className={classes.container}>
+                              <div className={classes.content}>
+                                <img src={AngryHatperor} alt="Hatperor" className={classes.hatperor}/>
+                                <Typography variant="display1" color="textSecondary">
+                                  Connection error!
+                                </Typography>
+                              </div>
+                            </Paper>
+                          );
+                        } else {
+                          if (createdActive === undefined) createdActive = [];
+                          if (joinedActive === undefined) joinedActive = [];
+                          if (createdResolved === undefined) createdResolved = [];
+                          if (joinedResolved === undefined) joinedResolved = [];
+                          let games = createdActive.concat(joinedActive, createdResolved, joinedResolved);
+                          console.log(games);
+                          if (this.state.sortState) {
+                            games = this.applySort(games);
+                          }
+                          return <GamesList games={games}/>
+                        }
+                      }}
+                    </Query>
+                  )}
+                </Query>
+              )}
+            </Query>
+          )}
+        </Query>
+        }
 
-        <Dialog
+        < Dialog
           open={this.state.sortDialog}
           onClose={this.handleSortClose}
           aria-labelledby="form-dialog-title"
@@ -316,9 +395,13 @@ class GamesScreen extends Component {
             <SubmitButton submitHandler={this.handleSort}/>
           </DialogContent>
         </Dialog>
-        <BottomNavBar value={0}/>
+        <
+          BottomNavBar
+          value={0}
+        />
       </div>
-    );
+    )
+      ;
   }
 }
 

@@ -459,8 +459,6 @@ class GameScreen extends Component {
 
                 const vote = data.vote;
                 console.log(vote);
-                const totalAmount = parsedGame.options.reduce((totalAccum, currentOption) => totalAccum + currentOption.result.totalValue
-                  , 0);
                 return (
                   parsedGame.options.map((option, index) =>
                     <Card key={index}
@@ -475,7 +473,7 @@ class GameScreen extends Component {
                           <div className={classes.headerDivider}/>
                           <Paper elevation={0} className={classes.result}>
                             <Typography variant="display1">
-                              {parseOptionPercentage(option.result.totalValue, totalAmount)}
+                              {parseOptionPercentage(option.result.totalValue, parsedGame.totalMoney)}
                             </Typography>
                             {
                               option.id === vote.option.id &&
