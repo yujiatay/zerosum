@@ -32,6 +32,7 @@ type Game struct {
 	Options      []Option `gorm:"foreignkey:GameId"`
 	Participants []User   `gorm:"many2many:votes;"`
 	Resolved     bool
+	Validated    bool
 }
 
 type Option struct {
@@ -58,7 +59,7 @@ type User struct {
 	GamesWon         int32
 	WinRate          float64
 	Experience       int
-	Picture string
+	Picture          string
 	PushSubscription webpush.Subscription
 }
 
@@ -84,8 +85,9 @@ type Vote struct {
 	Money    int32
 	Resolved bool
 	// Computed values after completion, stored to reduce computation
-	Win    bool
-	Change int32
+	Win       bool
+	Change    int32
+	Validated bool
 }
 
 func (user *User) BeforeCreate(scope *gorm.Scope) error {

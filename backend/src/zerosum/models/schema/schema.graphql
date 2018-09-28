@@ -11,8 +11,8 @@ schema {
 type Query {
     user(id: ID): User
     game(id: ID!): Game
-    activeGames(filter: String!, joined: Boolean!, limit: Int, after: String): [Game]!
-    completedGames(filter: String!, joined: Boolean!, limit: Int, after: String): [Game]!
+    activeGames(filter: String!, joined: Boolean, created: Boolean, limit: Int): [Game]!
+    completedGames(created: Boolean!): [Game]!
     vote(gameId: ID!): Vote
     votes(limit: Int, after: String): [Vote]!
     gameCount: Int!
@@ -28,6 +28,7 @@ type Mutation {
     addGame(game: GameInput!): Game
     addVote(vote: VoteInput!): Vote
     buyHat(id: ID!): Hat
+    validateResult(gameId: ID!): Boolean!
 }
 enum GameMode {
     MAJORITY
