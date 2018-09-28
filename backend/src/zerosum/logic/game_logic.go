@@ -191,9 +191,13 @@ func ResolveGame(gameId string) (err error) {
 		return
 	}
 
-	// If all winners or losers, no change
-	if len(winningOptions) == 0 || len(losingOptions) == 0 {
-		return
+	// If all losers, should be case where no one voted on a minority game, then set all to winners (just for display)
+	if len(winningOptions) == 0 {
+		if game.GameMode != models.MINORITY {
+			err = errors.New("error in resolving game")
+			return
+		}
+		winningOptions = losingOptions
 	}
 
 	// Allocate money and exp, update vote results
@@ -209,7 +213,7 @@ func ResolveGame(gameId string) (err error) {
 	// TODO: Make this one big transaction to prevent corruption, for fun: move rounding error money to dev
 	for _, index := range winningOptions {
 		for _, vote := range votes[index] {
-			moneyGained := vote.Money + int32((float64(vote.Money)/float64(winPool))* float64(losePool))
+			moneyGained := vote.Money + int32((float64(vote.Money)/float64(winPool)) * float64(losePool))
 			// Update Vote Result
 			updateVoteResult(vote.UserId, vote.GameId, true, moneyGained)
 			// Allocate money and exp, stats
@@ -234,8 +238,6 @@ func ResolveGame(gameId string) (err error) {
 		}
 	}
 
-
-
 	return
 }
 
@@ -258,7 +260,10 @@ func resolveMajority(values []int32) (winners []int, losers []int) {
 func resolveMinority(values []int32) (winners []int, losers []int) {
 	min := values[0]
 	for i, value := range values {
-		if value < min {
+		// No one voted for option
+		if value == 0 {
+			losers = append(losers, i)
+		} else if value < min {
 			losers = append(losers, winners...)
 			winners = []int{i}
 			min = value
