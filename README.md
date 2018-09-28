@@ -45,5 +45,4 @@ ZeroSum is a social experiment game that pits players against each other in a wi
 | [Foo Guo Wei](https://github.com/tomforge) | [Phua Tai Da John](https://github.com/JayPeeTeeDee) | [Tay Yu Jia](https://github.com/yujiatay) | [Lim Hui Qi](https://github.com/LuMiN0uSaRc) |
 | :---: |:---:| :---:| :---:|
 | <img src="./docs/madhatter-1.png" height="150" width="150"> | <img src="./docs/madhatter-2.png" height="150" width="150"> | <img src="./docs/madhatter-3.png" height="150" width="150">  | <img src="./docs/madhatter-4.png" height="150" width="150">  |
-| Matric. No.: A0121606U | Matric. No.: A0167875J | Matric. No.: A0171240W | Matric. No.: A0143378Y |
 | **The Firefighter**<br> - Game Scheduling <br> -Authentication <br> - Push Notifications <br>| **GraphQL Trailblazer**<br> - Game Logic<br> - Database<br> - GraphQL<br>| **Frontend Man**<br> - Design ➡️ Code<br> - Google Analytics<br> | **Game Design Ninja**<br> - Game Design<br> - UI/UX <br> - Game Assets<br>|
