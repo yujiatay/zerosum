@@ -270,7 +270,7 @@ class GamesScreen extends Component {
             }
           </Toolbar>
         </AppBar>
-        <Query query={GET_COUNT} fetchPolicy={"no-cache"}>
+        <Query query={GET_COUNT} fetchPolicy={"network-only"}>
           {({loading, error, data}) => {
             let gamesCount = loading ? "???"
               : error ? "???"
