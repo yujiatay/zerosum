@@ -357,7 +357,8 @@ class GamesScreen extends Component {
                           if (joinedActive === undefined) joinedActive = [];
                           if (createdResolved === undefined) createdResolved = [];
                           if (joinedResolved === undefined) joinedResolved = [];
-                          let games = createdActive.concat(joinedActive, createdResolved, joinedResolved);
+                          let games = createdActive.activeGames.concat(joinedActive.activeGames,
+                            createdResolved.completedGames, joinedResolved.completedGames);
                           console.log(games);
                           if (this.state.sortState) {
                             games = this.applySort(games);
