@@ -171,7 +171,7 @@ func GetCompletedGames(userId string, created bool) (games []models.Game, err er
 }
 
 func CountGames() (total int32) {
-	db.Model(&models.Game{}).Where("end_time > ?", time.Now()).Count(&total)
+	db.Debug().Model(&models.Game{}).Where("end_time > ?", time.Now()).Count(&total)
 	return
 }
 
@@ -266,7 +266,7 @@ func QueryAllUsers() (users []models.User) {
 }
 
 func QueryTopUsers(limit int, minGames int) (users []models.User, err error) {
-	err = db.Where("games_played > ?", minGames).Order("win_rate desc").Limit(limit).Find(&users).Error
+	err = db.Debug().Where("games_played > ?", minGames).Order("win_rate desc").Limit(limit).Find(&users).Error
 	return
 }
 
@@ -471,7 +471,7 @@ func QueryUserHats(userId string, owned bool, achievement bool) (hats []models.H
 func UpdateHatOwnership(hatOwnership models.HatOwnership) (err error) {
 	// Check if exists
 	var foundOwnership models.HatOwnership
-	if db.Where("hat_id = ? AND user_id = ?", hatOwnership.HatId, hatOwnership.UserId).First(&foundOwnership).RecordNotFound() {
+	if db.Debug().Where("hat_id = ? AND user_id = ?", hatOwnership.HatId, hatOwnership.UserId).First(&foundOwnership).RecordNotFound() {
 		err = errors.New("no ownership found")
 		return
 	}
