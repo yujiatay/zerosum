@@ -288,12 +288,18 @@ class GameScreen extends Component {
     this.setState({
       playDialog: false,
       bet: ''
+    }, () => {
+      if (this.state.querySent) {
+        this.props.history.push('/games');
+      }
     });
   };
   handleSubmit = (createVote, stakes) => {
-    // TODO: check whether exceeds user's money
     if (stakes === 'Fixed Stakes' || this.state.bet > 0) {
       createVote();
+      this.setState({
+        querySent: true
+      });
     } else {
       this.setState({
         errorMsg: true
