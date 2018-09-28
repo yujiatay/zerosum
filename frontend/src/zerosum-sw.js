@@ -10,7 +10,7 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest);
 workbox.routing.registerRoute(new RegExp('^https://fonts.(?:googleapis|gstatic).com/(.*)'), workbox.strategies.cacheFirst());
 workbox.routing.registerRoute("/images/", workbox.strategies.staleWhileRevalidate());
 // app-shell
-workbox.routing.registerRoute("/", workbox.strategies.staleWhileRevalidate());
+workbox.routing.registerNavigationRoute("/");
 
 self.addEventListener('push', e => {
   console.log("[Service Worker] Push received: " + e.data.text());
