@@ -2,6 +2,7 @@ package logic
 
 import (
 	"errors"
+	"fmt"
 	"zerosum/models"
 	"zerosum/push"
 	"zerosum/repository"
@@ -217,7 +218,7 @@ func ResolveGame(gameId string) (err error) {
 			allocateWinOrLoss(vote.UserId, true)
 			// Verify Achievements
 			verifyAchievements(vote.UserId)
-			push.SendNotif("You have won!!!", vote.UserId)
+			push.SendNotif(fmt.Sprintf("You have won %d from %s!!!", moneyGained, game.Topic), vote.UserId)
 		}
 	}
 	for _, index := range losingOptions {
@@ -229,7 +230,7 @@ func ResolveGame(gameId string) (err error) {
 			allocateWinOrLoss(vote.UserId, false)
 			// Verify Achievements
 			verifyAchievements(vote.UserId)
-			push.SendNotif("A game you participated in has ended!", vote.UserId)
+			push.SendNotif(fmt.Sprintf("[Game Ended] %s", game.Topic), vote.UserId)
 		}
 	}
 

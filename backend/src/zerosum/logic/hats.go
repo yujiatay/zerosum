@@ -3,6 +3,7 @@ package logic
 import (
 	"log"
 	"zerosum/models"
+	"zerosum/push"
 	"zerosum/repository"
 )
 
@@ -198,6 +199,9 @@ func validateOrAward(hatId string, userId string) {
 	hatOwnership, err := repository.QueryHatOwnership(models.HatOwnership{UserId: userId, HatId: hatId})
 	if err != nil {
 		log.Print("Critical error: hat ownership inconsistent")
+	}
+	if (!hatOwnership.Owned) {
+		push.SendNotif("HATchievement unlocked! Log in to view!!", userId)
 	}
 	hatOwnership.Owned = true
 	repository.UpdateHatOwnership(hatOwnership)
