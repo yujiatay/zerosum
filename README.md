@@ -4,6 +4,12 @@
 
 ZeroSum is a social experiment game that pits players against each other in a winners-take-all fashion. 
 
+## Game Instructions
+
+1. Log in with Facebook at https://zerosum.ml
+2. Read our Hattoria storyline and tutorial! 
+3. Enjoy the game 🎲
+
 ## Architecture
 
 ### Frontend
