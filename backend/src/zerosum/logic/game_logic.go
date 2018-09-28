@@ -208,7 +208,7 @@ func ResolveGame(gameId string) (err error) {
 	// TODO: Make this one big transaction to prevent corruption, for fun: move rounding error money to dev
 	for _, index := range winningOptions {
 		for _, vote := range votes[index] {
-			moneyGained := vote.Money + (vote.Money/winPool)*losePool
+			moneyGained := vote.Money + int32((float64(vote.Money)/float64(winPool))* float64(losePool))
 			// Update Vote Result
 			updateVoteResult(vote.UserId, vote.GameId, true, moneyGained)
 			// Allocate money and exp, stats
