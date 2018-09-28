@@ -59,7 +59,8 @@ const styles = theme => ({
   },
   hat: {
     width: 75,
-    height: 75
+    height: 75,
+    margin: theme.spacing.unit
   }
 });
 
