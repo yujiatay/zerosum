@@ -63,6 +63,11 @@ func QueryGame(desiredGame models.Game) (game models.Game, err error) {
 	return
 }
 
+func SearchUnresolvedGames() (games []models.Game) {
+	db.Where("resolved = ?", false).Find(&games)
+	return
+}
+
 func SearchActiveGames(searchString string, joined *bool, created *bool, userId string, limit *int32) (games []models.Game, err error) {
 
 	if joined == nil && created == nil {

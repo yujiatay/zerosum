@@ -47,6 +47,18 @@ func redirectTLSHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "https://"+r.Host+r.RequestURI, http.StatusMovedPermanently)
 }
 
+func restoreGames() {
+	games := repository.SearchUnresolvedGames()
+	if len(games) > 0 {
+		log.Printf("Restoring %d games...", len(games))
+		for _, game := range games {
+			logic.Controller.AddGame(&game)
+		}
+	} else {
+		log.Print("No games to restore...")
+	}
+}
+
 func main() {
 	DEBUG := false
 	if os.Getenv("DEBUG") == "TRUE" {
@@ -79,6 +91,7 @@ func main() {
 		os.Getenv("VAPID_PRIV_KEY"),
 		&httpClient,
 	)
+	restoreGames()
 	staticFiles := packr.NewBox("./static")
 
 	authRouter := mux.NewRouter()
